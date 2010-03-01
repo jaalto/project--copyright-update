@@ -93,6 +93,8 @@ clean:
 	-rm -f *[#~] *.\#* \
 	*.x~~ pod*.tmp
 
+	rm -rf tmp
+
 distclean: clean
 
 realclean: clean
