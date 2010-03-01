@@ -42,7 +42,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0301.0900';
+my $VERSION = '2010.0301.0918';
 
 # ****************************************************************************
 #
@@ -117,6 +117,8 @@ there must be no spaces around the dash-character in YEAR-YEAR. Examples:
    Copyright: (C)       YYYY-YYYY
 
 =head1 OPTIONS
+
+=over 4
 
 =item B<-a, --fsf-address>
 
@@ -236,7 +238,7 @@ licensecheck(1) program in Debian.
 
 =head1 COREQUISITES
 
-Uses tandard Perl modules.
+Uses standard Perl modules.
 
 =head1 AUTHOR
 
@@ -286,8 +288,7 @@ sub Help (;$$)
     }
 
     defined $msg  and  print $msg;
-
-    exit 1;
+    exit 0;
 }
 
 # ****************************************************************************
@@ -379,7 +380,7 @@ sub HandleCommandLineArgs ()
     $version    and  die "$VERSION $CONTACT $LICENSE $URL\n";
     $help	and  Help();
     $helpMan	and  Help(-man);
-    $helpMan	and  Help(-html);
+    $helpHtml	and  Help(-html);
     $version	and  Version();
 
     $debug = 1          if $debug == 0;
