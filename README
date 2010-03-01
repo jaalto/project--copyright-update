@@ -1,0 +1,33 @@
+README: copyright-update - Update copyright information in files
+----------------------------------------------------------------
+
+Update the copyright information in set of files, possibly
+recursively, matching content criteria. The updating affects copyright
+year, GPL address information etc.
+
+The source package directories:
+
+    bin/            The program and system manual page (*.1)
+    doc/            Documentation
+
+Important files
+
+    COPYING         GPL v2 or later Licence
+    INSTALL         Install instructions
+    ChangeLog       Project change records
+
+Project details
+
+    Homepage
+      http://freshmeat.net/projects/copyright-update
+
+    To report bugs
+      See freshmeat page
+
+    Source code repository
+      See freshmeat page
+
+    Depends
+      Perl (any version). Uses only standard Perl libraries.
+
+End of file
