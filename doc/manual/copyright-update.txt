@@ -1,0 +1,121 @@
+NAME
+      copyright-update - Update Copyright information in files
+
+DESCRIPTION
+    Update the copyright information in set of files, possibly recursively,
+    matching content criteria. The updating affects copyright year, GPL
+    address information etc.
+
+    The line must have word "Copyright", a three character "(C)" and the
+    range of years. Varying amount of spaces and tabs are permitted, but
+    there must be no spaces around the dash-character in YEAR-YEAR.
+    Examples:
+
+       Copyright (C)        YYYY-YYYY
+       Copyright: (C)       YYYY-YYYY
+
+OPTIONS
+    -a, --fsf-address
+        Change FSF (a)ddress paragraphs pointing only to URL. This format is
+        the format used in the GPL v3 license text:
+
+            You should have received a copy of the GNU General Public License
+            along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+        Affects: paragraph with old address:
+
+            You should have received a copy of the GNU General Public License
+            along with this program; if not, write to the Free Software
+            Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+        Affects: paragraph with new address:
+
+            You should have received a copy of the GNU General Public License
+            along with this package; if not, write to the Free Software
+            Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
+
+    --debug LEVEL
+        Turn on debug. Level can be in range 0-10.
+
+    -h, --help
+        Print text help
+
+    --help-html
+        Print help in HTML format.
+
+    --help-man
+        Print help in manual page man(1) format.
+
+    -i, --ignore REGEXP
+        Ignore files mathing regexp. The match is done against whole path.
+
+    -l, --line REGEXP
+        Change only lines which match REGEXP. The match is case-insensitive.
+
+    -r, --recursive
+        Recursively search all direcotries given at command line.
+
+    -R, --regexp REGEXP
+        Change only files whose content matches REGEXP.
+
+    -t, --test, --dry-run
+        Run in test mode. Show what would happen. No files are changed.
+
+    -v, --verbose LEVEL
+        Print informational messages. Increase numeric LEVEL for more
+        verbosity.
+
+    -V, --version
+        Print contact and version information
+
+    -y, --year YEAR
+        Update files using YEAR. Year value must be four digits. The default
+        is current calendar year.
+
+    -Y, --no-year
+        Disable updating year.
+
+EXAMPLES
+    The primary use is to update files to the current year:
+
+       copyright-update.pl --verbose 1 --test [--year YYYY] *
+
+    It is possible to restrict updating files recursively to only those
+    files whose content match regexp, like author is "Mr. Foo". The lines
+    affected are those that match --line regular expression.
+
+       copyright-update.pl \
+            --recursive \
+            --Regexp "Author:.*Mr. Foo" \
+            --line '\bFoo\b' \
+            --ignore '\.(bak|bup|[~#]])$' \
+            --verbose 1 \
+            --year 2002 \
+            --test \
+            .
+
+TROUBLESHOOTING
+    None.
+
+EXAMPLES
+    None.
+
+ENVIRONMENT
+    No environment variables are used.
+
+FILES
+    None.
+
+SEE ALSO
+    licensecheck(1) program in Debian.
+
+COREQUISITES
+    Uses tandard Perl modules.
+
+AUTHOR
+    Copyright (C) Jari Aalto
+
+    This program is free software; you can redistribute and/or modify
+    program under the terms of GNU General Public license either version 2
+    of the License, or (at your option) any later version.
+
