@@ -1,0 +1,10 @@
+2010-03-01 Mon  Jari Aalto  <jari.aalto@cante.net>
+
+	Make a standalone project. This program has been part of the Emacs Tiny
+	Tools project. See http://freshmeat.net/projects/emacs-tiny-tools
+
+	* copyright-update.pl: (top level): update Copyright template.
+	(Help): reorder manual page into sections.
+	(HandleCommandLineArgs): Chnage all mixed case long options into
+	standard lowercase option. Like --Version is not --version.
+
