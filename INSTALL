@@ -1,0 +1,16 @@
+INSTALL: copyright-update - Update copyright information in files
+-----------------------------------------------------------------
+
+System wide install
+
+        Run makefile with appropriate parameters. The program is
+        installed without any file extension. An example:
+
+            make [-n] DESTDIR= prefix=/usr/local install
+
+Manual install
+
+        1. Copy bin/*.pl somewhere along $PATH
+	2. Copy bin/*.1 somewhere along $MANPATH
+
+End of file
