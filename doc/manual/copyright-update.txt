@@ -110,7 +110,7 @@ SEE ALSO
     licensecheck(1) program in Debian.
 
 COREQUISITES
-    Uses tandard Perl modules.
+    Uses standard Perl modules.
 
 AUTHOR
     Copyright (C) Jari Aalto
