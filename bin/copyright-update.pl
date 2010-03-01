@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 #
-# copyright-update.pl -- Utility to update copyright information in files
+#   copyright-update -- Utility to update copyright information in files
 #
-#   File id
+#   Copyright
 #
 #       Copyright (C) 2000-2010 Jari Aalto
+#
+#   License
 #
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -14,19 +16,14 @@
 #       This program is distributed in the hope that it will be useful,
 #       but WITHOUT ANY WARRANTY; without even the implied warranty of
 #       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-#       GNU General Public License for more details at
-#       <http://www.gnu.org/licenses/>.
+#       GNU General Public License for more details.
+#
+#       You should have received a copy of the GNU General Public License
+#       along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #   Documentation
 #
-#       See --help for documentation.
-#
-#   Code Note
-#
-#       This code has been edited using Emacs editor, where M-x
-#       cperl-mode and M-x font-lock-mode was turned on. Due to
-#       highlighting problems, a Perl regexp marker may // sometimes
-#       confuse things, so an alternative m,, match operator was used.
+#       To read manual, start this program with option: --help
 
 use strict;
 
@@ -35,20 +32,54 @@ use autouse 'Pod::Html'     => qw( pod2html );
 
 use English;
 use Getopt::Long;
+use File::Basename;
 use File::Find;
 
-    my $LIB = "copyright-update.pl";
+use vars qw ( $VERSION );
 
-    use vars qw ( $VERSION );
+#   This is for use of Makefile.PL and ExtUtils::MakeMaker
+#
+#   The following variable is updated by Emacs setup whenever
+#   this file is saved.
 
-    #   This is for use of Makefile.PL and ExtUtils::MakeMaker
-    #   So that it puts the tardist number in format YYYY.MMDD
-    #   The REAL version number is defined later
-    #
-    #   The following variable is updated by Emacs setup whenever
-    #   this file is saved. See http//tiny-tools.sourceforge.net/
+my $VERSION = '2010.0301.0900';
 
-    my $VERSION = '2009.1102.1502';
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Set global variables for the program
+#
+#   INPUT PARAMETERS
+#
+#       none
+#
+#   RETURN VALUES
+#
+#       none
+#
+# ****************************************************************************
+
+sub Initialize ()
+{
+    use vars qw
+    (
+        $LIB
+        $PROGNAME
+        $CONTACT
+	$LICENSE
+        $URL
+    );
+
+    $LICENSE	= "GPL-2+";
+    $LIB        = basename $PROGRAM_NAME;
+    $PROGNAME   = $LIB;
+
+    $CONTACT     = "Jari Aalto";
+    $URL         = "http://freshmeat.net/projects/copyright-update";
+
+    $OUTPUT_AUTOFLUSH = 1;
+}
 
 # ****************************************************************************
 #
@@ -70,60 +101,44 @@ use File::Find;
 
 =head1 NAME
 
-copyright-update.pl - Update Copyright year information
+  copyright-update - Update Copyright information in files
 
-=head1 README
+=head1 DESCRIPTION
 
-This program updates the copyright year information for given files. The
-year is current year unless passed with B<--year> YEAR option.
+Update the copyright information in set of files, possibly
+recursively, matching content criteria. The updating affects copyright
+year, GPL address information etc.
 
-   copyright-update.pl --verbose 1 --test [--year 2002] *
-
-To change all files recursively from current directory, whose author is
-"Mr. Foo" use command below. The B<--regexp> option requires that
-file contains matching line. The lines affected are those matches
-by the --line regural expression.
-
-   copyright-update.pl \
-        --recursive \
-        --Regexp "Author:.*Mr. Foo" \
-        --line '\bFoo\b' \
-        --ignore '\.(bak|bup|[~#]])$' \
-        --verbose 1 \
-        --year 2002 \
-        --test \
-        .
-
-For the above command, only files that contain lines like these would
-be updated:
+The line must have word "Copyright", a three character "(C)" and the
+range of years. Varying amount of spaces and tabs are permitted, but
+there must be no spaces around the dash-character in YEAR-YEAR. Examples:
 
    Copyright (C)        YYYY-YYYY
    Copyright: (C)       YYYY-YYYY
 
-The line must have word "Copyright", an ascii "(C)" and range of years.
-Varying amount of spaces and tabs are permitted, but there must be no
-spaces around the dash-character in YEAR-YEAR.
-
 =head1 OPTIONS
 
-=item B<-a, --fsf-address LEVEL>
+=item B<-a, --fsf-address>
 
-Correct FSF addresses, like:
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-    You should have received a copy of the GNU General Public License
-    along with this package; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
-
-Into FSF recommendation, used in GPL v3 preamble:
+Change FSF (a)ddress paragraphs pointing only to URL. This format is
+the format used in the GPL v3 license text:
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-=item B<-d, --debug LEVEL>
+Affects: paragraph with old address:
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+Affects: paragraph with new address:
+
+    You should have received a copy of the GNU General Public License
+    along with this package; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
+
+=item B<--debug LEVEL>
 
 Turn on debug. Level can be in range 0-10.
 
@@ -131,11 +146,11 @@ Turn on debug. Level can be in range 0-10.
 
 Print text help
 
-=item B<--Help-html>
+=item B<--help-html>
 
 Print help in HTML format.
 
-=item B<--Help-man>
+=item B<--help-man>
 
 Print help in manual page C<man(1)> format.
 
@@ -155,16 +170,16 @@ Recursively search all direcotries given at command line.
 
 Change only files whose content matches REGEXP.
 
-=item B<-t, --test>
+=item B<-t, --test, --dry-run>
 
-hangedRun in test mode. Show what would happen. No files are changed.
+Run in test mode. Show what would happen. No files are changed.
 
 =item B<-v, --verbose LEVEL>
 
 Print informational messages. Increase numeric LEVEL for more
 verbosity.
 
-=item B<-V, --Version>
+=item B<-V, --version>
 
 Print contact and version information
 
@@ -179,9 +194,25 @@ Disable updating year.
 
 =back
 
-=head1 DESCRIPTION
+=head1 EXAMPLES
 
-<Longer program description>
+The primary use is to update files to the current year:
+
+   copyright-update.pl --verbose 1 --test [--year YYYY] *
+
+It is possible to restrict updating files recursively to only those
+files whose content match regexp, like author is "Mr. Foo". The lines
+affected are those that match B<--line> regular expression.
+
+   copyright-update.pl \
+        --recursive \
+        --Regexp "Author:.*Mr. Foo" \
+        --line '\bFoo\b' \
+        --ignore '\.(bak|bup|[~#]])$' \
+        --verbose 1 \
+        --year 2002 \
+        --test \
+        .
 
 =head1 TROUBLESHOOTING
 
@@ -201,33 +232,19 @@ None.
 
 =head1 SEE ALSO
 
-<references to other programs>
-
-=head1 BUGS
-
-No known limitations.
-
-=head1 AVAILABILITY
-
-http://tiny-tools.sourceforge.net/
-
-=head1 SCRIPT CATEGORIES
-
-CPAN/Administrative
+licensecheck(1) program in Debian.
 
 =head1 COREQUISITES
 
 Uses tandard Perl modules.
 
-=head1 OSNAMES
-
-C<any>
-
 =head1 AUTHOR
 
-Copyright (C) 2000-2009 Jari Aalto. All rights reserved. This program
-is free software; you can redistribute and/or modify program under the
-terms of Gnu General Public license v2 or later.
+Copyright (C) Jari Aalto
+
+This program is free software; you can redistribute and/or modify
+program under the terms of GNU General Public license either version 2
+of the License, or (at your option) any later version.
 
 =cut
 
@@ -337,29 +354,33 @@ sub HandleCommandLineArgs ()
         no_ignore_case_always
     ));
 
-    my ( $help, $helpMan, $helpHtml );          # local variables to function
+    my ( $help, $helpMan, $helpHtml, $version ); # local variables to function
     $debug = -1;
 
     GetOptions      # Getopt::Long
     (
           "a|fsf-address" => \$OPT_FSF_ADDRESS
         , "debug:i"    => \$debug
-        , "help"       => \$help
-        , "Help-html"  => \$helpHtml
-        , "Help-man"   => \$helpMan
+        , "h|help"     => \$help
+        , "help-html"  => \$helpHtml
+        , "help-man"   => \$helpMan
         , "ignore=s"   => \$OPT_REGEXP_IGNORE
         , "line=s"     => \$OPT_LINE_REGEXP
         , "Y|no-year"  => \$OPT_NO_YEAR
         , "recursive"  => \$OPT_RECURSIVE
-        , "R|regexp=s"   => \$OPT_REGEXP
+        , "R|regexp=s" => \$OPT_REGEXP
         , "test"       => \$test
-        , "verbose:i"  => \$verb
+        , "dry-run"    => \$test
+        , "v|verbose:i" => \$verb
+        , "V|version"  => \$version
         , "year=i"     => \$YEAR
     );
 
-    $help     and  Help();
-    $helpMan  and  Help(-man);
-    $helpMan  and  Help(-html);
+    $version    and  die "$VERSION $CONTACT $LICENSE $URL\n";
+    $help	and  Help();
+    $helpMan	and  Help(-man);
+    $helpMan	and  Help(-html);
+    $version	and  Version();
 
     $debug = 1          if $debug == 0;
     $debug = 0          if $debug < 0;
@@ -379,7 +400,6 @@ sub HandleCommandLineArgs ()
     $verb = 1  if  $test and $verb == 0;
     $verb = 5  if  $debug;
 }
-
 
 # ****************************************************************************
 #
@@ -690,6 +710,7 @@ sub Main ()
 {
     my $id = "$LIB.Main";
 
+    Initialize();
     HandleCommandLineArgs();
 
     unless ( @ARGV )
