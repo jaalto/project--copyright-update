@@ -42,7 +42,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0301.0918';
+my $VERSION = '2010.0302.0901';
 
 # ****************************************************************************
 #
@@ -239,6 +239,10 @@ licensecheck(1) program in Debian.
 =head1 COREQUISITES
 
 Uses standard Perl modules.
+
+=head1 AVAILABILITY
+
+Homepage is at http://freshmeat.net/projects/copyright-update
 
 =head1 AUTHOR
 
