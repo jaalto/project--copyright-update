@@ -2,6 +2,7 @@
 
 	* bin/copyright-update.pl: (Help::AVAILABILITY): Add Homepage.
 	(Help::SYNOPSIS): Add section.
+	(FsfAddress): Change s// dereferencing \1 to $1 in REPLACEMENT side.
 
 	* Makefile (dist-git): Run 'test'.
 	(dist-snap): Run 'test'.
