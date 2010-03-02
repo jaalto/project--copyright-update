@@ -1,10 +1,19 @@
+2010-03-02 Tue  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl: (Help::AVAILABILITY): Add Homepage.
+
+	* Makefile (dist-git): Run 'test'.
+	(dist-snap): Run 'test'.
+
 2010-03-01 Mon  Jari Aalto  <jari.aalto@cante.net>
+
+	* INSTALL: Update requirements and manual install.
 
 	Make a standalone project. This program has been part of the Emacs Tiny
 	Tools project. See http://freshmeat.net/projects/emacs-tiny-tools
 
 	* copyright-update.pl: (top level): update Copyright template.
 	(Help): reorder manual page into sections.
-	(HandleCommandLineArgs): Chnage all mixed case long options into
+	(HandleCommandLineArgs): Change all mixed case long options into
 	standard lowercase option. Like --Version is not --version.
 
