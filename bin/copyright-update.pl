@@ -42,7 +42,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0302.0901';
+my $VERSION = '2010.0302.1724';
 
 # ****************************************************************************
 #
@@ -101,7 +101,11 @@ sub Initialize ()
 
 =head1 NAME
 
-  copyright-update - Update Copyright information in files
+copyright-update - Update Copyright information in files
+
+=head1 SYNOPSIS
+
+  copyright-update [options] <FILE ... | --recursive PATH>
 
 =head1 DESCRIPTION
 

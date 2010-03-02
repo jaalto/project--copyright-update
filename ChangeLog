@@ -1,6 +1,7 @@
 2010-03-02 Tue  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl: (Help::AVAILABILITY): Add Homepage.
+	(Help::SYNOPSIS): Add section.
 
 	* Makefile (dist-git): Run 'test'.
 	(dist-snap): Run 'test'.
