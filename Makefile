@@ -99,7 +99,7 @@ distclean: clean
 
 realclean: clean
 
-dist-git:
+dist-git: test
 	rm -f $(DIST_DIR)/$(RELEASE)*
 
 	git archive --format=tar --prefix=$(RELEASE)/ master | \
@@ -111,9 +111,9 @@ dist-git:
 	ls -la $(DIST_DIR)/$(RELEASE).tar.gz
 
 # The "gt" is maintainer's program frontend to Git
-# Rule: dist-snapshot - [maintainer] release snapshot from Git repository
-dist-snapshot:
-	gt tar -q -z -p $(PACKAGE) -c -D master
+# Rule: dist-snap - [maintainer] release snapshot from Git repository
+dist-snap: test
+	@echo gt tar -q -z -p $(PACKAGE) -c -D master
 
 # Rule: dist - [maintainer] release from Git repository
 dist: dist-git
