@@ -54,7 +54,7 @@ IMPORT: # This is just a syntactic sugar: actually no-op
     #   The following variable is updated by Emacs setup whenever
     #   this file is saved.
 
-    my $VERSION = '2010.0303.1225';
+    my $VERSION = '2010.0303.1227';
 }
 
 # ****************************************************************************
@@ -126,7 +126,7 @@ Update the copyright information in set of files, possibly
 recursively, matching content criteria. The updating affects copyright
 year, GPL address information etc.
 
-The line must have word "Copyright", a space, three characters "(C)"
+The line must have word "Copyright", a space, three characters '(C)'
 (or U+00A9 UTF copyright sign), a space, and the range of
 years. Varying amount of spaces and tabs are permitted, but there must
 be no spaces around the dash-character in YEAR-YEAR. Examples:
