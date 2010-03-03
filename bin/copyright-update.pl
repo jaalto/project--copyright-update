@@ -42,7 +42,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0302.1730';
+my $VERSION = '2010.0303.0854';
 
 # ****************************************************************************
 #
@@ -376,7 +376,7 @@ sub HandleCommandLineArgs ()
         , "ignore=s"   => \$OPT_REGEXP_IGNORE
         , "line=s"     => \$OPT_LINE_REGEXP
         , "Y|no-year"  => \$OPT_NO_YEAR
-        , "recursive"  => \$OPT_RECURSIVE
+        , "r|recursive"  => \$OPT_RECURSIVE
         , "R|regexp=s" => \$OPT_REGEXP
         , "test"       => \$test
         , "dry-run"    => \$test

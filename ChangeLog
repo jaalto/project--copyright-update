@@ -1,3 +1,8 @@
+2010-03-03 Wed  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (HandleCommandLineArgs):
+	Accept -r as a shorthand to --recursive.
+
 2010-03-02 Tue  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl: (Help::AVAILABILITY): Add Homepage.
