@@ -54,7 +54,7 @@ IMPORT: # This is just a syntactic sugar: actually no-op
     #   The following variable is updated by Emacs setup whenever
     #   this file is saved.
 
-    my $VERSION = '2010.0303.1437';
+    my $VERSION = '2010.0303.1439';
 }
 
 # ****************************************************************************
@@ -427,6 +427,7 @@ sub HandleCommandLineArgs ()
     ));
 
     my ( $help, $helpMan, $helpHtml, $version ); # local variables to function
+
     $debug = -1;
 
     GetOptions      # Getopt::Long
