@@ -54,7 +54,7 @@ IMPORT: # This is just a syntactic sugar: actually no-op
     #   The following variable is updated by Emacs setup whenever
     #   this file is saved.
 
-    my $VERSION = '2010.0303.1228';
+    my $VERSION = '2010.0303.1229';
 }
 
 # ****************************************************************************
@@ -146,8 +146,8 @@ be no spaces around the dash-character in YEAR-YEAR. Examples:
 =item B<-a, --auto>
 
 In automatic mode, the author's name is read from environment variable
-NAME and only files matching 'Copyright.*$NAME' are affected. If NAME
-is not set, read information from EMAIL.
+NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
+is not set, read information from EMAIL. See section ENVIRONMENT.
 
 This option effectively presets value for the B<--line> option.
 
