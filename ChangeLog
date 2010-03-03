@@ -3,6 +3,10 @@
 	* bin/copyright-update.pl (HandleCommandLineArgs):
 	Accept -r as a shorthand to --recursive.
 	(HandleFile): Detect manual page style: YYYY\-YYYY
+	(HandleCommandLineArgs): Add new option --auto. DEfine -d for
+	--debug.
+	(Help::ENVIRONMENT): Document NAME and EMAIL.
+	(HandleFile): Add support for U+00A9 UTF copyright sign.
 
 2010-03-02 Tue  Jari Aalto  <jari.aalto@cante.net>
 

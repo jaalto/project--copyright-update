@@ -34,15 +34,28 @@ use English;
 use Getopt::Long;
 use File::Basename;
 use File::Find;
+use charnames q(:full);
 
-use vars qw ( $VERSION );
+IMPORT: # This is just a syntactic sugar: actually no-op
+{
+    #   Import following environment variables
 
-#   This is for use of Makefile.PL and ExtUtils::MakeMaker
-#
-#   The following variable is updated by Emacs setup whenever
-#   this file is saved.
+    use Env;
+    use vars qw
+    (
+        $NAME
+        $EMAIL
+    );
 
-my $VERSION = '2010.0303.0900';
+    use vars qw ( $VERSION );
+
+    #   This is for use of Makefile.PL and ExtUtils::MakeMaker
+    #
+    #   The following variable is updated by Emacs setup whenever
+    #   this file is saved.
+
+    my $VERSION = '2010.0303.1225';
+}
 
 # ****************************************************************************
 #
@@ -113,18 +126,32 @@ Update the copyright information in set of files, possibly
 recursively, matching content criteria. The updating affects copyright
 year, GPL address information etc.
 
-The line must have word "Copyright", a three character "(C)" and the
-range of years. Varying amount of spaces and tabs are permitted, but
-there must be no spaces around the dash-character in YEAR-YEAR. Examples:
+The line must have word "Copyright", a space, three characters "(C)"
+(or U+00A9 UTF copyright sign), a space, and the range of
+years. Varying amount of spaces and tabs are permitted, but there must
+be no spaces around the dash-character in YEAR-YEAR. Examples:
 
+            A whitespace, or multiple, required
+            |   |           No space between years
+            |   |           |
    Copyright (C)        YYYY-YYYY
    Copyright: (C)       YYYY-YYYY
+            |
+            A colon is optional
 
 =head1 OPTIONS
 
 =over 4
 
-=item B<-a, --fsf-address>
+=item B<-a, --auto>
+
+In automatic mode, the author's name is read from environment variable
+NAME and only files matching 'Copyright.*$NAME' are affected. If NAME
+is not set, read information from EMAIL.
+
+This option effectively presets value for the B<--line> option.
+
+=item B<-A, --fsf-address>
 
 Change FSF (a)ddress paragraphs pointing only to URL. This format is
 the format used in the GPL v3 license text:
@@ -144,7 +171,7 @@ Affects: paragraph with new address:
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
 
-=item B<--debug LEVEL>
+=item B<-d, --debug LEVEL>
 
 Turn on debug. Level can be in range 0-10.
 
@@ -212,7 +239,7 @@ affected are those that match B<--line> regular expression.
 
    copyright-update.pl \
         --recursive \
-        --Regexp "Author:.*Mr. Foo" \
+        --regexp "Author:.*Mr. Foo" \
         --line '\bFoo\b' \
         --ignore '\.(bak|bup|[~#]])$' \
         --verbose 1 \
@@ -230,7 +257,19 @@ None.
 
 =head1 ENVIRONMENT
 
-No environment variables are used.
+=over 4
+
+=item NAME
+
+In the form 'Firstname Lastname'. If set, this is used in option B<--auto>.
+
+=item EMAIL
+
+In the form 'Firstname Lastname <address@example.com>'. If set, this
+is used in option B<--auto> only if environment variable NAME is not
+set.
+
+=back
 
 =head1 FILES
 
@@ -348,12 +387,13 @@ sub HandleCommandLineArgs ()
         $debug
 
         $YEAR
-        $OPT_NO_YEAR
+        $OPT_AUTOMATIC
+        $OPT_FSF_ADDRESS
         $OPT_LINE_REGEXP
+        $OPT_NO_YEAR
         $OPT_RECURSIVE
         $OPT_REGEXP
         $OPT_REGEXP_IGNORE
-        $OPT_FSF_ADDRESS
     );
 
     Getopt::Long::config( qw
@@ -368,21 +408,22 @@ sub HandleCommandLineArgs ()
 
     GetOptions      # Getopt::Long
     (
-          "a|fsf-address" => \$OPT_FSF_ADDRESS
-        , "debug:i"    => \$debug
-        , "h|help"     => \$help
-        , "help-html"  => \$helpHtml
-        , "help-man"   => \$helpMan
-        , "ignore=s"   => \$OPT_REGEXP_IGNORE
-        , "line=s"     => \$OPT_LINE_REGEXP
-        , "Y|no-year"  => \$OPT_NO_YEAR
-        , "r|recursive"  => \$OPT_RECURSIVE
-        , "R|regexp=s" => \$OPT_REGEXP
-        , "test"       => \$test
-        , "dry-run"    => \$test
-        , "v|verbose:i" => \$verb
-        , "V|version"  => \$version
-        , "year=i"     => \$YEAR
+	  "a|auto"	    => \$OPT_AUTOMATIC
+	, "A|fsf-address"   => \$OPT_FSF_ADDRESS
+	, "d|debug:i"	    => \$debug
+	, "dry-run"	    => \$test
+	, "help-html"	    => \$helpHtml
+	, "help-man"	    => \$helpMan
+	, "h|help"	    => \$help
+	, "ignore=s"	    => \$OPT_REGEXP_IGNORE
+	, "line=s"	    => \$OPT_LINE_REGEXP
+	, "r|recursive"	    => \$OPT_RECURSIVE
+	, "R|regexp=s"	    => \$OPT_REGEXP
+	, "test"	    => \$test
+	, "v|verbose:i"	    => \$verb
+	, "V|version"	    => \$version
+	, "year=i"	    => \$YEAR
+	, "Y|no-year"	    => \$OPT_NO_YEAR
     );
 
     $version    and  die "$VERSION $CONTACT $LICENSE $URL\n";
@@ -408,6 +449,38 @@ sub HandleCommandLineArgs ()
 
     $verb = 1  if  $test and $verb == 0;
     $verb = 5  if  $debug;
+
+    if ( $OPT_LINE_REGEXP  and  $OPT_AUTOMATIC )
+    {
+	die "$id: option --auto cannot be used togethet with --line";
+    }
+
+    if ( $OPT_AUTOMATIC )
+    {
+	if ( $NAME )
+	{
+	    local $ARG = $NAME;
+
+	    s/[ \t]+/[ \\t]+/;
+
+	    $OPT_LINE_REGEXP = $ARG;
+	}
+	elsif ( $EMAIL )
+	{
+	    local $ARG = $EMAIL;
+
+	    s/[ \t]*<.*//;		# Delete <email> part
+	    s/[ \t]+/[ \\t]+/;
+
+	    $OPT_LINE_REGEXP = $ARG;
+	}
+	else
+	{
+	    die "$id: option --auto needs environment variable NAME or EMAIL"
+	}
+
+	$verb > 1  and  print "$id: automatic preset: --line '$OPT_LINE_REGEXP'\n";
+    }
 }
 
 # ****************************************************************************
@@ -479,8 +552,8 @@ sub HandleFile ( % )
     }
 
     $debug  and  print "$id: -file [@files], ",
-                       "-regexp [$regexp] ",
-                       "-line [$linere]\n"
+                       "-regexp '$regexp' ",
+                       "-line '$linere'\n"
 		       ;
 
     my $ffile;
@@ -539,13 +612,18 @@ sub HandleFile ( % )
 	    $done++;
 	}
 
-        my $yyyy    = '\d{4}';
-        my $copy    = 'Copyright:?[ \t]+\([Cc]\)[ \t]+' . $yyyy;
+	# Perl Unicode also would accpt x{a9}/, but \N{} is more readable
+        # http://en.wikipedia.org/wiki/Copyright_symbol
+
+	my $ch   = "\N{COPYRIGHT SIGN}";
+	my $sign = '(?:' . $ch . '|\([Cc]\))';
+        my $yyyy = '\d{4}';
+        my $copy = '(?:(?i)Copyright):?[ \t]+' . $sign . '[ \t]+' . $yyyy;
 
 	# In manual pages the hyphen is quoted as:
 	# Copyright (C) YYYY\-YYYY
 
-        my $repeat  = '\\?-';
+        my $repeat  = '\x5C?-';  	# HEX 5C = backslash (\)
 
         #  If we find the regexp, then check if YEAR is different
         #  and finally do substitution.
@@ -555,6 +633,7 @@ sub HandleFile ( % )
         unless ( /$copy$repeat($yyyy)/oi )
         {
             $verb > 1 and  Print "No Copyright line" ;
+	    $debug > 2 and print "$id: Match regexp: $copy$repeat($yyyy)\n";
         }
 
         my $y = $1;
@@ -570,7 +649,10 @@ sub HandleFile ( % )
 	{
 	    if ( $linere )
 	    {
-		if ( $debug )
+
+		$debug  and  print "$id: --line matched\n";
+
+		if ( $debug > 1 )
 		{
 		    warn "s/(?:$linere).*\\K($copy$repeat)($yyyy)/\${1}$YEAR/gmi\n";
 		    warn "s/($copy$repeat)$yyyy(.*$linere)/\${1}$YEAR\${2}/gmi\n";
