@@ -2,6 +2,7 @@
 
 	* bin/copyright-update.pl (HandleCommandLineArgs):
 	Accept -r as a shorthand to --recursive.
+	(HandleFile): Detect manual page style: YYYY\-YYYY
 
 2010-03-02 Tue  Jari Aalto  <jari.aalto@cante.net>
 

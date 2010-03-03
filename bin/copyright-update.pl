@@ -42,7 +42,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0303.0854';
+my $VERSION = '2010.0303.0900';
 
 # ****************************************************************************
 #
@@ -541,7 +541,11 @@ sub HandleFile ( % )
 
         my $yyyy    = '\d{4}';
         my $copy    = 'Copyright:?[ \t]+\([Cc]\)[ \t]+' . $yyyy;
-        my $repeat  = '-';
+
+	# In manual pages the hyphen is quoted as:
+	# Copyright (C) YYYY\-YYYY
+
+        my $repeat  = '\\?-';
 
         #  If we find the regexp, then check if YEAR is different
         #  and finally do substitution.
