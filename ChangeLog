@@ -7,6 +7,11 @@
 	--debug.
 	(Help::ENVIRONMENT): Document NAME and EMAIL.
 	(HandleFile): Add support for U+00A9 UTF copyright sign.
+	(HandleCommandLineArgs): Add options --all, --include
+	and --exclude (was: --ignore).
+	(IsInclude):  New.
+	(IsExclude): New.
+	(wanted): Add include and exclude tests.
 
 2010-03-02 Tue  Jari Aalto  <jari.aalto@cante.net>
 

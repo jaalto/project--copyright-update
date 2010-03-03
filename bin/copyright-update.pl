@@ -54,7 +54,7 @@ IMPORT: # This is just a syntactic sugar: actually no-op
     #   The following variable is updated by Emacs setup whenever
     #   this file is saved.
 
-    my $VERSION = '2010.0303.1229';
+    my $VERSION = '2010.0303.1433';
 }
 
 # ****************************************************************************
@@ -118,7 +118,7 @@ copyright-update - Update Copyright information in files
 
 =head1 SYNOPSIS
 
-  copyright-update [options] <FILE ... | --recursive PATH>
+  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]>
 
 =head1 DESCRIPTION
 
@@ -151,7 +151,18 @@ is not set, read information from EMAIL. See section ENVIRONMENT.
 
 This option effectively presets value for the B<--line> option.
 
-=item B<-A, --fsf-address>
+=item B<-A, --all>
+
+Chnage every occurrance of matches I<Copyright> line. The default is
+to find only the first occurrance which is normally located at the
+beginning of file; inside comments where License information is
+placed.
+
+=item B<-d, --debug LEVEL>
+
+Turn on debug. Level can be in range 0-10.
+
+=item B<--fsf-address>
 
 Change FSF (a)ddress paragraphs pointing only to URL. This format is
 the format used in the GPL v3 license text:
@@ -171,10 +182,6 @@ Affects: paragraph with new address:
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
 
-=item B<-d, --debug LEVEL>
-
-Turn on debug. Level can be in range 0-10.
-
 =item B<-h, --help>
 
 Print text help
@@ -187,9 +194,13 @@ Print help in HTML format.
 
 Print help in manual page C<man(1)> format.
 
-=item B<-i, --ignore REGEXP>
+=item B<-i, --include REGEXP>
 
-Ignore files mathing regexp. The match is done against whole path.
+Include files mathing regexp. The match is done against whole path. The option
+can be used multiple times.
+
+If this option is not supplied, every file is automatically included.
+The matches can be further filtered by using options B<--exclude>.
 
 =item B<-l, --line REGEXP>
 
@@ -197,11 +208,18 @@ Change only lines which match REGEXP. The match is case-insensitive.
 
 =item B<-r, --recursive>
 
-Recursively search all direcotries given at command line.
+Recursively search all direcotories given at command line.
 
 =item B<-R, --regexp REGEXP>
 
-Change only files whose content matches REGEXP.
+Change only files whose content matches REGEXP. The file is read in as
+a one big string so it's possible to match using Perl regular
+epxressions accross lines. An example: '(?smi)This.*multi.*line.*match'.
+See perlre(1) for more information about 'smi' modifiers.
+
+This options can be used as a preliminary I<Content criteria>, to
+select the file, before B<--line> option finds the correct Copyright
+line.
 
 =item B<-t, --test, --dry-run>
 
@@ -216,6 +234,13 @@ verbosity.
 
 Print contact and version information
 
+=item B<-x, --exclude REGEXP>
+
+Ignore files mathing regexp. The match is done against whole path. The option
+can be used multiple times.
+
+This option is applied after possible B<--include> matches.
+
 =item B<-y, --year YEAR>
 
 Update files using YEAR. Year value must be four digits.
@@ -229,9 +254,13 @@ Disable updating year.
 
 =head1 EXAMPLES
 
-The primary use is to update files to the current year:
+The primary use is to update files according to the current year:
 
-   copyright-update.pl --verbose 1 --test [--year YYYY] *
+   copyright-update.pl --verbose 1 [--test] [--year YYYY] *
+
+Update only C-code file:
+
+   copyright-update.pl --verbose 1 --include "*.[ch]" --recursive .
 
 It is possible to restrict updating files recursively to only those
 files whose content match regexp, like author is "Mr. Foo". The lines
@@ -387,13 +416,15 @@ sub HandleCommandLineArgs ()
         $debug
 
         $YEAR
+        $OPT_ALL_MATCHES
         $OPT_AUTOMATIC
+        @OPT_FILE_REGEXP_EXCLUDE
+        @OPT_FILE_REGEXP_INCLUDE
         $OPT_FSF_ADDRESS
         $OPT_LINE_REGEXP
         $OPT_NO_YEAR
         $OPT_RECURSIVE
         $OPT_REGEXP
-        $OPT_REGEXP_IGNORE
     );
 
     Getopt::Long::config( qw
@@ -408,20 +439,22 @@ sub HandleCommandLineArgs ()
 
     GetOptions      # Getopt::Long
     (
-	  "a|auto"	    => \$OPT_AUTOMATIC
-	, "A|fsf-address"   => \$OPT_FSF_ADDRESS
+	  "A|All"           => \$OPT_ALL_MATCHES
+	, "a|auto"	    => \$OPT_AUTOMATIC
+	, "fsf-address"     => \$OPT_FSF_ADDRESS
 	, "d|debug:i"	    => \$debug
 	, "dry-run"	    => \$test
 	, "help-html"	    => \$helpHtml
 	, "help-man"	    => \$helpMan
 	, "h|help"	    => \$help
-	, "ignore=s"	    => \$OPT_REGEXP_IGNORE
+	, "include=s"	    => \@OPT_FILE_REGEXP_INCLUDE
 	, "line=s"	    => \$OPT_LINE_REGEXP
 	, "r|recursive"	    => \$OPT_RECURSIVE
 	, "R|regexp=s"	    => \$OPT_REGEXP
 	, "test"	    => \$test
 	, "v|verbose:i"	    => \$verb
 	, "V|version"	    => \$version
+	, "x|exclude=s"	    => \@OPT_FILE_REGEXP_EXCLUDE
 	, "year=i"	    => \$YEAR
 	, "Y|no-year"	    => \$OPT_NO_YEAR
     );
@@ -690,6 +723,80 @@ sub HandleFile ( % )
 #
 #   DESCRIPTION
 #
+#       Check if FILE matches exclude regexps.
+#
+#   INPUT PARAMETERS
+#
+#       $	Filename
+#
+#   RETURN VALUES
+#
+#       true	File in exclude list
+#       false	File NOT in exclude list
+#
+# ****************************************************************************
+
+sub IsExclude ($)
+{
+    my $id   = "$LIB.IsExclude";
+    local $ARG = shift;
+
+    @OPT_FILE_REGEXP_EXCLUDE  or  return 0;
+
+    for my $re ( @OPT_FILE_REGEXP_EXCLUDE )
+    {
+
+	if ( /$re/ )
+	{
+	    $verb > 2  and  print "$id: '$re' matches: $ARG\n";
+	    return 1
+	}
+    }
+
+    return 0;
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Check if FILE matches include regexps.
+#
+#   INPUT PARAMETERS
+#
+#       $	Filename
+#
+#   RETURN VALUES
+#
+#       true	File in include list
+#       false	File NOT in include list
+#
+# ****************************************************************************
+
+sub IsInclude ($)
+{
+    my $id   = "$LIB.IsInclude";
+    local $ARG = shift;
+
+    @OPT_FILE_REGEXP_INCLUDE  or  return 1;
+
+    for my $re ( @OPT_FILE_REGEXP_INCLUDE )
+    {
+
+	if ( /$re/ )
+	{
+	    $verb > 2  and  print "$id: '$re' matches: $ARG\n";
+	    return 1
+	}
+    }
+
+    return 0;
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
 #       Recursively find out all files and chnege their content.
 #
 #   INPUT PARAMETERS
@@ -712,27 +819,21 @@ sub wanted ()
     if ( $dir =~ m,(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$,i )
     {
         $File::Find::prune = 1;
-        $debug  and  print "$id: Ignored directory: $dir\n";
+        $debug  and  print "$id: Ignore VCS directory: $dir\n";
         return;
     }
-
-    #   Emacs backup files this.txt~  and   #this.text#
 
     my $ignore = '[#~]$'
                  . '|\.[#]'
-                 . '|\.(log|tmp|bak|bin|s?o|com|exe)$'
-                 . '\.(ppt|xls|jpg|png|gif|tiff|bmp)$'
+                 . '|\.(s?o|l?a|bin|com|exe|class|elc)$'
+                 . '|\.(ods|odt|pdf|ppt|xls|rtf)$'
+		 . '|\.(xpm|jpg|png|gif|tiff|bmp)$'
                  ;
 
-    if ( $OPT_REGEXP_IGNORE  and  $file =~ /$OPT_REGEXP_IGNORE/o )
-    {
-        $debug  and  print "$id: skipped --ignore match: $file\n";
-        return;
-    }
 
     if ( $file =~ m,$ignore,oi )
     {
-        $debug  and  print "$id: Ignored temporary file: $file\n";
+        $debug  and  print "$id: Default exclude: $file\n";
         return;
     }
 
@@ -742,6 +843,15 @@ sub wanted ()
         {
             print "$id: $file\n";
         }
+
+	unless ( -T )
+	{
+	    $debug  and
+		print "$id: Not a binary file (internal test): $file\n";
+	}
+
+	IsInclude $file  or  return;
+	IsExclude $file  and return;
 
         HandleFile -file => [$file],
 	  -line   => $OPT_LINE_REGEXP,
