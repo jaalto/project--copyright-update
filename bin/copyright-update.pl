@@ -54,7 +54,7 @@ IMPORT: # This is just a syntactic sugar: actually no-op
     #   The following variable is updated by Emacs setup whenever
     #   this file is saved.
 
-    my $VERSION = '2010.0303.1433';
+    my $VERSION = '2010.0303.1437';
 }
 
 # ****************************************************************************
@@ -150,13 +150,6 @@ NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
 is not set, read information from EMAIL. See section ENVIRONMENT.
 
 This option effectively presets value for the B<--line> option.
-
-=item B<-A, --all>
-
-Chnage every occurrance of matches I<Copyright> line. The default is
-to find only the first occurrance which is normally located at the
-beginning of file; inside comments where License information is
-placed.
 
 =item B<-d, --debug LEVEL>
 
@@ -416,7 +409,6 @@ sub HandleCommandLineArgs ()
         $debug
 
         $YEAR
-        $OPT_ALL_MATCHES
         $OPT_AUTOMATIC
         @OPT_FILE_REGEXP_EXCLUDE
         @OPT_FILE_REGEXP_INCLUDE
@@ -439,8 +431,7 @@ sub HandleCommandLineArgs ()
 
     GetOptions      # Getopt::Long
     (
-	  "A|All"           => \$OPT_ALL_MATCHES
-	, "a|auto"	    => \$OPT_AUTOMATIC
+	  "a|auto"	    => \$OPT_AUTOMATIC
 	, "fsf-address"     => \$OPT_FSF_ADDRESS
 	, "d|debug:i"	    => \$debug
 	, "dry-run"	    => \$test
@@ -682,7 +673,6 @@ sub HandleFile ( % )
 	{
 	    if ( $linere )
 	    {
-
 		$debug  and  print "$id: --line matched\n";
 
 		if ( $debug > 1 )
