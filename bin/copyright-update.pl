@@ -25,6 +25,12 @@
 #
 #       To read manual, start this program with option: --help
 
+# ****************************************************************************
+#
+#   Standard perl modules
+#
+# ****************************************************************************
+
 use strict;
 
 use autouse 'Pod::Text'     => qw( pod2text );
@@ -46,16 +52,22 @@ IMPORT: # This is just a syntactic sugar: actually no-op
         $NAME
         $EMAIL
     );
-
-    use vars qw ( $VERSION );
-
-    #   This is for use of Makefile.PL and ExtUtils::MakeMaker
-    #
-    #   The following variable is updated by Emacs setup whenever
-    #   this file is saved.
-
-    my $VERSION = '2010.0307.1318';
 }
+
+# ****************************************************************************
+#
+#   VERSION
+#
+# ****************************************************************************
+
+use vars qw ( $VERSION );
+
+#   This is for use of Makefile.PL and ExtUtils::MakeMaker
+#
+#   The following variable is updated by custom Emacs setup whenever
+#   this file is saved.
+
+my $VERSION = '2010.0307.1325';
 
 # ****************************************************************************
 #

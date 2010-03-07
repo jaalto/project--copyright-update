@@ -2,7 +2,9 @@
 
 	* Makefile: (dist-*): Run 'doc'.
 
-	* bin/copyright-update.pl (HandleCommandLineArgs): In --auto
+	* bin/copyright-update.pl
+	(top level): Add stanza 'Standard perl modules'.
+	(HandleCommandLineArgs): In --auto
 	options, check NAME and EMAIL more carefully.
 	(Help::EMAIL): Document email address in more detail.
 
