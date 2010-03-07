@@ -54,7 +54,7 @@ IMPORT: # This is just a syntactic sugar: actually no-op
     #   The following variable is updated by Emacs setup whenever
     #   this file is saved.
 
-    my $VERSION = '2010.0303.1439';
+    my $VERSION = '2010.0307.1318';
 }
 
 # ****************************************************************************
@@ -287,9 +287,15 @@ In the form 'Firstname Lastname'. If set, this is used in option B<--auto>.
 
 =item EMAIL
 
-In the form 'Firstname Lastname <address@example.com>'. If set, this
-is used in option B<--auto> only if environment variable NAME is not
-set.
+In the form 'Firtname.Lastname@example.com>'. If set, this is used in
+option B<--auto> only if environment variable NAME is not set. The
+localpart in email address must match case insensitive regexp
+C<'^[a-z-]+\.[a-z-]+@'> or it is not used:
+
+    address@example.com		Not used
+    dr.foo.company@example.com  Not used
+    -------------
+    Localpart
 
 =back
 
@@ -486,25 +492,38 @@ sub HandleCommandLineArgs ()
 	{
 	    local $ARG = $NAME;
 
-	    s/[ \t]+/[ \\t]+/;
-
-	    $OPT_LINE_REGEXP = $ARG;
+	    if ( /^([a-z-]+) +([a-z-]+)/i )
+	    {
+		$verb > 1 and  print "$id: Using NAME: $NAME\n";
+		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
+	    }
+	    else
+	    {
+		$verb  and  print "$id: WARN: NAME not recognized: '$NAME'\n";
+	    }
 	}
-	elsif ( $EMAIL )
+
+	if ( not $OPT_LINE_REGEXP  and  $EMAIL )
 	{
 	    local $ARG = $EMAIL;
 
-	    s/[ \t]*<.*//;		# Delete <email> part
-	    s/[ \t]+/[ \\t]+/;
+	    if ( /^([a-z-]+)\.([a-z-]+)@/i )
+	    {
+		$verb > 1 and  print "$id: Using EMAIL: $EMAIL\n";
+		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
+	    }
+	    else
+	    {
+		$verb  and  print "$id: WARN: EMAIL not recognized: '$EMAIL'\n";
+	    }
 
-	    $OPT_LINE_REGEXP = $ARG;
-	}
-	else
-	{
-	    die "$id: option --auto needs environment variable NAME or EMAIL"
+	    unless ( $OPT_LINE_REGEXP )
+	    {
+		die "$id: information for option --auto missing";
+	    }
 	}
 
-	$verb > 1  and  print "$id: automatic preset: --line '$OPT_LINE_REGEXP'\n";
+	$verb > 1  and  print "$id: automatic preset of --line '$OPT_LINE_REGEXP'\n";
     }
 }
 
