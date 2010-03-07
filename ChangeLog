@@ -1,5 +1,7 @@
 2010-03-07 Sun  Jari Aalto  <jari.aalto@cante.net>
 
+	* Makefile: (dist-*): Run 'doc'.
+
 	* bin/copyright-update.pl (HandleCommandLineArgs): In --auto
 	options, check NAME and EMAIL more carefully.
 	(Help::EMAIL): Document email address in more detail.
