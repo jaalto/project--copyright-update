@@ -124,14 +124,17 @@
 .\" ========================================================================
 .\"
 .IX Title "COPYRIGHT-UPDATE 1"
-.TH COPYRIGHT-UPDATE 1 "2010-03-01" "perl v5.10.1" "cvs status - formatter"
+.TH COPYRIGHT-UPDATE 1 "2010-03-07" "perl v5.10.1" "cvs status - formatter"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
 .nh
 .SH "NAME"
+copyright\-update \- Update Copyright information in files
+.SH "SYNOPSIS"
+.IX Header "SYNOPSIS"
 .Vb 1
-\&  copyright\-update \- Update Copyright information in files
+\&  copyright\-update [options] FILE [FILE ...] | \-\-recursive PATH [PATH ...]>
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -139,18 +142,34 @@ Update the copyright information in set of files, possibly
 recursively, matching content criteria. The updating affects copyright
 year, \s-1GPL\s0 address information etc.
 .PP
-The line must have word \*(L"Copyright\*(R", a three character \*(L"(C)\*(R" and the
-range of years. Varying amount of spaces and tabs are permitted, but
-there must be no spaces around the dash-character in YEAR-YEAR. Examples:
+The line must have word \*(L"Copyright\*(R", a space, three characters '(C)'
+(or a U+00A9 \s-1UTF\s0 copyright sign), a space, and the range of
+years. Varying amount of spaces and tabs are permitted, but there must
+be no spaces around the dash-character in YEAR-YEAR. Examples:
 .PP
-.Vb 2
+.Vb 7
+\&            A whitespace, or multiple, required
+\&            |   |           No space between years
+\&            |   |           |
 \&   Copyright (C)        YYYY\-YYYY
 \&   Copyright: (C)       YYYY\-YYYY
+\&            |
+\&            A colon is optional
 .Ve
 .SH "OPTIONS"
 .IX Header "OPTIONS"
-.IP "\fB\-a, \-\-fsf\-address\fR" 4
-.IX Item "-a, --fsf-address"
+.IP "\fB\-a, \-\-auto\fR" 4
+.IX Item "-a, --auto"
+In automatic mode, the author's name is read from environment variable
+\&\s-1NAME\s0 and only lines matching 'Copyright.*$NAME' are affected. If \s-1NAME\s0
+is not set, read information from \s-1EMAIL\s0. See section \s-1ENVIRONMENT\s0.
+.Sp
+This option effectively presets value for the \fB\-\-line\fR option.
+.IP "\fB\-d, \-\-debug \s-1LEVEL\s0\fR" 4
+.IX Item "-d, --debug LEVEL"
+Turn on debug. Level can be in range 0\-10.
+.IP "\fB\-\-fsf\-address\fR" 4
+.IX Item "--fsf-address"
 Change \s-1FSF\s0 (a)ddress paragraphs pointing only to \s-1URL\s0. This format is
 the format used in the \s-1GPL\s0 v3 license text:
 .Sp
@@ -174,9 +193,6 @@ Affects: paragraph with new address:
 \&    along with this package; if not, write to the Free Software
 \&    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110\-1301USA
 .Ve
-.IP "\fB\-\-debug \s-1LEVEL\s0\fR" 4
-.IX Item "--debug LEVEL"
-Turn on debug. Level can be in range 0\-10.
 .IP "\fB\-h, \-\-help\fR" 4
 .IX Item "-h, --help"
 Print text help
@@ -186,18 +202,29 @@ Print help in \s-1HTML\s0 format.
 .IP "\fB\-\-help\-man\fR" 4
 .IX Item "--help-man"
 Print help in manual page \f(CWman(1)\fR format.
-.IP "\fB\-i, \-\-ignore \s-1REGEXP\s0\fR" 4
-.IX Item "-i, --ignore REGEXP"
-Ignore files mathing regexp. The match is done against whole path.
+.IP "\fB\-i, \-\-include \s-1REGEXP\s0\fR" 4
+.IX Item "-i, --include REGEXP"
+Include files mathing regexp. The match is done against whole path. The option
+can be used multiple times.
+.Sp
+If this option is not supplied, every file is automatically included.
+The matches can be further filtered by using options \fB\-\-exclude\fR.
 .IP "\fB\-l, \-\-line \s-1REGEXP\s0\fR" 4
 .IX Item "-l, --line REGEXP"
 Change only lines which match \s-1REGEXP\s0. The match is case-insensitive.
 .IP "\fB\-r, \-\-recursive\fR" 4
 .IX Item "-r, --recursive"
-Recursively search all direcotries given at command line.
+Recursively search all direcotories given at command line.
 .IP "\fB\-R, \-\-regexp \s-1REGEXP\s0\fR" 4
 .IX Item "-R, --regexp REGEXP"
-Change only files whose content matches \s-1REGEXP\s0.
+Change only files whose content matches \s-1REGEXP\s0. The file is read in as
+a one big string so it's possible to match using Perl regular
+epxressions accross lines. An example: '(?smi)This.*multi.*line.*match'.
+See \fIperlre\fR\|(1) for more information about 'smi' modifiers.
+.Sp
+This options can be used as a preliminary \fIContent criteria\fR, to
+select the file, before \fB\-\-line\fR option finds the correct Copyright
+line.
 .IP "\fB\-t, \-\-test, \-\-dry\-run\fR" 4
 .IX Item "-t, --test, --dry-run"
 Run in test mode. Show what would happen. No files are changed.
@@ -208,6 +235,12 @@ verbosity.
 .IP "\fB\-V, \-\-version\fR" 4
 .IX Item "-V, --version"
 Print contact and version information
+.IP "\fB\-x, \-\-exclude \s-1REGEXP\s0\fR" 4
+.IX Item "-x, --exclude REGEXP"
+Ignore files mathing regexp. The match is done against whole path. The option
+can be used multiple times.
+.Sp
+This option is applied after possible \fB\-\-include\fR matches.
 .IP "\fB\-y, \-\-year \s-1YEAR\s0\fR" 4
 .IX Item "-y, --year YEAR"
 Update files using \s-1YEAR\s0. Year value must be four digits.
@@ -217,10 +250,16 @@ The default is current calendar year.
 Disable updating year.
 .SH "EXAMPLES"
 .IX Header "EXAMPLES"
-The primary use is to update files to the current year:
+The primary use is to update files according to the current year:
 .PP
 .Vb 1
-\&   copyright\-update.pl \-\-verbose 1 \-\-test [\-\-year YYYY] *
+\&   copyright\-update.pl \-\-verbose 1 [\-\-test] [\-\-year YYYY] *
+.Ve
+.PP
+Update only C\-code file:
+.PP
+.Vb 1
+\&   copyright\-update.pl \-\-verbose 1 \-\-include "*.[ch]" \-\-recursive .
 .Ve
 .PP
 It is possible to restrict updating files recursively to only those
@@ -230,7 +269,7 @@ affected are those that match \fB\-\-line\fR regular expression.
 .Vb 9
 \&   copyright\-update.pl \e
 \&        \-\-recursive \e
-\&        \-\-Regexp "Author:.*Mr. Foo" \e
+\&        \-\-regexp "Author:.*Mr. Foo" \e
 \&        \-\-line \*(Aq\ebFoo\eb\*(Aq \e
 \&        \-\-ignore \*(Aq\e.(bak|bup|[~#]])$\*(Aq \e
 \&        \-\-verbose 1 \e
@@ -246,7 +285,22 @@ None.
 None.
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
-No environment variables are used.
+.IP "\s-1NAME\s0" 4
+.IX Item "NAME"
+In the form 'Firstname Lastname'. If set, this is used in option \fB\-\-auto\fR.
+.IP "\s-1EMAIL\s0" 4
+.IX Item "EMAIL"
+In the form 'Firtname.Lastname@example.com>'. If set, this is used in
+option \fB\-\-auto\fR only if environment variable \s-1NAME\s0 is not set. The
+localpart in email address must match case insensitive regexp
+\&\f(CW\*(Aq^[a\-z\-]+\e.[a\-z\-]+@\*(Aq\fR or it is not used:
+.Sp
+.Vb 4
+\&    address@example.com         Not used
+\&    dr.foo.company@example.com  Not used
+\&    \-\-\-\-\-\-\-\-\-\-\-\-\-
+\&    Localpart
+.Ve
 .SH "FILES"
 .IX Header "FILES"
 None.
@@ -256,6 +310,9 @@ None.
 .SH "COREQUISITES"
 .IX Header "COREQUISITES"
 Uses standard Perl modules.
+.SH "AVAILABILITY"
+.IX Header "AVAILABILITY"
+Homepage is at http://freshmeat.net/projects/copyright\-update
 .SH "AUTHOR"
 .IX Header "AUTHOR"
 Copyright (C) Jari Aalto

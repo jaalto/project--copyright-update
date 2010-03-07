@@ -1,21 +1,40 @@
 NAME
-      copyright-update - Update Copyright information in files
+    copyright-update - Update Copyright information in files
+
+SYNOPSIS
+      copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]>
 
 DESCRIPTION
     Update the copyright information in set of files, possibly recursively,
     matching content criteria. The updating affects copyright year, GPL
     address information etc.
 
-    The line must have word "Copyright", a three character "(C)" and the
-    range of years. Varying amount of spaces and tabs are permitted, but
-    there must be no spaces around the dash-character in YEAR-YEAR.
-    Examples:
+    The line must have word "Copyright", a space, three characters '(C)' (or
+    a U+00A9 UTF copyright sign), a space, and the range of years. Varying
+    amount of spaces and tabs are permitted, but there must be no spaces
+    around the dash-character in YEAR-YEAR. Examples:
 
+                A whitespace, or multiple, required
+                |   |           No space between years
+                |   |           |
        Copyright (C)        YYYY-YYYY
        Copyright: (C)       YYYY-YYYY
+                |
+                A colon is optional
 
 OPTIONS
-    -a, --fsf-address
+    -a, --auto
+        In automatic mode, the author's name is read from environment
+        variable NAME and only lines matching 'Copyright.*$NAME' are
+        affected. If NAME is not set, read information from EMAIL. See
+        section ENVIRONMENT.
+
+        This option effectively presets value for the --line option.
+
+    -d, --debug LEVEL
+        Turn on debug. Level can be in range 0-10.
+
+    --fsf-address
         Change FSF (a)ddress paragraphs pointing only to URL. This format is
         the format used in the GPL v3 license text:
 
@@ -34,9 +53,6 @@ OPTIONS
             along with this package; if not, write to the Free Software
             Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
 
-    --debug LEVEL
-        Turn on debug. Level can be in range 0-10.
-
     -h, --help
         Print text help
 
@@ -46,17 +62,30 @@ OPTIONS
     --help-man
         Print help in manual page man(1) format.
 
-    -i, --ignore REGEXP
-        Ignore files mathing regexp. The match is done against whole path.
+    -i, --include REGEXP
+        Include files mathing regexp. The match is done against whole path.
+        The option can be used multiple times.
+
+        If this option is not supplied, every file is automatically
+        included. The matches can be further filtered by using options
+        --exclude.
 
     -l, --line REGEXP
         Change only lines which match REGEXP. The match is case-insensitive.
 
     -r, --recursive
-        Recursively search all direcotries given at command line.
+        Recursively search all direcotories given at command line.
 
     -R, --regexp REGEXP
-        Change only files whose content matches REGEXP.
+        Change only files whose content matches REGEXP. The file is read in
+        as a one big string so it's possible to match using Perl regular
+        epxressions accross lines. An example:
+        '(?smi)This.*multi.*line.*match'. See perlre(1) for more information
+        about 'smi' modifiers.
+
+        This options can be used as a preliminary *Content criteria*, to
+        select the file, before --line option finds the correct Copyright
+        line.
 
     -t, --test, --dry-run
         Run in test mode. Show what would happen. No files are changed.
@@ -68,6 +97,12 @@ OPTIONS
     -V, --version
         Print contact and version information
 
+    -x, --exclude REGEXP
+        Ignore files mathing regexp. The match is done against whole path.
+        The option can be used multiple times.
+
+        This option is applied after possible --include matches.
+
     -y, --year YEAR
         Update files using YEAR. Year value must be four digits. The default
         is current calendar year.
@@ -76,9 +111,13 @@ OPTIONS
         Disable updating year.
 
 EXAMPLES
-    The primary use is to update files to the current year:
+    The primary use is to update files according to the current year:
 
-       copyright-update.pl --verbose 1 --test [--year YYYY] *
+       copyright-update.pl --verbose 1 [--test] [--year YYYY] *
+
+    Update only C-code file:
+
+       copyright-update.pl --verbose 1 --include "*.[ch]" --recursive .
 
     It is possible to restrict updating files recursively to only those
     files whose content match regexp, like author is "Mr. Foo". The lines
@@ -86,7 +125,7 @@ EXAMPLES
 
        copyright-update.pl \
             --recursive \
-            --Regexp "Author:.*Mr. Foo" \
+            --regexp "Author:.*Mr. Foo" \
             --line '\bFoo\b' \
             --ignore '\.(bak|bup|[~#]])$' \
             --verbose 1 \
@@ -101,7 +140,20 @@ EXAMPLES
     None.
 
 ENVIRONMENT
-    No environment variables are used.
+    NAME
+        In the form 'Firstname Lastname'. If set, this is used in option
+        --auto.
+
+    EMAIL
+        In the form 'Firtname.Lastname@example.com>'. If set, this is used
+        in option --auto only if environment variable NAME is not set. The
+        localpart in email address must match case insensitive regexp
+        '^[a-z-]+\.[a-z-]+@' or it is not used:
+
+            address@example.com         Not used
+            dr.foo.company@example.com  Not used
+            -------------
+            Localpart
 
 FILES
     None.
@@ -111,6 +163,9 @@ SEE ALSO
 
 COREQUISITES
     Uses standard Perl modules.
+
+AVAILABILITY
+    Homepage is at http://freshmeat.net/projects/copyright-update
 
 AUTHOR
     Copyright (C) Jari Aalto

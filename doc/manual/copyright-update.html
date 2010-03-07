@@ -17,6 +17,7 @@
 <ul>
 
 	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
 	<li><a href="#description">DESCRIPTION</a></li>
 	<li><a href="#options">OPTIONS</a></li>
 	<li><a href="#examples">EXAMPLES</a></li>
@@ -26,6 +27,7 @@
 	<li><a href="#files">FILES</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
 	<li><a href="#corequisites">COREQUISITES</a></li>
+	<li><a href="#availability">AVAILABILITY</a></li>
 	<li><a href="#author">AUTHOR</a></li>
 </ul>
 
@@ -37,8 +39,13 @@
 </p>
 <hr />
 <h1><a name="name">NAME</a></h1>
+<p>copyright-update - Update Copyright information in files</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
-  copyright-update - Update Copyright information in files</pre>
+  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]&gt;</pre>
 <p>
 </p>
 <hr />
@@ -46,18 +53,37 @@
 <p>Update the copyright information in set of files, possibly
 recursively, matching content criteria. The updating affects copyright
 year, GPL address information etc.</p>
-<p>The line must have word &quot;Copyright&quot;, a three character &quot;(C)&quot; and the
-range of years. Varying amount of spaces and tabs are permitted, but
-there must be no spaces around the dash-character in YEAR-YEAR. Examples:</p>
+<p>The line must have word &quot;Copyright&quot;, a space, three characters '(C)'
+(or a U+00A9 UTF copyright sign), a space, and the range of
+years. Varying amount of spaces and tabs are permitted, but there must
+be no spaces around the dash-character in YEAR-YEAR. Examples:</p>
 <pre>
+            A whitespace, or multiple, required
+            |   |           No space between years
+            |   |           |
    Copyright (C)        YYYY-YYYY
-   Copyright: (C)       YYYY-YYYY</pre>
+   Copyright: (C)       YYYY-YYYY
+            |
+            A colon is optional</pre>
 <p>
 </p>
 <hr />
 <h1><a name="options">OPTIONS</a></h1>
 <dl>
-<dt><strong><a name="a_fsf_address" class="item"><strong>-a, --fsf-address</strong></a></strong></dt>
+<dt><strong><a name="a_auto" class="item"><strong>-a, --auto</strong></a></strong></dt>
+
+<dd>
+<p>In automatic mode, the author's name is read from environment variable
+NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
+is not set, read information from EMAIL. See section ENVIRONMENT.</p>
+<p>This option effectively presets value for the <strong>--line</strong> option.</p>
+</dd>
+<dt><strong><a name="d_debug_level" class="item"><strong>-d, --debug LEVEL</strong></a></strong></dt>
+
+<dd>
+<p>Turn on debug. Level can be in range 0-10.</p>
+</dd>
+<dt><strong><a name="fsf_address" class="item"><strong>--fsf-address</strong></a></strong></dt>
 
 <dd>
 <p>Change FSF (a)ddress paragraphs pointing only to URL. This format is
@@ -76,11 +102,6 @@ the format used in the GPL v3 license text:</p>
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA</pre>
 </dd>
-<dt><strong><a name="debug_level" class="item"><strong>--debug LEVEL</strong></a></strong></dt>
-
-<dd>
-<p>Turn on debug. Level can be in range 0-10.</p>
-</dd>
 <dt><strong><a name="h_help" class="item"><strong>-h, --help</strong></a></strong></dt>
 
 <dd>
@@ -96,10 +117,13 @@ the format used in the GPL v3 license text:</p>
 <dd>
 <p>Print help in manual page <code>man(1)</code> format.</p>
 </dd>
-<dt><strong><a name="i_ignore_regexp" class="item"><strong>-i, --ignore REGEXP</strong></a></strong></dt>
+<dt><strong><a name="i_include_regexp" class="item"><strong>-i, --include REGEXP</strong></a></strong></dt>
 
 <dd>
-<p>Ignore files mathing regexp. The match is done against whole path.</p>
+<p>Include files mathing regexp. The match is done against whole path. The option
+can be used multiple times.</p>
+<p>If this option is not supplied, every file is automatically included.
+The matches can be further filtered by using options <strong>--exclude</strong>.</p>
 </dd>
 <dt><strong><a name="l_line_regexp" class="item"><strong>-l, --line REGEXP</strong></a></strong></dt>
 
@@ -109,12 +133,18 @@ the format used in the GPL v3 license text:</p>
 <dt><strong><a name="r_recursive" class="item"><strong>-r, --recursive</strong></a></strong></dt>
 
 <dd>
-<p>Recursively search all direcotries given at command line.</p>
+<p>Recursively search all direcotories given at command line.</p>
 </dd>
 <dt><strong><a name="r_regexp_regexp" class="item"><strong>-R, --regexp REGEXP</strong></a></strong></dt>
 
 <dd>
-<p>Change only files whose content matches REGEXP.</p>
+<p>Change only files whose content matches REGEXP. The file is read in as
+a one big string so it's possible to match using Perl regular
+epxressions accross lines. An example: '(?smi)This.*multi.*line.*match'.
+See <code>perlre(1)</code> for more information about 'smi' modifiers.</p>
+<p>This options can be used as a preliminary <em>Content criteria</em>, to
+select the file, before <strong>--line</strong> option finds the correct Copyright
+line.</p>
 </dd>
 <dt><strong><a name="t_test_dry_run" class="item"><strong>-t, --test, --dry-run</strong></a></strong></dt>
 
@@ -132,6 +162,13 @@ verbosity.</p>
 <dd>
 <p>Print contact and version information</p>
 </dd>
+<dt><strong><a name="x_exclude_regexp" class="item"><strong>-x, --exclude REGEXP</strong></a></strong></dt>
+
+<dd>
+<p>Ignore files mathing regexp. The match is done against whole path. The option
+can be used multiple times.</p>
+<p>This option is applied after possible <strong>--include</strong> matches.</p>
+</dd>
 <dt><strong><a name="y_year_year" class="item"><strong>-y, --year YEAR</strong></a></strong></dt>
 
 <dd>
@@ -148,16 +185,19 @@ The default is current calendar year.</p>
 </p>
 <hr />
 <h1><a name="examples">EXAMPLES</a></h1>
-<p>The primary use is to update files to the current year:</p>
+<p>The primary use is to update files according to the current year:</p>
 <pre>
-   copyright-update.pl --verbose 1 --test [--year YYYY] *</pre>
+   copyright-update.pl --verbose 1 [--test] [--year YYYY] *</pre>
+<p>Update only C-code file:</p>
+<pre>
+   copyright-update.pl --verbose 1 --include &quot;*.[ch]&quot; --recursive .</pre>
 <p>It is possible to restrict updating files recursively to only those
 files whose content match regexp, like author is &quot;Mr. Foo&quot;. The lines
 affected are those that match <strong>--line</strong> regular expression.</p>
 <pre>
    copyright-update.pl \
         --recursive \
-        --Regexp &quot;Author:.*Mr. Foo&quot; \
+        --regexp &quot;Author:.*Mr. Foo&quot; \
         --line '\bFoo\b' \
         --ignore '\.(bak|bup|[~#]])$' \
         --verbose 1 \
@@ -178,7 +218,26 @@ affected are those that match <strong>--line</strong> regular expression.</p>
 </p>
 <hr />
 <h1><a name="environment">ENVIRONMENT</a></h1>
-<p>No environment variables are used.</p>
+<dl>
+<dt><strong><a name="name" class="item">NAME</a></strong></dt>
+
+<dd>
+<p>In the form 'Firstname Lastname'. If set, this is used in option <strong>--auto</strong>.</p>
+</dd>
+<dt><strong><a name="email" class="item">EMAIL</a></strong></dt>
+
+<dd>
+<p>In the form <a href="mailto:'Firtname.Lastname@example.com>">'Firtname.Lastname@example.com></a>'. If set, this is used in
+option <strong>--auto</strong> only if environment variable NAME is not set. The
+localpart in email address must match case insensitive regexp
+<code>'^[a-z-]+\.[a-z-]+@'</code> or it is not used:</p>
+<pre>
+    address@example.com         Not used
+    dr.foo.company@example.com  Not used
+    -------------
+    Localpart</pre>
+</dd>
+</dl>
 <p>
 </p>
 <hr />
@@ -194,6 +253,11 @@ affected are those that match <strong>--line</strong> regular expression.</p>
 <hr />
 <h1><a name="corequisites">COREQUISITES</a></h1>
 <p>Uses standard Perl modules.</p>
+<p>
+</p>
+<hr />
+<h1><a name="availability">AVAILABILITY</a></h1>
+<p>Homepage is at <a href="http://freshmeat.net/projects/copyright-update">http://freshmeat.net/projects/copyright-update</a></p>
 <p>
 </p>
 <hr />
