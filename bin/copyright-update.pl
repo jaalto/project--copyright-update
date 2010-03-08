@@ -56,7 +56,7 @@ IMPORT: # This is just a syntactic sugar: actually no-op
 
 # ****************************************************************************
 #
-#   VERSION
+#   GLOBALS
 #
 # ****************************************************************************
 
@@ -67,7 +67,19 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0308.1730';
+my $VERSION = '2010.0308.1756';
+
+my $DEFAULT_PATH_EXCLUDE = ''		# Matches *only path component
+    . '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
+    ;
+
+my $DEFAULT_FILE_EXCLUDE = ''		# Matches *only* file component
+    . '[#~]$'
+    . '|\.[#]'
+    . '|\.(s?o|l?a|bin|com|exe|class|elc)$'
+    . '|\.(ods|odt|pdf|ppt|xls|rtf)$'
+    . '|\.(xpm|jpg|png|gif|tiff|bmp)$'
+    ;
 
 # ****************************************************************************
 #
@@ -151,6 +163,10 @@ be no spaces around the dash-character in YEAR-YEAR. Examples:
             |
             A colon is optional
 
+By default certan files and paths are always ignored; like version
+control directories, backups files, object files and binary files
+according to Perl's C<-T> file test. See option B<--help-exclude>.
+
 =head1 OPTIONS
 
 =over 4
@@ -190,6 +206,10 @@ Affects: paragraph with new address:
 =item B<-h, --help>
 
 Print text help
+
+=item B<--help-exclude>
+
+Print default values that exclude paths and files.
 
 =item B<--help-html>
 
@@ -237,7 +257,7 @@ verbosity.
 
 =item B<-V, --version>
 
-Print contact and version information
+Print contact and version information.
 
 =item B<-x, --exclude REGEXP>
 
@@ -248,8 +268,8 @@ This option is applied after possible B<--include> matches.
 
 =item B<-y, --year YEAR>
 
-Update files using YEAR. Year value must be four digits.
-The default is current calendar year.
+Update files using YEAR. Value must be four digits. Without this
+option, program uses current calendar year.
 
 =item B<-Y, --no-year>
 
@@ -259,9 +279,9 @@ Disable updating year.
 
 =head1 EXAMPLES
 
-The primary use is to update files according to the current year:
+The primary use is to update files to reflect current year:
 
-   copyright-update.pl --verbose 1 [--test] [--year YYYY] *
+   copyright-update.pl --verbose 1 [--test] *
 
 Update only C-code file:
 
@@ -394,6 +414,30 @@ sub Help (;$$)
 #
 # ****************************************************************************
 
+sub HelpExclude ()
+{
+    my $id = "$LIB.HelpExclude";
+
+    print "Default path exclude regexp: '$DEFAULT_PATH_EXCLUDE'\n";
+    print "Default file exclude regexp: '$DEFAULT_FILE_EXCLUDE'\n";
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Return current year YYYY
+#
+#   INPUT PARAMETERS
+#
+#       None
+#
+#   RETURN VALUES
+#
+#       number      YYYY
+#
+# ****************************************************************************
+
 sub Year ()
 {
     my $id = "$LIB.Year";
@@ -445,6 +489,7 @@ sub HandleCommandLineArgs ()
     ));
 
     my ( $help, $helpMan, $helpHtml, $version ); # local variables to function
+    my ( $helpExclude );
 
     $debug = -1;
 
@@ -454,6 +499,7 @@ sub HandleCommandLineArgs ()
 	, "fsf-address"     => \$OPT_FSF_ADDRESS
 	, "d|debug:i"	    => \$debug
 	, "dry-run"	    => \$test
+	, "help-exclude"    => \$helpExclude
 	, "help-html"	    => \$helpHtml
 	, "help-man"	    => \$helpMan
 	, "h|help"	    => \$help
@@ -469,11 +515,12 @@ sub HandleCommandLineArgs ()
 	, "Y|no-year"	    => \$OPT_NO_YEAR
     );
 
-    $version    and  die "$VERSION $CONTACT $LICENSE $URL\n";
-    $help	and  Help();
-    $helpMan	and  Help(-man);
-    $helpHtml	and  Help(-html);
-    $version	and  Version();
+    $version		and  die "$VERSION $CONTACT $LICENSE $URL\n";
+    $helpExclude 	and  HelpExclude();
+    $help		and  Help();
+    $helpMan		and  Help(-man);
+    $helpHtml		and  Help(-html);
+    $version		and  Version();
 
     $debug = 1          if $debug == 0;
     $debug = 0          if $debug < 0;
@@ -838,24 +885,16 @@ sub wanted ()
     my $dir  = $File::Find::dir;
     my $file = $File::Find::name;  # complete path
 
-    if ( $dir =~ m,(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$,i )
+    if ( $dir =~ m,$DEFAULT_PATH_EXCLUDE,o )
     {
         $File::Find::prune = 1;
-        $debug  and  print "$id: Ignore VCS directory: $dir\n";
+        $debug  and  print "$id: DEfault path exclude: $dir\n";
         return;
     }
 
-    my $ignore = '[#~]$'
-                 . '|\.[#]'
-                 . '|\.(s?o|l?a|bin|com|exe|class|elc)$'
-                 . '|\.(ods|odt|pdf|ppt|xls|rtf)$'
-		 . '|\.(xpm|jpg|png|gif|tiff|bmp)$'
-                 ;
-
-
-    if ( $file =~ m,$ignore,oi )
+    if ( $file =~ m,$DEFAULT_FILE_EXCLUDE,o )
     {
-        $debug  and  print "$id: Default exclude: $file\n";
+        $debug  and  print "$id: Default file exclude: $file\n";
         return;
     }
 
@@ -869,7 +908,7 @@ sub wanted ()
 	unless ( -T )
 	{
 	    $debug  and
-		print "$id: Not a binary file (internal test): $file\n";
+		print "$id: Exclude binary file (internal test): $file\n";
 	}
 
 	IsInclude $file  or  return;
