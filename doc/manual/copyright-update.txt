@@ -175,7 +175,7 @@ AVAILABILITY
     Homepage is at http://freshmeat.net/projects/copyright-update
 
 AUTHOR
-    Copyright (C) Jari Aalto
+    Copyright (C) 2000-2010 Jari Aalto
 
 LICENSE
     This program is free software; you can redistribute and/or modify

@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0308.1759';
+my $VERSION = '2010.0308.1801';
 
 my $DEFAULT_PATH_EXCLUDE = ''		# Matches *only path component
     . '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -349,7 +349,7 @@ Homepage is at http://freshmeat.net/projects/copyright-update
 
 =head1 AUTHOR
 
-Copyright (C) Jari Aalto
+Copyright (C) 2000-2010 Jari Aalto
 
 =head1 LICENSE
 
