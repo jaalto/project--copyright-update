@@ -1,7 +1,8 @@
 2010-03-08 Mon  Jari Aalto  <jari.aalto@cante.net>
 
-	* bin/copyright-update.pl (Help::SYNOPSIN): remove
-	extra character '>' at end.
+	* bin/copyright-update.pl
+	(Help::LICENSE): New section.
+	(Help::SYNOPSIN): remove extra character '>' at end.
 	(top level): add $DEFAULT_PATH_EXCLUDE, $DEFAULT_FILE_EXCLUDE.
 	(wanted): Use $DEFAULT_PATH_EXCLUDE, $DEFAULT_FILE_EXCLUDE.
 	(HelpExclude): New.
