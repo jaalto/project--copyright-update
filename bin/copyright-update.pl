@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0307.1325';
+my $VERSION = '2010.0308.1730';
 
 # ****************************************************************************
 #
@@ -130,7 +130,7 @@ copyright-update - Update Copyright information in files
 
 =head1 SYNOPSIS
 
-  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]>
+  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]
 
 =head1 DESCRIPTION
 

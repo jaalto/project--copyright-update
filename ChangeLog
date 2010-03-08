@@ -1,3 +1,8 @@
+2010-03-08 Mon  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (Help::SYNOPSIN): remove
+	extra character '>' at end.
+
 2010-03-07 Sun  Jari Aalto  <jari.aalto@cante.net>
 
 	* Makefile: (dist-*): Run 'doc'.
