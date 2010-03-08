@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0308.1758';
+my $VERSION = '2010.0308.1759';
 
 my $DEFAULT_PATH_EXCLUDE = ''		# Matches *only path component
     . '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -347,15 +347,15 @@ Uses standard Perl modules.
 
 Homepage is at http://freshmeat.net/projects/copyright-update
 
+=head1 AUTHOR
+
+Copyright (C) Jari Aalto
+
 =head1 LICENSE
 
 This program is free software; you can redistribute and/or modify
 program under the terms of GNU General Public license either version 2
 of the License, or (at your option) any later version.
-
-=head1 AUTHOR
-
-Copyright (C) Jari Aalto
 
 =cut
 
