@@ -45,7 +45,7 @@
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
-  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]&gt;</pre>
+  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]</pre>
 <p>
 </p>
 <hr />
@@ -65,6 +65,9 @@ be no spaces around the dash-character in YEAR-YEAR. Examples:</p>
    Copyright: (C)       YYYY-YYYY
             |
             A colon is optional</pre>
+<p>By default certan files and paths are always ignored; like version
+control directories, backups files, object files and binary files
+according to Perl's <code>-T</code> file test. See option <strong>--help-exclude</strong>.</p>
 <p>
 </p>
 <hr />
@@ -106,6 +109,11 @@ the format used in the GPL v3 license text:</p>
 
 <dd>
 <p>Print text help</p>
+</dd>
+<dt><strong><a name="help_exclude" class="item"><strong>--help-exclude</strong></a></strong></dt>
+
+<dd>
+<p>Print default values that exclude paths and files.</p>
 </dd>
 <dt><strong><a name="help_html" class="item"><strong>--help-html</strong></a></strong></dt>
 
@@ -160,7 +168,7 @@ verbosity.</p>
 <dt><strong><a name="v_version" class="item"><strong>-V, --version</strong></a></strong></dt>
 
 <dd>
-<p>Print contact and version information</p>
+<p>Print contact and version information.</p>
 </dd>
 <dt><strong><a name="x_exclude_regexp" class="item"><strong>-x, --exclude REGEXP</strong></a></strong></dt>
 
@@ -172,8 +180,8 @@ can be used multiple times.</p>
 <dt><strong><a name="y_year_year" class="item"><strong>-y, --year YEAR</strong></a></strong></dt>
 
 <dd>
-<p>Update files using YEAR. Year value must be four digits.
-The default is current calendar year.</p>
+<p>Update files using YEAR. Value must be four digits. Without this
+option, program uses current calendar year.</p>
 </dd>
 <dt><strong><a name="y_no_year" class="item"><strong>-Y, --no-year</strong></a></strong></dt>
 
@@ -185,9 +193,9 @@ The default is current calendar year.</p>
 </p>
 <hr />
 <h1><a name="examples">EXAMPLES</a></h1>
-<p>The primary use is to update files according to the current year:</p>
+<p>The primary use is to update files to reflect current year:</p>
 <pre>
-   copyright-update.pl --verbose 1 [--test] [--year YYYY] *</pre>
+   copyright-update.pl --verbose 1 [--test] *</pre>
 <p>Update only C-code file:</p>
 <pre>
    copyright-update.pl --verbose 1 --include &quot;*.[ch]&quot; --recursive .</pre>

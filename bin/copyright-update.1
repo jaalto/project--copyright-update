@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "COPYRIGHT-UPDATE 1"
-.TH COPYRIGHT-UPDATE 1 "2010-03-07" "perl v5.10.1" "cvs status - formatter"
+.TH COPYRIGHT-UPDATE 1 "2010-03-08" "perl v5.10.1" "cvs status - formatter"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -134,7 +134,7 @@ copyright\-update \- Update Copyright information in files
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
 .Vb 1
-\&  copyright\-update [options] FILE [FILE ...] | \-\-recursive PATH [PATH ...]>
+\&  copyright\-update [options] FILE [FILE ...] | \-\-recursive PATH [PATH ...]
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -156,6 +156,10 @@ be no spaces around the dash-character in YEAR-YEAR. Examples:
 \&            |
 \&            A colon is optional
 .Ve
+.PP
+By default certan files and paths are always ignored; like version
+control directories, backups files, object files and binary files
+according to Perl's \f(CW\*(C`\-T\*(C'\fR file test. See option \fB\-\-help\-exclude\fR.
 .SH "OPTIONS"
 .IX Header "OPTIONS"
 .IP "\fB\-a, \-\-auto\fR" 4
@@ -196,6 +200,9 @@ Affects: paragraph with new address:
 .IP "\fB\-h, \-\-help\fR" 4
 .IX Item "-h, --help"
 Print text help
+.IP "\fB\-\-help\-exclude\fR" 4
+.IX Item "--help-exclude"
+Print default values that exclude paths and files.
 .IP "\fB\-\-help\-html\fR" 4
 .IX Item "--help-html"
 Print help in \s-1HTML\s0 format.
@@ -234,7 +241,7 @@ Print informational messages. Increase numeric \s-1LEVEL\s0 for more
 verbosity.
 .IP "\fB\-V, \-\-version\fR" 4
 .IX Item "-V, --version"
-Print contact and version information
+Print contact and version information.
 .IP "\fB\-x, \-\-exclude \s-1REGEXP\s0\fR" 4
 .IX Item "-x, --exclude REGEXP"
 Ignore files mathing regexp. The match is done against whole path. The option
@@ -243,17 +250,17 @@ can be used multiple times.
 This option is applied after possible \fB\-\-include\fR matches.
 .IP "\fB\-y, \-\-year \s-1YEAR\s0\fR" 4
 .IX Item "-y, --year YEAR"
-Update files using \s-1YEAR\s0. Year value must be four digits.
-The default is current calendar year.
+Update files using \s-1YEAR\s0. Value must be four digits. Without this
+option, program uses current calendar year.
 .IP "\fB\-Y, \-\-no\-year\fR" 4
 .IX Item "-Y, --no-year"
 Disable updating year.
 .SH "EXAMPLES"
 .IX Header "EXAMPLES"
-The primary use is to update files according to the current year:
+The primary use is to update files to reflect current year:
 .PP
 .Vb 1
-\&   copyright\-update.pl \-\-verbose 1 [\-\-test] [\-\-year YYYY] *
+\&   copyright\-update.pl \-\-verbose 1 [\-\-test] *
 .Ve
 .PP
 Update only C\-code file:
