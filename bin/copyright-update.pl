@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0308.1801';
+my $VERSION = '2010.0309.2123';
 
 my $DEFAULT_PATH_EXCLUDE = ''		# Matches *only path component
     . '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -752,23 +752,29 @@ sub HandleFile ( % )
 
 	unless ( $OPT_NO_YEAR )
 	{
+	    my $i = 0;
+
 	    if ( $linere )
 	    {
-		$debug  and  print "$id: --line matched\n";
-
 		if ( $debug > 1 )
 		{
 		    warn "s/(?:$linere).*\\K($copy$repeat)($yyyy)/\${1}$YEAR/gmi\n";
 		    warn "s/($copy$repeat)$yyyy(.*$linere)/\${1}$YEAR\${2}/gmi\n";
 		}
 
-		s/(?:$linere).*\K($copy$repeat)$yyyy/$1$YEAR/gmi and $done++;
-		s/($copy$repeat)$yyyy(.*$linere)/$1$YEAR$2/gmi and $done++;
+		s/(?:$linere).*\K($copy$repeat)$yyyy/$1$YEAR/gmi and $i++;
+		s/($copy$repeat)$yyyy(.*$linere)/$1$YEAR$2/gmi and $i++;
+
 	    }
 	    else
 	    {
-		s/($copy$repeat)$yyyy/$1$YEAR/gmi and $done++;
+		s/($copy$repeat)$yyyy/$1$YEAR/gmi and $i++;
 	    }
+
+	    $done += $i;
+	    $debug and $i and print "$id: matches --line '$linere'\n";
+
+	    $y = ""  unless $i;
 	}
 
         $verb   and  $y  and  Print "$msg $y => $YEAR";

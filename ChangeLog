@@ -1,3 +1,8 @@
+2010-03-09 Tue  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (HandleFile): Suppress year change
+	messages if nothing is matched.
+
 2010-03-08 Mon  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl
