@@ -36,7 +36,7 @@ use strict;
 use autouse 'Pod::Text'     => qw( pod2text );
 use autouse 'Pod::Html'     => qw( pod2html );
 
-use English;
+use English qw( -no_match_vars );
 use Getopt::Long;
 use File::Basename;
 use File::Find;
@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0309.2136';
+my $VERSION = '2010.0312.2218';
 
 my $DEFAULT_PATH_EXCLUDE = ''		# Matches *only path component
     . '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
