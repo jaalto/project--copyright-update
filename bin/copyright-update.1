@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "COPYRIGHT-UPDATE 1"
-.TH COPYRIGHT-UPDATE 1 "2010-03-08" "perl v5.10.1" "cvs status - formatter"
+.TH COPYRIGHT-UPDATE 1 "2010-03-15" "perl v5.10.1" "cvs status - formatter"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -260,13 +260,13 @@ Disable updating year.
 The primary use is to update files to reflect current year:
 .PP
 .Vb 1
-\&   copyright\-update.pl \-\-verbose 1 [\-\-test] *
+\&   copyright\-update \-\-verbose 1 [\-\-test] *
 .Ve
 .PP
 Update only C\-code file:
 .PP
 .Vb 1
-\&   copyright\-update.pl \-\-verbose 1 \-\-include "*.[ch]" \-\-recursive .
+\&   copyright\-update \-\-verbose 1 \-\-include "*.[ch]" \-\-recursive .
 .Ve
 .PP
 It is possible to restrict updating files recursively to only those
@@ -274,7 +274,7 @@ files whose content match regexp, like author is \*(L"Mr. Foo\*(R". The lines
 affected are those that match \fB\-\-line\fR regular expression.
 .PP
 .Vb 9
-\&   copyright\-update.pl \e
+\&   copyright\-update \e
 \&        \-\-recursive \e
 \&        \-\-regexp "Author:.*Mr. Foo" \e
 \&        \-\-line \*(Aq\ebFoo\eb\*(Aq \e

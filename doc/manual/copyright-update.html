@@ -196,15 +196,15 @@ option, program uses current calendar year.</p>
 <h1><a name="examples">EXAMPLES</a></h1>
 <p>The primary use is to update files to reflect current year:</p>
 <pre>
-   copyright-update.pl --verbose 1 [--test] *</pre>
+   copyright-update --verbose 1 [--test] *</pre>
 <p>Update only C-code file:</p>
 <pre>
-   copyright-update.pl --verbose 1 --include &quot;*.[ch]&quot; --recursive .</pre>
+   copyright-update --verbose 1 --include &quot;*.[ch]&quot; --recursive .</pre>
 <p>It is possible to restrict updating files recursively to only those
 files whose content match regexp, like author is &quot;Mr. Foo&quot;. The lines
 affected are those that match <strong>--line</strong> regular expression.</p>
 <pre>
-   copyright-update.pl \
+   copyright-update \
         --recursive \
         --regexp &quot;Author:.*Mr. Foo&quot; \
         --line '\bFoo\b' \

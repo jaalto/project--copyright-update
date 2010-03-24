@@ -120,17 +120,17 @@ OPTIONS
 EXAMPLES
     The primary use is to update files to reflect current year:
 
-       copyright-update.pl --verbose 1 [--test] *
+       copyright-update --verbose 1 [--test] *
 
     Update only C-code file:
 
-       copyright-update.pl --verbose 1 --include "*.[ch]" --recursive .
+       copyright-update --verbose 1 --include "*.[ch]" --recursive .
 
     It is possible to restrict updating files recursively to only those
     files whose content match regexp, like author is "Mr. Foo". The lines
     affected are those that match --line regular expression.
 
-       copyright-update.pl \
+       copyright-update \
             --recursive \
             --regexp "Author:.*Mr. Foo" \
             --line '\bFoo\b' \
