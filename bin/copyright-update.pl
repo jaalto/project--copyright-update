@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0312.2218';
+my $VERSION = '2010.0315.1013';
 
 my $DEFAULT_PATH_EXCLUDE = ''		# Matches *only path component
     . '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -281,17 +281,17 @@ Disable updating year.
 
 The primary use is to update files to reflect current year:
 
-   copyright-update.pl --verbose 1 [--test] *
+   copyright-update --verbose 1 [--test] *
 
 Update only C-code file:
 
-   copyright-update.pl --verbose 1 --include "*.[ch]" --recursive .
+   copyright-update --verbose 1 --include "*.[ch]" --recursive .
 
 It is possible to restrict updating files recursively to only those
 files whose content match regexp, like author is "Mr. Foo". The lines
 affected are those that match B<--line> regular expression.
 
-   copyright-update.pl \
+   copyright-update \
         --recursive \
         --regexp "Author:.*Mr. Foo" \
         --line '\bFoo\b' \
@@ -404,7 +404,7 @@ sub Help (;$$)
 #
 #   DESCRIPTION
 #
-#       Return current year YYYY
+#       Display default excludes.
 #
 #   INPUT PARAMETERS
 #
@@ -412,7 +412,7 @@ sub Help (;$$)
 #
 #   RETURN VALUES
 #
-#       number      YYYY
+#       None
 #
 # ****************************************************************************
 
@@ -428,7 +428,7 @@ sub HelpExclude ()
 #
 #   DESCRIPTION
 #
-#       Return current year YYYY
+#       Return current year YYYY.
 #
 #   INPUT PARAMETERS
 #
