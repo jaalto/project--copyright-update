@@ -1,3 +1,16 @@
+2010-04-15 Thu  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (Help): rewrite eval Pod::Man call.
+
+2010-04-04 Sun  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (HandleCommandLineArgs): Arrange
+	options in call to GetOptions().
+	(Initialize): Chnage variable definition order.
+	(Year): Add space to time().
+	(wanted): Correct typo in description block.
+	(Help): Correct manual page string that appears in the center.
+
 2010-03-24 Wed  Jari Aalto  <jari.aalto@cante.net>
 
 	* README (at the end): add Copyright and License.

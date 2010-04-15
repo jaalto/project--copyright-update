@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.0315.1013';
+my $VERSION = '2010.0404.0636';
 
 my $DEFAULT_PATH_EXCLUDE = ''		# Matches *only path component
     . '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -101,19 +101,20 @@ sub Initialize ()
 {
     use vars qw
     (
+	$LICENSE
+        $CONTACT
+        $URL
+
         $LIB
         $PROGNAME
-        $CONTACT
-	$LICENSE
-        $URL
     );
 
     $LICENSE	= "GPL-2+";
+    $CONTACT    = "Jari Aalto";
+    $URL        = "http://freshmeat.net/projects/copyright-update";
+
     $LIB        = basename $PROGRAM_NAME;
     $PROGNAME   = $LIB;
-
-    $CONTACT     = "Jari Aalto";
-    $URL         = "http://freshmeat.net/projects/copyright-update";
 
     $OUTPUT_AUTOFLUSH = 1;
 }
@@ -371,18 +372,18 @@ sub Help (;$$)
     }
     elsif ( $type eq -man )
     {
-	eval "use Pod::Man;";
-        $EVAL_ERROR  and  die "$id: Cannot generate Man: $EVAL_ERROR";
+	eval "use Pod::Man"
+	    or "$id: Cannot generate Man: $EVAL_ERROR";
 
         my %options;
-        $options{center} = 'cvs status - formatter';
+        $options{center} = "User commands";
 
         my $parser = Pod::Man->new(%options);
         $parser->parse_from_file ($PROGRAM_NAME);
     }
     else
     {
-	if ( $^V =~ /5\.10/ )
+	if ( $PERL_VERSION =~ /5\.10/ )
 	{
 	    # Bug in 5.10. Cant use string ("") as a symbol ref
 	    # while "strict refs" in use at
@@ -443,7 +444,7 @@ sub HelpExclude ()
 sub Year ()
 {
     my $id = "$LIB.Year";
-    1900 + (localtime time())[5];
+    1900 + (localtime time() )[5];
 }
 
 # ****************************************************************************
@@ -512,9 +513,9 @@ sub HandleCommandLineArgs ()
 	, "test"	    => \$test
 	, "v|verbose:i"	    => \$verb
 	, "V|version"	    => \$version
-	, "x|exclude=s"	    => \@OPT_FILE_REGEXP_EXCLUDE
 	, "year=i"	    => \$YEAR
 	, "Y|no-year"	    => \$OPT_NO_YEAR
+	, "x|exclude=s"	    => \@OPT_FILE_REGEXP_EXCLUDE
     );
 
     $version		and  die "$VERSION $CONTACT $LICENSE $URL\n";
@@ -878,7 +879,7 @@ sub IsInclude ($)
 #
 #   DESCRIPTION
 #
-#       Recursively find out all files and chnege their content.
+#       Recursively find out all files and change their content.
 #
 #   INPUT PARAMETERS
 #
