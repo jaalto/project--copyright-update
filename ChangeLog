@@ -1,6 +1,8 @@
 2010-04-15 Thu  Jari Aalto  <jari.aalto@cante.net>
 
-	* bin/copyright-update.pl (Help): rewrite eval Pod::Man call.
+	* bin/copyright-update.pl
+	(top level): Correct many of the Perl::Critic remarks.
+	(Help): rewrite eval Pod::Man call.
 
 2010-04-04 Sun  Jari Aalto  <jari.aalto@cante.net>
 
