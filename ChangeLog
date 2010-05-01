@@ -1,3 +1,8 @@
+2010-05-01 Sat  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (HandleCommandLineArgs): Remove
+	"require_order" from Getopt::Long::config().
+
 2010-04-15 Thu  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl
