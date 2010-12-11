@@ -1,3 +1,9 @@
+2010-12-11 Sat  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (Help::OPTIONS): update option -y.
+	(Help::EXAMPLES): Correct C-code regexp, Chnage "Mr. Foo" to
+	"John Doe".
+
 2010-05-01 Sat  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (HandleCommandLineArgs): Remove
