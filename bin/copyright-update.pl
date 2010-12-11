@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.1211.1649';
+my $VERSION = '2010.1211.1653';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -164,9 +164,10 @@ be no spaces around the dash-character in YEAR-YEAR. Examples:
 	    |
 	    A colon is optional
 
-By default certan files and paths are always ignored; like version
+By default certain files and paths are always ignored; like version
 control directories, backups files, object files and binary files
-according to Perl's C<-T> file test. See option B<--help-exclude>.
+according to Perl's C<-T> file test. Run program with option
+B<--help-exclude> to see exclude path list.
 
 =head1 OPTIONS
 
@@ -222,7 +223,7 @@ Print help in manual page C<man(1)> format.
 
 =item B<-i, --include REGEXP>
 
-Include files mathing regexp. The match is done against whole path. The option
+Include files matching regexp. The match is done against whole path. The option
 can be used multiple times.
 
 If this option is not supplied, every file is automatically included.
@@ -240,7 +241,7 @@ Recursively search all direcotories given at command line.
 
 Change only files whose content matches REGEXP. The file is read in as
 a one big string so it's possible to match using Perl regular
-epxressions accross lines. An example: '(?smi)This.*multi.*line.*match'.
+expressions across lines. An example: '(?smi)This.*multi.*line.*match'.
 See perlre(1) for more information about 'smi' modifiers.
 
 This options can be used as a preliminary I<Content criteria>, to
@@ -262,8 +263,8 @@ Print contact and version information.
 
 =item B<-x, --exclude REGEXP>
 
-Ignore files mathing regexp. The match is done against whole path. The option
-can be used multiple times.
+Ignore files matching regexp. The match is done against whole path.
+The option can be used multiple times.
 
 This option is applied after possible B<--include> matches.
 
@@ -320,7 +321,7 @@ In the form 'Firstname Lastname'. If set, this is used in option B<--auto>.
 
 =item EMAIL
 
-In the form 'Firtname.Lastname@example.com>'. If set, this is used in
+In the form 'Firstname.Lastname@example.com>'. If set, this is used in
 option B<--auto> only if environment variable NAME is not set. The
 localpart in email address must match case insensitive regexp
 C<'^[a-z-]+\.[a-z-]+@'> or it is not used:
