@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.1211.1653';
+my $VERSION = '2010.1211.1656';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -185,7 +185,7 @@ This option effectively presets value for the B<--line> option.
 
 Turn on debug. Level can be in range 0-10.
 
-=item B<--fsf-address>
+=item B<-f, --fsf-address>
 
 Change FSF (a)ddress paragraphs pointing only to URL. This format is
 the format used in the GPL v3 license text:
