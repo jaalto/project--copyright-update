@@ -1,3 +1,8 @@
+2010-12-14 Tue  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (FsfAddress): Remove city name
+	Boston from regexp.
+
 2010-12-11 Sat  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (Help::OPTIONS): update option -y.

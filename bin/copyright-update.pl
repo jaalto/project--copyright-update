@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.1211.1656';
+my $VERSION = '2010.1214.1601';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -616,7 +616,6 @@ sub FsfAddress ( $ ; $ )
     s
     {^([^\r\n]*)You \s+ should \s+ have \s+ received
 	 .*? (write \s+ to | contact .*? Foundation)
-	 .*? Boston
 	 .*? USA[ \t.]*
     }
     {$1You should have received a copy of the GNU General Public License\n$1along with this program. If not, see <http://www.gnu.org/licenses/>.}smix
