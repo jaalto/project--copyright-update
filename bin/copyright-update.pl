@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2011.0409.1235';
+my $VERSION = '2011.0409.1254';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -79,6 +79,7 @@ my $DEFAULT_FILE_EXCLUDE =              # Matches *only* file component
     . '|\.(s?o|l?a|bin|com|exe|class|elc)$'
     . '|\.(ods|odt|pdf|ppt|xls|rtf)$'
     . '|\.(xpm|jpg|png|gif|tiff|bmp)$'
+    . '|(config.guess|config.sub|ltconfig|depcomp|missing|COPYING)$'
     ;
 
 # ****************************************************************************
@@ -183,6 +184,11 @@ is not set, read information from EMAIL. See section ENVIRONMENT.
 
 This option effectively presets value for the B<--line> option.
 
+=item B<-c, --code>
+
+Preset B<--include> to match common code files: .c, .h, .cc, .hh, .cpp,
+.c++, .hpp, .C, .pl, .py, .sh and .rb
+
 =item B<-d, --debug LEVEL>
 
 Turn on debug. Level can be in range 0-10.
@@ -209,11 +215,12 @@ Affects: paragraph with new address:
 
 =item B<-i, --include REGEXP>
 
-Include files matching regexp. The match is done against whole path. The option
-can be used multiple times.
+Include files matching regexp. The match is done against whole path.
 
 If this option is not supplied, every file is automatically included.
 The matches can be further filtered by using options B<--exclude>.
+
+This option can be used multiple times. See also option B<--code>.
 
 =item B<-l, --line REGEXP>
 
@@ -300,7 +307,7 @@ To test what would happen:
 
 Update only C-code file:
 
-   copyright-update --verbose 1 --include '*\.[ch]$' --recursive .
+   copyright-update --verbose 1 --include '\.[ch]$' --recursive .
 
 It is possible to restrict updating files recursively to only those
 files whose content match regexp. Here, the lines affected are those
@@ -508,7 +515,7 @@ sub HandleCommandLineArgs ()
     ));
 
     my ( $help, $helpMan, $helpHtml, $version ); # local variables to function
-    my ( $helpExclude );
+    my ( $helpExclude, $code );
 
     $debug = -1;
 
@@ -516,6 +523,7 @@ sub HandleCommandLineArgs ()
     (
 	  "a|auto"          => \$OPT_AUTOMATIC
 	, "fsf-address"     => \$OPT_FSF_ADDRESS
+	, "c|code"          => \$code
 	, "d|debug:i"       => \$debug
 	, "dry-run"         => \$test
 	, "help-exclude"    => \$helpExclude
@@ -554,6 +562,12 @@ sub HandleCommandLineArgs ()
     if ( defined $verb  and  $verb == 0 )
     {
 	$verb = 1;
+    }
+
+    if ( $code )
+    {
+	push @OPT_FILE_REGEXP_INCLUDE,
+	    '\.([Cch]|cc|hh|cpp|c\+\+|hpp|p[y]l|sh|rb)';
     }
 
     $verb = 1  if  $test and $verb == 0;

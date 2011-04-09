@@ -2,6 +2,9 @@
 
 	* bin/copyright-update.pl (Help::POD): Move --help options
 	to the end. Minor updated to documentation.
+	(DEFAULT_FILE_EXCLUDE): Add config.guess, config.sub, ltconfig,
+	depcomp, missing, COPYING.
+	(HandleCommandLineArgs): Add new option --code.
 
 2010-12-14 Tue  Jari Aalto  <jari.aalto@cante.net>
 
