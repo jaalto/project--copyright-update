@@ -4,7 +4,7 @@
 #
 #   Copyright
 #
-#       Copyright (C) 2000-2010 Jari Aalto
+#       Copyright (C) 2000-2011 Jari Aalto
 #
 #   License
 #
@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2011.0409.1232';
+my $VERSION = '2011.0409.1235';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -380,7 +380,7 @@ Jari Aalto
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (C) 2000-2010 Jari Aalto
+Copyright (C) 2000-2011 Jari Aalto
 
 This program is free software; you can redistribute and/or modify
 program under the terms of GNU General Public license either version 2
