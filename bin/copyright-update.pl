@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2010.1214.1601';
+my $VERSION = '2011.0409.1232';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -171,6 +171,8 @@ B<--help-exclude> to see exclude path list.
 
 =head1 OPTIONS
 
+=head2 Run options
+
 =over 4
 
 =item B<-a, --auto>
@@ -187,8 +189,8 @@ Turn on debug. Level can be in range 0-10.
 
 =item B<-f, --fsf-address>
 
-Change FSF (a)ddress paragraphs pointing only to URL. This format is
-the format used in the GPL v3 license text:
+Change FSF (a)ddress paragraphs to point to URL, like in the GPL v3
+recommendation:
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
@@ -204,22 +206,6 @@ Affects: paragraph with new address:
     You should have received a copy of the GNU General Public License
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
-
-=item B<-h, --help>
-
-Print text help
-
-=item B<--help-exclude>
-
-Print default values that exclude paths and files.
-
-=item B<--help-html>
-
-Print help in HTML format.
-
-=item B<--help-man>
-
-Print help in manual page C<man(1)> format.
 
 =item B<-i, --include REGEXP>
 
@@ -257,10 +243,6 @@ Run in test mode. Show what would happen. No files are changed.
 Print informational messages. Increase numeric LEVEL for more
 verbosity.
 
-=item B<-V, --version>
-
-Print contact and version information.
-
 =item B<-x, --exclude REGEXP>
 
 Ignore files matching regexp. The match is done against whole path.
@@ -270,8 +252,7 @@ This option is applied after possible B<--include> matches.
 
 =item B<-y, --year YEAR>
 
-Update files using YEAR. Value must be four digits. The default value
-is the current calendar year.
+Update files using YEAR. Value must be four digits.
 
 =item B<-Y, --no-year>
 
@@ -279,28 +260,60 @@ Disable updating year.
 
 =back
 
+=head2 Miscellaneus options
+
+=over 4
+
+=item B<-h, --help>
+
+Print text help
+
+=item B<--help-exclude>
+
+Print default values in the program that whow what values are used to
+exclude paths and files.
+
+=item B<--help-html>
+
+Print help in HTML format.
+
+=item B<--help-man>
+
+Print help in manual page C<man(1)> format.
+
+=item B<-V, --version>
+
+Print contact and version information.
+
+=back
+
 =head1 EXAMPLES
 
-The primary use is to update files to reflect current year:
+The primary use is to update files to reflect current year; option
+B<--year> is implicit:
 
-   copyright-update --verbose 1 [--test] *
+   copyright-update *
+
+To test what would happen:
+
+   copyright-update --verbose 1 --test *
 
 Update only C-code file:
 
-   copyright-update --verbose 1 --include '*\.[ch]' --recursive .
+   copyright-update --verbose 1 --include '*\.[ch]$' --recursive .
 
 It is possible to restrict updating files recursively to only those
-files whose content match regexp, like author is "John Doe". The lines
-affected are those that match B<--line> regular expression.
+files whose content match regexp. Here, the lines affected are those
+that match B<--line> regular expression.
 
    copyright-update \
-	--recursive \
-	--regexp "(?i)Author:.*John.*Doe" \
-	--line '\bFoo\b' \
-	--ignore '\.(bak|bup|[~#]])$' \
+	--regexp  '(?i)Author:.*John.*Doe' \
+	--line    '\bFoo\b' \
+	--ignore  '\.(bak|bup|[~#]])$' \
 	--verbose 1 \
-	--year 2002 \
+	--year    2002 \
 	--test \
+	--recursive \
 	.
 
 =head1 TROUBLESHOOTING
@@ -315,10 +328,6 @@ None.
 
 =over 4
 
-=item NAME
-
-In the form 'Firstname Lastname'. If set, this is used in option B<--auto>.
-
 =item EMAIL
 
 In the form 'Firstname.Lastname@example.com>'. If set, this is used in
@@ -331,11 +340,19 @@ C<'^[a-z-]+\.[a-z-]+@'> or it is not used:
     -------------
     Localpart
 
+=item NAME
+
+In the form 'Firstname Lastname'. If set, this is used in option B<--auto>.
+
 =back
 
 =head1 FILES
 
 None.
+
+=head1 EXIT STATUS
+
+The exit status not defined.
 
 =head1 SEE ALSO
 

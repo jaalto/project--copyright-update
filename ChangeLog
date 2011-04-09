@@ -1,3 +1,8 @@
+2011-04-09 Sat  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (Help::POD): Move --help options
+	to the end. Minor updated to documentation.
+
 2010-12-14 Tue  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (FsfAddress): Remove city name
