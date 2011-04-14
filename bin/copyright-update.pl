@@ -195,8 +195,8 @@ Turn on debug. Level can be in range 0-10.
 
 =item B<-f, --fsf-address>
 
-Change FSF (a)ddress paragraphs to point to URL, like in the GPL v3
-recommendation:
+Change FSF (a)ddress paragraphs to point to URL, according to latest
+FSF recommendation:
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
@@ -325,7 +325,7 @@ that match B<--line> regular expression.
 
 =head1 TROUBLESHOOTING
 
-None.
+See option B<--debug>.
 
 =head1 EXAMPLES
 
@@ -337,19 +337,21 @@ None.
 
 =item EMAIL
 
-In the form 'Firstname.Lastname@example.com>'. If set, this is used in
-option B<--auto> only if environment variable NAME is not set. The
-localpart in email address must match case insensitive regexp
-C<'^[a-z-]+\.[a-z-]+@'> or it is not used:
+In the form "firstname.lastname@example.com"; that is, without the
+angles <>. If set, the value is used in option B<--auto> only if
+environment variable NAME is not set. In order to find first and
+lasname, the localpart in email address must match case insensitive
+regexp C<'^[a-z-]+\.[a-z-]+@'> or it is not used:
 
     address@example.com         Not used
     dr.foo.company@example.com  Not used
-    -------------
+    --------------
     Localpart
 
 =item NAME
 
-In the form 'Firstname Lastname'. If set, this is used in option B<--auto>.
+In the form "Firstname Lastname". If set, the value is used in option
+B<--auto>.
 
 =back
 
@@ -359,23 +361,21 @@ None.
 
 =head1 EXIT STATUS
 
-The exit status not defined.
+Not defined.
 
 =head1 SEE ALSO
 
-licensecheck(1) program in Debian.
-
-=head1 EXIT STATUS
-
-Not defined.
+licensecheck(1)
 
 =head1 DEPENDENCIES
 
-Uses standard Perl modules.
+Uses only standard Perl modules.
 
 =head1 BUGS AND LIMITATIONS
 
-None.
+The Copyright stanzas searched with option B<--fsf-address> must be
+exactly like in the FSF recommendation in order for them to be
+noticed.
 
 =head1 AVAILABILITY
 
@@ -392,6 +392,7 @@ Copyright (C) 2000-2011 Jari Aalto
 This program is free software; you can redistribute and/or modify
 program under the terms of GNU General Public license either version 2
 of the License, or (at your option) any later version.
+For more information, see see <http://www.gnu.org/licenses/>.
 
 =cut
 

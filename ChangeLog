@@ -1,3 +1,8 @@
+2011-04-14  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (POD): Minor grammar corrections and
+	wording changes.
+
 2011-04-09 Sat  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (Help::POD): Move --help options
