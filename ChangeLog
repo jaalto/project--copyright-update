@@ -122,7 +122,7 @@
 	* INSTALL: Update requirements and manual install.
 
 	Make a standalone project. This program has been part of the Emacs Tiny
-	Tools project. See http://freshmeat.net/projects/emacs-tiny-tools
+	Tools project. See http://freecode.net/projects/emacs-tiny-tools
 
 	* copyright-update.pl: (top level): update Copyright template.
 	(Help): reorder manual page into sections.

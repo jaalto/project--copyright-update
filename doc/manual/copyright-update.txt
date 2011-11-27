@@ -172,7 +172,7 @@ COREQUISITES
     Uses standard Perl modules.
 
 AVAILABILITY
-    Homepage is at http://freshmeat.net/projects/copyright-update
+    Homepage is at http://freecode.net/projects/copyright-update
 
 AUTHOR
     Copyright (C) 2000-2010 Jari Aalto
