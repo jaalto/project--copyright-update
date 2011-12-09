@@ -112,7 +112,7 @@ sub Initialize ()
 
     $LICENSE    = "GPL-2+";
     $CONTACT    = "Jari Aalto";
-    $URL        = "http://freecode.net/projects/copyright-update";
+    $URL        = "http://freecode.com/projects/copyright-update";
 
     $LIB        = basename $PROGRAM_NAME;
     $PROGNAME   = $LIB;
@@ -379,7 +379,7 @@ noticed.
 
 =head1 AVAILABILITY
 
-Homepage is at http://freecode.net/projects/copyright-update
+Homepage is at http://freecode.com/projects/copyright-update
 
 =head1 AUTHOR
 
