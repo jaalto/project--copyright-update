@@ -2,7 +2,7 @@
 #
 #   Copyright information
 #
-#	Copyright (C) 2002-2010 Jari Aalto
+#	Copyright (C) 2002-2012 Jari Aalto
 #
 #   License
 #
