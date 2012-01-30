@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0112.0524';
+my $VERSION = '2012.0130.0624';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -195,7 +195,7 @@ Turn on debug. Level can be in range 0-10.
 
 =item B<-f, --fsf-address>
 
-Change FSF (a)ddress paragraphs to point to URL, according to latest
+Change FSF address paragraphs to point to URL, according to latest
 FSF recommendation:
 
     You should have received a copy of the GNU General Public License
