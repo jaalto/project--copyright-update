@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0626';
+my $VERSION = '2012.0130.0628';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -237,7 +237,7 @@ a one big string so it's possible to match using Perl regular
 expressions across lines. An example: '(?smi)This.*multi.*line.*match'.
 See perlre(1) for more information about 'smi' modifiers.
 
-This options can be used as a preliminary I<Content criteria>, to
+This option can be used as a preliminary I<Content criteria>, to
 select the file, before B<--line> option finds the correct Copyright
 line.
 
