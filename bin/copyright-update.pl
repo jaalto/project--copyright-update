@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0639';
+my $VERSION = '2012.0130.0641';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -604,7 +604,7 @@ sub HandleCommandLineArgs ()
 
 	    if ( /^([a-z-]+)\.([a-z-]+)@/i )
 	    {
-		$verb > 1 and  print "$id: Using EMAIL: $EMAIL\n";
+		$verb > 1  and  print "$id: Using EMAIL: $EMAIL\n";
 		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
 	    }
 	    else
@@ -1064,5 +1064,5 @@ sub Main ()
 
 Main();
 
-0;
-__END__
+# End of file
+
