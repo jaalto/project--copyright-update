@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0633';
+my $VERSION = '2012.0130.0637';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -340,13 +340,14 @@ See option B<--debug>.
 In the form "firstname.lastname@example.com"; that is, without the
 angles <>. If set, the value is used in option B<--auto> only if
 environment variable NAME is not set. In order to find first and
-lasname, the localpart in email address must match case insensitive
+lastname, the localpart in email address must match case insensitive
 regexp C<'^[a-z-]+\.[a-z-]+@'> or it is not used:
 
-    address@example.com         Not used
-    dr.foo.company@example.com  Not used
-    --------------
-    Localpart
+    address@example.com            Not used
+    mr.first.lastname@example.com  Not used
+    +---------------- +----------
+    |                 |
+    Localpart         Domain part
 
 =item NAME
 
