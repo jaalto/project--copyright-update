@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0624';
+my $VERSION = '2012.0130.0625';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -218,7 +218,7 @@ Affects: paragraph with new address:
 Include files matching regexp. The match is done against whole path.
 
 If this option is not supplied, every file is automatically included.
-The matches can be further filtered by using options B<--exclude>.
+The matches can be further filtered by using option B<--exclude>.
 
 This option can be used multiple times. See also option B<--code>.
 
