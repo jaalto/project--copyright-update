@@ -4,7 +4,8 @@
 	in --fsf-address option description. Fix
 	typo in --include option. Fix typo in --recursive
 	option. Fix typo in --regexp option. Improve
-	--year desctiption
+	--year desctiption. Use word "display" in place of
+	"print".
 
 2011-04-14  Jari Aalto  <jari.aalto@cante.net>
 

@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0632';
+my $VERSION = '2012.0130.0633';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -277,24 +277,24 @@ Disable updating year.
 
 =item B<-h, --help>
 
-Print text help
+Display help.
 
 =item B<--help-exclude>
 
-Print default values in the program that whow what values are used to
+Display default values in the program that whow what values are used to
 exclude paths and files.
 
 =item B<--help-html>
 
-Print help in HTML format.
+Display help in HTML format.
 
 =item B<--help-man>
 
-Print help in manual page C<man(1)> format.
+Display help in manual page C<man(1)> format.
 
 =item B<-V, --version>
 
-Print contact and version information.
+Display contact and version information.
 
 =back
 
