@@ -7,6 +7,7 @@
 	--year desctiption. Use word "display" in place of
 	"print".
 	(Main, wanted): Fix indent.
+	(Help): Fix Pod::Man library load.
 
 2011-04-14  Jari Aalto  <jari.aalto@cante.net>
 

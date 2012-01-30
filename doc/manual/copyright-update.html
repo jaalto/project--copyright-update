@@ -20,16 +20,23 @@
 	<li><a href="#synopsis">SYNOPSIS</a></li>
 	<li><a href="#description">DESCRIPTION</a></li>
 	<li><a href="#options">OPTIONS</a></li>
+	<ul>
+
+		<li><a href="#run_options">Run options</a></li>
+		<li><a href="#miscellaneus_options">Miscellaneus options</a></li>
+	</ul>
+
 	<li><a href="#examples">EXAMPLES</a></li>
 	<li><a href="#troubleshooting">TROUBLESHOOTING</a></li>
-	<li><a href="#examples">EXAMPLES</a></li>
 	<li><a href="#environment">ENVIRONMENT</a></li>
 	<li><a href="#files">FILES</a></li>
+	<li><a href="#exit_status">EXIT STATUS</a></li>
 	<li><a href="#see_also">SEE ALSO</a></li>
-	<li><a href="#corequisites">COREQUISITES</a></li>
+	<li><a href="#dependencies">DEPENDENCIES</a></li>
+	<li><a href="#bugs_and_limitations">BUGS AND LIMITATIONS</a></li>
 	<li><a href="#availability">AVAILABILITY</a></li>
 	<li><a href="#author">AUTHOR</a></li>
-	<li><a href="#license">LICENSE</a></li>
+	<li><a href="#license_and_copyright">LICENSE AND COPYRIGHT</a></li>
 </ul>
 
 <hr name="index" />
@@ -46,7 +53,8 @@
 <hr />
 <h1><a name="synopsis">SYNOPSIS</a></h1>
 <pre>
-  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]</pre>
+  copyright-update [options] FILE [FILE ...]
+  copyright-update [options] --recursive PATH [PATH ...]</pre>
 <p>
 </p>
 <hr />
@@ -66,13 +74,17 @@ be no spaces around the dash-character in YEAR-YEAR. Examples:</p>
    Copyright: (C)       YYYY-YYYY
             |
             A colon is optional</pre>
-<p>By default certan files and paths are always ignored; like version
+<p>By default certain files and paths are always ignored; like version
 control directories, backups files, object files and binary files
-according to Perl's <code>-T</code> file test. See option <strong>--help-exclude</strong>.</p>
+according to Perl's <code>-T</code> file test. Run program with option
+<strong>--help-exclude</strong> to see exclude path list.</p>
 <p>
 </p>
 <hr />
 <h1><a name="options">OPTIONS</a></h1>
+<p>
+</p>
+<h2><a name="run_options">Run options</a></h2>
 <dl>
 <dt><strong><a name="a_auto" class="item"><strong>-a, --auto</strong></a></strong></dt>
 
@@ -82,16 +94,22 @@ NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
 is not set, read information from EMAIL. See section ENVIRONMENT.</p>
 <p>This option effectively presets value for the <strong>--line</strong> option.</p>
 </dd>
+<dt><strong><a name="c_code" class="item"><strong>-c, --code</strong></a></strong></dt>
+
+<dd>
+<p>Preset <strong>--include</strong> to match common code files: .c, .h, .cc, .hh, .cpp,
+.c++, .hpp, .C, .pl, .py, .sh and .rb</p>
+</dd>
 <dt><strong><a name="d_debug_level" class="item"><strong>-d, --debug LEVEL</strong></a></strong></dt>
 
 <dd>
 <p>Turn on debug. Level can be in range 0-10.</p>
 </dd>
-<dt><strong><a name="fsf_address" class="item"><strong>--fsf-address</strong></a></strong></dt>
+<dt><strong><a name="f_fsf_address" class="item"><strong>-f, --fsf-address</strong></a></strong></dt>
 
 <dd>
-<p>Change FSF (a)ddress paragraphs pointing only to URL. This format is
-the format used in the GPL v3 license text:</p>
+<p>Change FSF address paragraphs to point to URL, according to latest
+FSF recommendation:</p>
 <pre>
     You should have received a copy of the GNU General Public License
     along with this program. If not, see &lt;<a href="http://www.gnu.org/licenses/&gt">http://www.gnu.org/licenses/&gt</a>;.</pre>
@@ -106,33 +124,13 @@ the format used in the GPL v3 license text:</p>
     along with this package; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA</pre>
 </dd>
-<dt><strong><a name="h_help" class="item"><strong>-h, --help</strong></a></strong></dt>
-
-<dd>
-<p>Print text help</p>
-</dd>
-<dt><strong><a name="help_exclude" class="item"><strong>--help-exclude</strong></a></strong></dt>
-
-<dd>
-<p>Print default values that exclude paths and files.</p>
-</dd>
-<dt><strong><a name="help_html" class="item"><strong>--help-html</strong></a></strong></dt>
-
-<dd>
-<p>Print help in HTML format.</p>
-</dd>
-<dt><strong><a name="help_man" class="item"><strong>--help-man</strong></a></strong></dt>
-
-<dd>
-<p>Print help in manual page <code>man(1)</code> format.</p>
-</dd>
 <dt><strong><a name="i_include_regexp" class="item"><strong>-i, --include REGEXP</strong></a></strong></dt>
 
 <dd>
-<p>Include files mathing regexp. The match is done against whole path. The option
-can be used multiple times.</p>
+<p>Include files matching regexp. The match is done against whole path.</p>
 <p>If this option is not supplied, every file is automatically included.
-The matches can be further filtered by using options <strong>--exclude</strong>.</p>
+The matches can be further filtered by using option <strong>--exclude</strong>.</p>
+<p>This option can be used multiple times. See also option <strong>--code</strong>.</p>
 </dd>
 <dt><strong><a name="l_line_regexp" class="item"><strong>-l, --line REGEXP</strong></a></strong></dt>
 
@@ -142,16 +140,16 @@ The matches can be further filtered by using options <strong>--exclude</strong>.
 <dt><strong><a name="r_recursive" class="item"><strong>-r, --recursive</strong></a></strong></dt>
 
 <dd>
-<p>Recursively search all direcotories given at command line.</p>
+<p>Recursively search all direcotories given in command line.</p>
 </dd>
 <dt><strong><a name="r_regexp_regexp" class="item"><strong>-R, --regexp REGEXP</strong></a></strong></dt>
 
 <dd>
 <p>Change only files whose content matches REGEXP. The file is read in as
 a one big string so it's possible to match using Perl regular
-epxressions accross lines. An example: '(?smi)This.*multi.*line.*match'.
+expressions across lines. An example: '(?smi)This.*multi.*line.*match'.
 See <code>perlre(1)</code> for more information about 'smi' modifiers.</p>
-<p>This options can be used as a preliminary <em>Content criteria</em>, to
+<p>This option can be used as a preliminary <em>Content criteria</em>, to
 select the file, before <strong>--line</strong> option finds the correct Copyright
 line.</p>
 </dd>
@@ -166,23 +164,20 @@ line.</p>
 <p>Print informational messages. Increase numeric LEVEL for more
 verbosity.</p>
 </dd>
-<dt><strong><a name="v_version" class="item"><strong>-V, --version</strong></a></strong></dt>
-
-<dd>
-<p>Print contact and version information.</p>
-</dd>
 <dt><strong><a name="x_exclude_regexp" class="item"><strong>-x, --exclude REGEXP</strong></a></strong></dt>
 
 <dd>
-<p>Ignore files mathing regexp. The match is done against whole path. The option
-can be used multiple times.</p>
+<p>Ignore files matching regexp. The match is done against whole path.
+The option can be used multiple times.</p>
 <p>This option is applied after possible <strong>--include</strong> matches.</p>
 </dd>
 <dt><strong><a name="y_year_year" class="item"><strong>-y, --year YEAR</strong></a></strong></dt>
 
 <dd>
-<p>Update files using YEAR. Value must be four digits. Without this
-option, program uses current calendar year.</p>
+<p>Update files using YEAR. Value must be four digits.</p>
+<p>The default operaton is to use currect year, so this option is not
+necessary in normal use. Use case: you plan to take a long holiday
+before year's end and want to update the next year's value beforehand.</p>
 </dd>
 <dt><strong><a name="y_no_year" class="item"><strong>-Y, --no-year</strong></a></strong></dt>
 
@@ -192,59 +187,92 @@ option, program uses current calendar year.</p>
 </dl>
 <p>
 </p>
+<h2><a name="miscellaneus_options">Miscellaneus options</a></h2>
+<dl>
+<dt><strong><a name="h_help" class="item"><strong>-h, --help</strong></a></strong></dt>
+
+<dd>
+<p>Display help.</p>
+</dd>
+<dt><strong><a name="help_exclude" class="item"><strong>--help-exclude</strong></a></strong></dt>
+
+<dd>
+<p>Display default values in the program that whow what values are used to
+exclude paths and files.</p>
+</dd>
+<dt><strong><a name="help_html" class="item"><strong>--help-html</strong></a></strong></dt>
+
+<dd>
+<p>Display help in HTML format.</p>
+</dd>
+<dt><strong><a name="help_man" class="item"><strong>--help-man</strong></a></strong></dt>
+
+<dd>
+<p>Display help in manual page <code>man(1)</code> format.</p>
+</dd>
+<dt><strong><a name="v_version" class="item"><strong>-V, --version</strong></a></strong></dt>
+
+<dd>
+<p>Display contact and version information.</p>
+</dd>
+</dl>
+<p>
+</p>
 <hr />
 <h1><a name="examples">EXAMPLES</a></h1>
-<p>The primary use is to update files to reflect current year:</p>
+<p>The primary use is to update files to reflect current year; option
+<strong>--year</strong> is implicit:</p>
 <pre>
-   copyright-update --verbose 1 [--test] *</pre>
+   copyright-update *</pre>
+<p>To test what would happen:</p>
+<pre>
+   copyright-update --verbose 1 --test *</pre>
 <p>Update only C-code file:</p>
 <pre>
-   copyright-update --verbose 1 --include &quot;*.[ch]&quot; --recursive .</pre>
+   copyright-update --verbose 1 --include '\.[ch]$' --recursive .</pre>
 <p>It is possible to restrict updating files recursively to only those
-files whose content match regexp, like author is &quot;Mr. Foo&quot;. The lines
-affected are those that match <strong>--line</strong> regular expression.</p>
+files whose content match regexp. Here, the lines affected are those
+that match <strong>--line</strong> regular expression.</p>
 <pre>
    copyright-update \
-        --recursive \
-        --regexp &quot;Author:.*Mr. Foo&quot; \
-        --line '\bFoo\b' \
-        --ignore '\.(bak|bup|[~#]])$' \
+        --regexp  '(?i)Author:.*John.*Doe' \
+        --line    '\bFoo\b' \
+        --ignore  '\.(bak|bup|[~#]])$' \
         --verbose 1 \
-        --year 2002 \
+        --year    2002 \
         --test \
+        --recursive \
         .</pre>
 <p>
 </p>
 <hr />
 <h1><a name="troubleshooting">TROUBLESHOOTING</a></h1>
-<p>None.</p>
-<p>
-</p>
-<hr />
-<h1><a name="examples">EXAMPLES</a></h1>
-<p>None.</p>
+<p>See option <strong>--debug</strong>.</p>
 <p>
 </p>
 <hr />
 <h1><a name="environment">ENVIRONMENT</a></h1>
 <dl>
-<dt><strong><a name="name" class="item">NAME</a></strong></dt>
-
-<dd>
-<p>In the form 'Firstname Lastname'. If set, this is used in option <strong>--auto</strong>.</p>
-</dd>
 <dt><strong><a name="email" class="item">EMAIL</a></strong></dt>
 
 <dd>
-<p>In the form <a href="mailto:'Firtname.Lastname@example.com>">'Firtname.Lastname@example.com></a>'. If set, this is used in
-option <strong>--auto</strong> only if environment variable NAME is not set. The
-localpart in email address must match case insensitive regexp
-<code>'^[a-z-]+\.[a-z-]+@'</code> or it is not used:</p>
+<p>In the form <a href="mailto:"firstname.lastname@example.com";">"firstname.lastname@example.com";</a> that is, without the
+angles &lt;&gt;. If set, the value is used in option <strong>--auto</strong> only if
+environment variable NAME is not set. In order to find first and
+lastname, the localpart in email address must match case insensitive
+regexp <code>'^[a-z-]+\.[a-z-]+@'</code> or it is not used:</p>
 <pre>
-    address@example.com         Not used
-    dr.foo.company@example.com  Not used
-    -------------
-    Localpart</pre>
+    address@example.com            Not used
+    mr.first.lastname@example.com  Not used
+    +---------------- +----------
+    |                 |
+    Localpart         Domain part</pre>
+</dd>
+<dt><strong><a name="name" class="item">NAME</a></strong></dt>
+
+<dd>
+<p>In the form &quot;Firstname Lastname&quot;. If set, the value is used in option
+<strong>--auto</strong>.</p>
 </dd>
 </dl>
 <p>
@@ -255,30 +283,44 @@ localpart in email address must match case insensitive regexp
 <p>
 </p>
 <hr />
-<h1><a name="see_also">SEE ALSO</a></h1>
-<p><code>licensecheck(1)</code> program in Debian.</p>
+<h1><a name="exit_status">EXIT STATUS</a></h1>
+<p>Not defined.</p>
 <p>
 </p>
 <hr />
-<h1><a name="corequisites">COREQUISITES</a></h1>
-<p>Uses standard Perl modules.</p>
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><code>licensecheck(1)</code></p>
+<p>
+</p>
+<hr />
+<h1><a name="dependencies">DEPENDENCIES</a></h1>
+<p>Uses only standard Perl modules.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs_and_limitations">BUGS AND LIMITATIONS</a></h1>
+<p>The Copyright stanzas searched with option <strong>--fsf-address</strong> must be
+exactly like in the FSF recommendation in order for them to be
+noticed.</p>
 <p>
 </p>
 <hr />
 <h1><a name="availability">AVAILABILITY</a></h1>
-<p>Homepage is at <a href="http://freecode.com/projects/copyright-update">http://freecode.net/projects/copyright-update</a></p>
+<p>Homepage is at <a href="http://freecode.com/projects/copyright-update">http://freecode.com/projects/copyright-update</a></p>
 <p>
 </p>
 <hr />
 <h1><a name="author">AUTHOR</a></h1>
-<p>Copyright (C) 2000-2012 Jari Aalto</p>
+<p>Jari Aalto</p>
 <p>
 </p>
 <hr />
-<h1><a name="license">LICENSE</a></h1>
+<h1><a name="license_and_copyright">LICENSE AND COPYRIGHT</a></h1>
+<p>Copyright (C) 2000-2012 Jari Aalto</p>
 <p>This program is free software; you can redistribute and/or modify
 program under the terms of GNU General Public license either version 2
-of the License, or (at your option) any later version.</p>
+of the License, or (at your option) any later version.
+For more information, see see &lt;http://www.gnu.org/licenses/&gt;.</p>
 
 </body>
 

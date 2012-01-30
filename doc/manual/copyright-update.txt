@@ -2,7 +2,8 @@ NAME
     copyright-update - Update Copyright information in files
 
 SYNOPSIS
-      copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]
+      copyright-update [options] FILE [FILE ...]
+      copyright-update [options] --recursive PATH [PATH ...]
 
 DESCRIPTION
     Update the copyright information in set of files, possibly recursively,
@@ -22,11 +23,13 @@ DESCRIPTION
                 |
                 A colon is optional
 
-    By default certan files and paths are always ignored; like version
+    By default certain files and paths are always ignored; like version
     control directories, backups files, object files and binary files
-    according to Perl's "-T" file test. See option --help-exclude.
+    according to Perl's "-T" file test. Run program with option
+    --help-exclude to see exclude path list.
 
 OPTIONS
+  Run options
     -a, --auto
         In automatic mode, the author's name is read from environment
         variable NAME and only lines matching 'Copyright.*$NAME' are
@@ -35,12 +38,16 @@ OPTIONS
 
         This option effectively presets value for the --line option.
 
+    -c, --code
+        Preset --include to match common code files: .c, .h, .cc, .hh, .cpp,
+        .c++, .hpp, .C, .pl, .py, .sh and .rb
+
     -d, --debug LEVEL
         Turn on debug. Level can be in range 0-10.
 
-    --fsf-address
-        Change FSF (a)ddress paragraphs pointing only to URL. This format is
-        the format used in the GPL v3 license text:
+    -f, --fsf-address
+        Change FSF address paragraphs to point to URL, according to latest
+        FSF recommendation:
 
             You should have received a copy of the GNU General Public License
             along with this program. If not, see <http://www.gnu.org/licenses/>.
@@ -57,40 +64,29 @@ OPTIONS
             along with this package; if not, write to the Free Software
             Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
 
-    -h, --help
-        Print text help
-
-    --help-exclude
-        Print default values that exclude paths and files.
-
-    --help-html
-        Print help in HTML format.
-
-    --help-man
-        Print help in manual page man(1) format.
-
     -i, --include REGEXP
-        Include files mathing regexp. The match is done against whole path.
-        The option can be used multiple times.
+        Include files matching regexp. The match is done against whole path.
 
         If this option is not supplied, every file is automatically
-        included. The matches can be further filtered by using options
+        included. The matches can be further filtered by using option
         --exclude.
+
+        This option can be used multiple times. See also option --code.
 
     -l, --line REGEXP
         Change only lines which match REGEXP. The match is case-insensitive.
 
     -r, --recursive
-        Recursively search all direcotories given at command line.
+        Recursively search all direcotories given in command line.
 
     -R, --regexp REGEXP
         Change only files whose content matches REGEXP. The file is read in
         as a one big string so it's possible to match using Perl regular
-        epxressions accross lines. An example:
+        expressions across lines. An example:
         '(?smi)This.*multi.*line.*match'. See perlre(1) for more information
         about 'smi' modifiers.
 
-        This options can be used as a preliminary *Content criteria*, to
+        This option can be used as a preliminary *Content criteria*, to
         select the file, before --line option finds the correct Copyright
         line.
 
@@ -101,84 +97,116 @@ OPTIONS
         Print informational messages. Increase numeric LEVEL for more
         verbosity.
 
-    -V, --version
-        Print contact and version information.
-
     -x, --exclude REGEXP
-        Ignore files mathing regexp. The match is done against whole path.
+        Ignore files matching regexp. The match is done against whole path.
         The option can be used multiple times.
 
         This option is applied after possible --include matches.
 
     -y, --year YEAR
-        Update files using YEAR. Value must be four digits. Without this
-        option, program uses current calendar year.
+        Update files using YEAR. Value must be four digits.
+
+        The default operaton is to use currect year, so this option is not
+        necessary in normal use. Use case: you plan to take a long holiday
+        before year's end and want to update the next year's value
+        beforehand.
 
     -Y, --no-year
         Disable updating year.
 
-EXAMPLES
-    The primary use is to update files to reflect current year:
+  Miscellaneus options
+    -h, --help
+        Display help.
 
-       copyright-update --verbose 1 [--test] *
+    --help-exclude
+        Display default values in the program that whow what values are used
+        to exclude paths and files.
+
+    --help-html
+        Display help in HTML format.
+
+    --help-man
+        Display help in manual page man(1) format.
+
+    -V, --version
+        Display contact and version information.
+
+EXAMPLES
+    The primary use is to update files to reflect current year; option
+    --year is implicit:
+
+       copyright-update *
+
+    To test what would happen:
+
+       copyright-update --verbose 1 --test *
 
     Update only C-code file:
 
-       copyright-update --verbose 1 --include "*.[ch]" --recursive .
+       copyright-update --verbose 1 --include '\.[ch]$' --recursive .
 
     It is possible to restrict updating files recursively to only those
-    files whose content match regexp, like author is "Mr. Foo". The lines
-    affected are those that match --line regular expression.
+    files whose content match regexp. Here, the lines affected are those
+    that match --line regular expression.
 
        copyright-update \
-            --recursive \
-            --regexp "Author:.*Mr. Foo" \
-            --line '\bFoo\b' \
-            --ignore '\.(bak|bup|[~#]])$' \
+            --regexp  '(?i)Author:.*John.*Doe' \
+            --line    '\bFoo\b' \
+            --ignore  '\.(bak|bup|[~#]])$' \
             --verbose 1 \
-            --year 2002 \
+            --year    2002 \
             --test \
+            --recursive \
             .
 
 TROUBLESHOOTING
-    None.
-
-EXAMPLES
-    None.
+    See option --debug.
 
 ENVIRONMENT
-    NAME
-        In the form 'Firstname Lastname'. If set, this is used in option
-        --auto.
-
     EMAIL
-        In the form 'Firtname.Lastname@example.com>'. If set, this is used
-        in option --auto only if environment variable NAME is not set. The
-        localpart in email address must match case insensitive regexp
-        '^[a-z-]+\.[a-z-]+@' or it is not used:
+        In the form "firstname.lastname@example.com"; that is, without the
+        angles <>. If set, the value is used in option --auto only if
+        environment variable NAME is not set. In order to find first and
+        lastname, the localpart in email address must match case insensitive
+        regexp '^[a-z-]+\.[a-z-]+@' or it is not used:
 
-            address@example.com         Not used
-            dr.foo.company@example.com  Not used
-            -------------
-            Localpart
+            address@example.com            Not used
+            mr.first.lastname@example.com  Not used
+            +---------------- +----------
+            |                 |
+            Localpart         Domain part
+
+    NAME
+        In the form "Firstname Lastname". If set, the value is used in
+        option --auto.
 
 FILES
     None.
 
-SEE ALSO
-    licensecheck(1) program in Debian.
+EXIT STATUS
+    Not defined.
 
-COREQUISITES
-    Uses standard Perl modules.
+SEE ALSO
+    licensecheck(1)
+
+DEPENDENCIES
+    Uses only standard Perl modules.
+
+BUGS AND LIMITATIONS
+    The Copyright stanzas searched with option --fsf-address must be exactly
+    like in the FSF recommendation in order for them to be noticed.
 
 AVAILABILITY
     Homepage is at http://freecode.com/projects/copyright-update
 
 AUTHOR
+    Jari Aalto
+
+LICENSE AND COPYRIGHT
     Copyright (C) 2000-2012 Jari Aalto
 
-LICENSE
     This program is free software; you can redistribute and/or modify
     program under the terms of GNU General Public license either version 2
-    of the License, or (at your option) any later version.
+    of the License, or (at your option) any later version. For more
+    information, see see <http://www.gnu.org/licenses/>.
 
