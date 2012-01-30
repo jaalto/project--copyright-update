@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0642';
+my $VERSION = '2012.0130.0643';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -967,9 +967,9 @@ sub wanted ()
 	IsInclude $file  or  return;
 	IsExclude $file  and return;
 
-	HandleFile -file => [$file],
-	  -line   => $OPT_LINE_REGEXP,
-	  -regexp => $OPT_REGEXP;
+	HandleFile -file   => [$file],
+	           -line   => $OPT_LINE_REGEXP,
+	           -regexp => $OPT_REGEXP;
     }
 }
 
