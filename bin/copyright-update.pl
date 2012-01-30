@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0643';
+my $VERSION = '2012.0130.0646';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -729,7 +729,7 @@ sub HandleFile ( % )
 		binmode $FILE;
 		local $INPUT_RECORD_SEPARATOR = undef;
 		$ARG = <$FILE>;
-		close $FILE   or  warn "Close $file error $ERRNO";
+		close $FILE  or  warn "Close $file error $ERRNO";
 
 		unless ( /\w/ )
 		{
@@ -743,8 +743,7 @@ sub HandleFile ( % )
 	{
 	    unless ( /$regexp/o )
 	    {
-		$verb and
-		    Print "WARN: failed regexp check: $regexp";
+		$verb  and  Print "WARN: failed regexp check: $regexp";
 		next;
 	    }
 	}
@@ -779,8 +778,8 @@ sub HandleFile ( % )
 
 	unless ( /$copy$repeat($yyyy)/oi )
 	{
-	    $verb > 1 and  Print "No Copyright line" ;
-	    $debug > 2 and print "$id: Match regexp: $copy$repeat($yyyy)\n";
+	    $verb  > 1  and  Print "No Copyright line" ;
+	    $debug > 2  and  print "$id: Match regexp: $copy$repeat($yyyy)\n";
 	}
 
 	my $y = $1;
@@ -832,7 +831,7 @@ sub HandleFile ( % )
 	}
 	else
 	{
-	    $verb > 2 and Print "wrote";
+	    $verb > 2  and  Print "wrote";
 
 	    binmode $FILE;
 	    print $FILE $ARG;
