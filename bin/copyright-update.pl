@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0637';
+my $VERSION = '2012.0130.0639';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -144,7 +144,8 @@ copyright-update - Update Copyright information in files
 
 =head1 SYNOPSIS
 
-  copyright-update [options] FILE [FILE ...] | --recursive PATH [PATH ...]
+  copyright-update [options] FILE [FILE ...]
+  copyright-update [options] --recursive PATH [PATH ...]
 
 =head1 DESCRIPTION
 
