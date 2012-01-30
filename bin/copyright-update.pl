@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0646';
+my $VERSION = '2012.0130.0651';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -410,7 +410,7 @@ sub Help (;$$)
     }
     elsif ( $type eq -man )
     {
-	eval "use Pod::Man"
+	eval { require Pod::Man; 1 }
 	    or die "$id: Cannot generate Man: $EVAL_ERROR";
 
 	my %options;
