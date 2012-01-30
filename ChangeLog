@@ -3,7 +3,8 @@
 	* bin/copyright-update.pl (Help::POD): Fix typo
 	in --fsf-address option description. Fix
 	typo in --include option. Fix typo in --recursive
-	option. Fix typo in --regexp option.
+	option. Fix typo in --regexp option. Improve
+	--year desctiption
 
 2011-04-14  Jari Aalto  <jari.aalto@cante.net>
 

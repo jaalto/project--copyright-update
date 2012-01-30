@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0628';
+my $VERSION = '2012.0130.0632';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -260,6 +260,10 @@ This option is applied after possible B<--include> matches.
 =item B<-y, --year YEAR>
 
 Update files using YEAR. Value must be four digits.
+
+The default operaton is to use currect year, so this option is not
+necessary in normal use. Use case: you plan to take a long holiday
+before year's end and want to update the next year's value beforehand.
 
 =item B<-Y, --no-year>
 
