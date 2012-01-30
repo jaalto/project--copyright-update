@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0625';
+my $VERSION = '2012.0130.0626';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -228,7 +228,7 @@ Change only lines which match REGEXP. The match is case-insensitive.
 
 =item B<-r, --recursive>
 
-Recursively search all direcotories given at command line.
+Recursively search all direcotories given in command line.
 
 =item B<-R, --regexp REGEXP>
 
