@@ -115,9 +115,10 @@ dist-git: test doc
 dist-snap: test doc
 	@echo gt tar -q -z -p $(PACKAGE) -c -D master
 
-# Rule: dist - [maintainer] release from Git repository
+# Rule: dist-git - [maintainer] release from Git repository
 dist: dist-git
 
+# Rule: dist-ls - [maintainer] List release files in achive
 dist-ls:
 	@ls -1tr $(DIST_DIR)/$(PACKAGE)*
 
