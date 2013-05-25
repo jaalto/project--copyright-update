@@ -1,3 +1,7 @@
+2013-05-25 Sat  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (HELP::STANDARDS): New.
+
 2012-01-30 Mon  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (Help::POD): Fix typo

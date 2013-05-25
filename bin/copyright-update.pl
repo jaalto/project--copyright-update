@@ -4,7 +4,7 @@
 #
 #   Copyright
 #
-#       Copyright (C) 2000-2012 Jari Aalto
+#       Copyright (C) 2000-2013 Jari Aalto
 #
 #   License
 #
@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2012.0130.0651';
+my $VERSION = '2013.0525.0659';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -181,9 +181,13 @@ B<--help-exclude> to see exclude path list.
 
 In automatic mode, the author's name is read from environment variable
 NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
-is not set, read information from EMAIL. See section ENVIRONMENT.
+is not set, read information from EMAIL.
 
-This option effectively presets value for the B<--line> option.
+If neither NAME nor EMAIL exists in evenvironemt, or if their values
+are not in a recognizeable formats (see section ENVIRONMENT), this
+options does nothing.
+
+This option effectively tries to preset value for the B<--line> option.
 
 =item B<-c, --code>
 
@@ -196,23 +200,23 @@ Turn on debug. Level can be in range 0-10.
 
 =item B<-f, --fsf-address>
 
-Change FSF address paragraphs to point to URL, according to latest
-FSF recommendation:
+Change License paragraphs that refer to FSF address. The FSF's current
+recommendation is to redirect inquiries about licences to their URL.
 
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+Effectively replace paragraphs:
 
-Affects: paragraph with old address:
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+  You should have received a copy of the GNU General Public License
+  along with this package; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
 
-Affects: paragraph with new address:
+With this:
 
-    You should have received a copy of the GNU General Public License
-    along with this package; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =item B<-i, --include REGEXP>
 
@@ -229,18 +233,19 @@ Change only lines which match REGEXP. The match is case-insensitive.
 
 =item B<-r, --recursive>
 
-Recursively search all direcotories given in command line.
+Recursively search all directories given in command line.
 
 =item B<-R, --regexp REGEXP>
 
 Change only files whose content matches REGEXP. The file is read in as
-a one big string so it's possible to match using Perl regular
-expressions across lines. An example: '(?smi)This.*multi.*line.*match'.
-See perlre(1) for more information about 'smi' modifiers.
+a one big string so that it's possible to match using Perl regular
+expressions across the whole file. An example:
+'(?smi)This.*multi.*line.*match'. See perlre(1) for more information
+about 'smi' and other modifiers.
 
 This option can be used as a preliminary I<Content criteria>, to
-select the file, before B<--line> option finds the correct Copyright
-line.
+select files before B<--line> option finds the correct Copyright
+lines.
 
 =item B<-t, --test, --dry-run>
 
@@ -262,7 +267,7 @@ This option is applied after possible B<--include> matches.
 
 Update files using YEAR. Value must be four digits.
 
-The default operaton is to use currect year, so this option is not
+The default operation is to use currect year, so this option is not
 necessary in normal use. Use case: you plan to take a long holiday
 before year's end and want to update the next year's value beforehand.
 
@@ -282,8 +287,7 @@ Display help.
 
 =item B<--help-exclude>
 
-Display default values in the program that whow what values are used to
-exclude paths and files.
+Display default values used to exclude paths and files.
 
 =item B<--help-html>
 
@@ -323,7 +327,7 @@ that match B<--line> regular expression.
 	--line    '\bFoo\b' \
 	--ignore  '\.(bak|bup|[~#]])$' \
 	--verbose 1 \
-	--year    2002 \
+	--year    2013 \
 	--test \
 	--recursive \
 	.
@@ -340,12 +344,15 @@ See option B<--debug>.
 
 In the form "firstname.lastname@example.com"; that is, without the
 angles <>. If set, the value is used in option B<--auto> only if
-environment variable NAME is not set. In order to find first and
-lastname, the localpart in email address must match case insensitive
-regexp C<'^[a-z-]+\.[a-z-]+@'> or it is not used:
+environment variable NAME is not set.
 
-    address@example.com            Not used
-    mr.first.lastname@example.com  Not used
+In order to find first and lastname, the localpart in email address
+must match case insensitive regexp C<'^[a-z-]+\.[a-z-]+@'>:
+
+    address@example.com            Not used, not in form First.Last
+    +------ +----------
+
+    mr.first.lastname@example.com  Not used, likewise
     +---------------- +----------
     |                 |
     Localpart         Domain part
@@ -377,7 +384,18 @@ Uses only standard Perl modules.
 
 The Copyright stanzas searched with option B<--fsf-address> must be
 exactly like in the FSF recommendation in order for them to be
-noticed.
+noticed. See STANDARDS.
+
+=head1 STANDARDS
+
+C<How to use GNU licenses for your own software>
+http://www.gnu.org/copyleft/gpl-howto.html
+
+C<Information for maintainers of GNU software (6.5 Copyright Notices)>
+http://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html
+
+C<Information for maintainers of GNU software (6.6 License Notices)>
+http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-Notices
 
 =head1 AVAILABILITY
 
