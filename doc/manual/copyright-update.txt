@@ -33,10 +33,13 @@ OPTIONS
     -a, --auto
         In automatic mode, the author's name is read from environment
         variable NAME and only lines matching 'Copyright.*$NAME' are
-        affected. If NAME is not set, read information from EMAIL. See
-        section ENVIRONMENT.
+        affected. If NAME is not set, read information from EMAIL.
 
-        This option effectively presets value for the --line option.
+        If neither NAME nor EMAIL exists in evenvironemt, or if their values
+        are not in a recognizeable formats (see section ENVIRONMENT), this
+        options does nothing.
+
+        This option effectively tries to preset value for the --line option.
 
     -c, --code
         Preset --include to match common code files: .c, .h, .cc, .hh, .cpp,
@@ -46,23 +49,24 @@ OPTIONS
         Turn on debug. Level can be in range 0-10.
 
     -f, --fsf-address
-        Change FSF address paragraphs to point to URL, according to latest
-        FSF recommendation:
+        Change License paragraphs that refer to FSF address. The FSF's
+        current recommendation is to redirect inquiries about licences to
+        their URL.
 
-            You should have received a copy of the GNU General Public License
-            along with this program. If not, see <http://www.gnu.org/licenses/>.
+        Effectively replace paragraphs:
 
-        Affects: paragraph with old address:
+          You should have received a copy of the GNU General Public License
+          along with this program; if not, write to the Free Software
+          Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-            You should have received a copy of the GNU General Public License
-            along with this program; if not, write to the Free Software
-            Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+          You should have received a copy of the GNU General Public License
+          along with this package; if not, write to the Free Software
+          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
 
-        Affects: paragraph with new address:
+        With this:
 
-            You should have received a copy of the GNU General Public License
-            along with this package; if not, write to the Free Software
-            Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
+          You should have received a copy of the GNU General Public License
+          along with this program. If not, see <http://www.gnu.org/licenses/>.
 
     -i, --include REGEXP
         Include files matching regexp. The match is done against whole path.
@@ -77,18 +81,17 @@ OPTIONS
         Change only lines which match REGEXP. The match is case-insensitive.
 
     -r, --recursive
-        Recursively search all direcotories given in command line.
+        Recursively search all directories given in command line.
 
     -R, --regexp REGEXP
         Change only files whose content matches REGEXP. The file is read in
-        as a one big string so it's possible to match using Perl regular
-        expressions across lines. An example:
+        as a one big string so that it's possible to match using Perl
+        regular expressions across the whole file. An example:
         '(?smi)This.*multi.*line.*match'. See perlre(1) for more information
-        about 'smi' modifiers.
+        about 'smi' and other modifiers.
 
         This option can be used as a preliminary *Content criteria*, to
-        select the file, before --line option finds the correct Copyright
-        line.
+        select files before --line option finds the correct Copyright lines.
 
     -t, --test, --dry-run
         Run in test mode. Show what would happen. No files are changed.
@@ -106,7 +109,7 @@ OPTIONS
     -y, --year YEAR
         Update files using YEAR. Value must be four digits.
 
-        The default operaton is to use currect year, so this option is not
+        The default operation is to use currect year, so this option is not
         necessary in normal use. Use case: you plan to take a long holiday
         before year's end and want to update the next year's value
         beforehand.
@@ -119,8 +122,7 @@ OPTIONS
         Display help.
 
     --help-exclude
-        Display default values in the program that whow what values are used
-        to exclude paths and files.
+        Display default values used to exclude paths and files.
 
     --help-html
         Display help in HTML format.
@@ -154,7 +156,7 @@ EXAMPLES
             --line    '\bFoo\b' \
             --ignore  '\.(bak|bup|[~#]])$' \
             --verbose 1 \
-            --year    2002 \
+            --year    2013 \
             --test \
             --recursive \
             .
@@ -166,12 +168,15 @@ ENVIRONMENT
     EMAIL
         In the form "firstname.lastname@example.com"; that is, without the
         angles <>. If set, the value is used in option --auto only if
-        environment variable NAME is not set. In order to find first and
-        lastname, the localpart in email address must match case insensitive
-        regexp '^[a-z-]+\.[a-z-]+@' or it is not used:
+        environment variable NAME is not set.
 
-            address@example.com            Not used
-            mr.first.lastname@example.com  Not used
+        In order to find first and lastname, the localpart in email address
+        must match case insensitive regexp '^[a-z-]+\.[a-z-]+@':
+
+            address@example.com            Not used, not in form First.Last
+            +------ +----------
+
+            mr.first.lastname@example.com  Not used, likewise
             +---------------- +----------
             |                 |
             Localpart         Domain part
@@ -194,7 +199,19 @@ DEPENDENCIES
 
 BUGS AND LIMITATIONS
     The Copyright stanzas searched with option --fsf-address must be exactly
-    like in the FSF recommendation in order for them to be noticed.
+    like in the FSF recommendation in order for them to be noticed. See
+    STANDARDS.
+
+STANDARDS
+    "How to use GNU licenses for your own software"
+    http://www.gnu.org/copyleft/gpl-howto.html
+
+    "Information for maintainers of GNU software (6.5 Copyright Notices)"
+    http://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html
+
+    "Information for maintainers of GNU software (6.6 License Notices)"
+    http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-
+    Notices
 
 AVAILABILITY
     Homepage is at http://freecode.com/projects/copyright-update

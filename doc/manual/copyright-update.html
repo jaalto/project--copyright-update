@@ -34,6 +34,7 @@
 	<li><a href="#see_also">SEE ALSO</a></li>
 	<li><a href="#dependencies">DEPENDENCIES</a></li>
 	<li><a href="#bugs_and_limitations">BUGS AND LIMITATIONS</a></li>
+	<li><a href="#standards">STANDARDS</a></li>
 	<li><a href="#availability">AVAILABILITY</a></li>
 	<li><a href="#author">AUTHOR</a></li>
 	<li><a href="#license_and_copyright">LICENSE AND COPYRIGHT</a></li>
@@ -91,8 +92,11 @@ according to Perl's <code>-T</code> file test. Run program with option
 <dd>
 <p>In automatic mode, the author's name is read from environment variable
 NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
-is not set, read information from EMAIL. See section ENVIRONMENT.</p>
-<p>This option effectively presets value for the <strong>--line</strong> option.</p>
+is not set, read information from EMAIL.</p>
+<p>If neither NAME nor EMAIL exists in evenvironemt, or if their values
+are not in a recognizeable formats (see section ENVIRONMENT), this
+options does nothing.</p>
+<p>This option effectively tries to preset value for the <strong>--line</strong> option.</p>
 </dd>
 <dt><strong><a name="c_code" class="item"><strong>-c, --code</strong></a></strong></dt>
 
@@ -108,21 +112,21 @@ is not set, read information from EMAIL. See section ENVIRONMENT.</p>
 <dt><strong><a name="f_fsf_address" class="item"><strong>-f, --fsf-address</strong></a></strong></dt>
 
 <dd>
-<p>Change FSF address paragraphs to point to URL, according to latest
-FSF recommendation:</p>
+<p>Change License paragraphs that refer to FSF address. The FSF's current
+recommendation is to redirect inquiries about licences to their URL.</p>
+<p>Effectively replace paragraphs:</p>
 <pre>
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see &lt;<a href="http://www.gnu.org/licenses/&gt">http://www.gnu.org/licenses/&gt</a>;.</pre>
-<p>Affects: paragraph with old address:</p>
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</pre>
 <pre>
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</pre>
-<p>Affects: paragraph with new address:</p>
+  You should have received a copy of the GNU General Public License
+  along with this package; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA</pre>
+<p>With this:</p>
 <pre>
-    You should have received a copy of the GNU General Public License
-    along with this package; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA</pre>
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see &lt;<a href="http://www.gnu.org/licenses/&gt">http://www.gnu.org/licenses/&gt</a>;.</pre>
 </dd>
 <dt><strong><a name="i_include_regexp" class="item"><strong>-i, --include REGEXP</strong></a></strong></dt>
 
@@ -140,18 +144,19 @@ The matches can be further filtered by using option <strong>--exclude</strong>.<
 <dt><strong><a name="r_recursive" class="item"><strong>-r, --recursive</strong></a></strong></dt>
 
 <dd>
-<p>Recursively search all direcotories given in command line.</p>
+<p>Recursively search all directories given in command line.</p>
 </dd>
 <dt><strong><a name="r_regexp_regexp" class="item"><strong>-R, --regexp REGEXP</strong></a></strong></dt>
 
 <dd>
 <p>Change only files whose content matches REGEXP. The file is read in as
-a one big string so it's possible to match using Perl regular
-expressions across lines. An example: '(?smi)This.*multi.*line.*match'.
-See <code>perlre(1)</code> for more information about 'smi' modifiers.</p>
+a one big string so that it's possible to match using Perl regular
+expressions across the whole file. An example:
+'(?smi)This.*multi.*line.*match'. See <code>perlre(1)</code> for more information
+about 'smi' and other modifiers.</p>
 <p>This option can be used as a preliminary <em>Content criteria</em>, to
-select the file, before <strong>--line</strong> option finds the correct Copyright
-line.</p>
+select files before <strong>--line</strong> option finds the correct Copyright
+lines.</p>
 </dd>
 <dt><strong><a name="t_test_dry_run" class="item"><strong>-t, --test, --dry-run</strong></a></strong></dt>
 
@@ -175,7 +180,7 @@ The option can be used multiple times.</p>
 
 <dd>
 <p>Update files using YEAR. Value must be four digits.</p>
-<p>The default operaton is to use currect year, so this option is not
+<p>The default operation is to use currect year, so this option is not
 necessary in normal use. Use case: you plan to take a long holiday
 before year's end and want to update the next year's value beforehand.</p>
 </dd>
@@ -197,8 +202,7 @@ before year's end and want to update the next year's value beforehand.</p>
 <dt><strong><a name="help_exclude" class="item"><strong>--help-exclude</strong></a></strong></dt>
 
 <dd>
-<p>Display default values in the program that whow what values are used to
-exclude paths and files.</p>
+<p>Display default values used to exclude paths and files.</p>
 </dd>
 <dt><strong><a name="help_html" class="item"><strong>--help-html</strong></a></strong></dt>
 
@@ -239,7 +243,7 @@ that match <strong>--line</strong> regular expression.</p>
         --line    '\bFoo\b' \
         --ignore  '\.(bak|bup|[~#]])$' \
         --verbose 1 \
-        --year    2002 \
+        --year    2013 \
         --test \
         --recursive \
         .</pre>
@@ -258,12 +262,14 @@ that match <strong>--line</strong> regular expression.</p>
 <dd>
 <p>In the form <a href="mailto:"firstname.lastname@example.com";">"firstname.lastname@example.com";</a> that is, without the
 angles &lt;&gt;. If set, the value is used in option <strong>--auto</strong> only if
-environment variable NAME is not set. In order to find first and
-lastname, the localpart in email address must match case insensitive
-regexp <code>'^[a-z-]+\.[a-z-]+@'</code> or it is not used:</p>
+environment variable NAME is not set.</p>
+<p>In order to find first and lastname, the localpart in email address
+must match case insensitive regexp <code>'^[a-z-]+\.[a-z-]+@'</code>:</p>
 <pre>
-    address@example.com            Not used
-    mr.first.lastname@example.com  Not used
+    address@example.com            Not used, not in form First.Last
+    +------ +----------</pre>
+<pre>
+    mr.first.lastname@example.com  Not used, likewise
     +---------------- +----------
     |                 |
     Localpart         Domain part</pre>
@@ -301,7 +307,17 @@ regexp <code>'^[a-z-]+\.[a-z-]+@'</code> or it is not used:</p>
 <h1><a name="bugs_and_limitations">BUGS AND LIMITATIONS</a></h1>
 <p>The Copyright stanzas searched with option <strong>--fsf-address</strong> must be
 exactly like in the FSF recommendation in order for them to be
-noticed.</p>
+noticed. See STANDARDS.</p>
+<p>
+</p>
+<hr />
+<h1><a name="standards">STANDARDS</a></h1>
+<p><code>How to use GNU licenses for your own software</code>
+<a href="http://www.gnu.org/copyleft/gpl-howto.html">http://www.gnu.org/copyleft/gpl-howto.html</a></p>
+<p><code>Information for maintainers of GNU software (6.5 Copyright Notices)</code>
+<a href="http://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html">http://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html</a></p>
+<p><code>Information for maintainers of GNU software (6.6 License Notices)</code>
+<a href="http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-Notices">http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-Notices</a></p>
 <p>
 </p>
 <hr />
