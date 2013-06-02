@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2013.0525.0659';
+my $VERSION = '2013.0602.0648';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -184,7 +184,7 @@ NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
 is not set, read information from EMAIL.
 
 If neither NAME nor EMAIL exists in evenvironemt, or if their values
-are not in a recognizeable formats (see section ENVIRONMENT), this
+are not in a recognizable formats (see section ENVIRONMENT), this
 options does nothing.
 
 This option effectively tries to preset value for the B<--line> option.

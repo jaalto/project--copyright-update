@@ -1,3 +1,7 @@
+2013-06-02 Sun  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl (POD::OPTIONS::--auto): Fix typo.
+
 2013-05-25 Sat  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (HELP::STANDARDS): New.
