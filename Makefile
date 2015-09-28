@@ -101,6 +101,7 @@ realclean: clean
 
 dist-git: test doc
 	rm -f $(DIST_DIR)/$(RELEASE)*
+	mkdir -p $(DIST_DIR)
 
 	git archive --format=tar --prefix=$(RELEASE)/ master | \
 	gzip --best > $(DIST_DIR)/$(RELEASE).tar.gz
