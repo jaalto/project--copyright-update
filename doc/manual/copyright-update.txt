@@ -214,7 +214,7 @@ STANDARDS
     Notices
 
 AVAILABILITY
-    Homepage is at http://freecode.com/projects/copyright-update
+    Homepage is at https://github.com/jaalto/project--copyright-update
 
 AUTHOR
     Jari Aalto
