@@ -1,3 +1,10 @@
+2016-10-18 Tue  Jari Aalto  <jari.aalto@cante.net>
+
+	* bin/copyright-update.pl: (IMPORT):
+	Encode copyright sign in UTF-8. Patch thanks to
+	Philipp Büttgenbach <philipp.buettgenbach@gmail.com> in
+	https://bugs.debian.org/814751
+
 2013-06-02 Sun  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (POD::OPTIONS::--auto): Fix typo.
