@@ -2,342 +2,318 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>copyright-update - Update Copyright information in files</title>
+<title></title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:root@localhost" />
+<link rev="made" href="mailto:ASSI@cygwin.nonet" />
 </head>
 
-<body style="background-color: white">
+<body>
 
 
-<!-- INDEX BEGIN -->
-<div name="index">
-<p><a name="__index__"></a></p>
 
-<ul>
-
-	<li><a href="#name">NAME</a></li>
-	<li><a href="#synopsis">SYNOPSIS</a></li>
-	<li><a href="#description">DESCRIPTION</a></li>
-	<li><a href="#options">OPTIONS</a></li>
-	<ul>
-
-		<li><a href="#run_options">Run options</a></li>
-		<li><a href="#miscellaneus_options">Miscellaneus options</a></li>
-	</ul>
-
-	<li><a href="#examples">EXAMPLES</a></li>
-	<li><a href="#troubleshooting">TROUBLESHOOTING</a></li>
-	<li><a href="#environment">ENVIRONMENT</a></li>
-	<li><a href="#files">FILES</a></li>
-	<li><a href="#exit_status">EXIT STATUS</a></li>
-	<li><a href="#see_also">SEE ALSO</a></li>
-	<li><a href="#dependencies">DEPENDENCIES</a></li>
-	<li><a href="#bugs_and_limitations">BUGS AND LIMITATIONS</a></li>
-	<li><a href="#standards">STANDARDS</a></li>
-	<li><a href="#availability">AVAILABILITY</a></li>
-	<li><a href="#author">AUTHOR</a></li>
-	<li><a href="#license_and_copyright">LICENSE AND COPYRIGHT</a></li>
+<ul id="index">
+  <li><a href="#NAME">NAME</a></li>
+  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#OPTIONS">OPTIONS</a>
+    <ul>
+      <li><a href="#Run-options">Run options</a></li>
+      <li><a href="#Miscellaneus-options">Miscellaneus options</a></li>
+    </ul>
+  </li>
+  <li><a href="#EXAMPLES">EXAMPLES</a></li>
+  <li><a href="#TROUBLESHOOTING">TROUBLESHOOTING</a></li>
+  <li><a href="#ENVIRONMENT">ENVIRONMENT</a></li>
+  <li><a href="#FILES">FILES</a></li>
+  <li><a href="#EXIT-STATUS">EXIT STATUS</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#DEPENDENCIES">DEPENDENCIES</a></li>
+  <li><a href="#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</a></li>
+  <li><a href="#STANDARDS">STANDARDS</a></li>
+  <li><a href="#AVAILABILITY">AVAILABILITY</a></li>
+  <li><a href="#AUTHOR">AUTHOR</a></li>
+  <li><a href="#LICENSE-AND-COPYRIGHT">LICENSE AND COPYRIGHT</a></li>
 </ul>
 
-<hr name="index" />
-</div>
-<!-- INDEX END -->
+<h1 id="NAME">NAME</h1>
 
-<p>
-</p>
-<hr />
-<h1><a name="name">NAME</a></h1>
 <p>copyright-update - Update Copyright information in files</p>
-<p>
-</p>
-<hr />
-<h1><a name="synopsis">SYNOPSIS</a></h1>
-<pre>
-  copyright-update [options] FILE [FILE ...]
-  copyright-update [options] --recursive PATH [PATH ...]</pre>
-<p>
-</p>
-<hr />
-<h1><a name="description">DESCRIPTION</a></h1>
-<p>Update the copyright information in set of files, possibly
-recursively, matching content criteria. The updating affects copyright
-year, GPL address information etc.</p>
-<p>The line must have word &quot;Copyright&quot;, a space, three characters '(C)'
-(or a U+00A9 UTF copyright sign), a space, and the range of
-years. Varying amount of spaces and tabs are permitted, but there must
-be no spaces around the dash-character in YEAR-YEAR. Examples:</p>
-<pre>
-            A whitespace, or multiple, required
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  copyright-update [options] FILE [FILE ...]
+  copyright-update [options] --recursive PATH [PATH ...]</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Update the copyright information in set of files, possibly recursively, matching content criteria. The updating affects copyright year, GPL address information etc.</p>
+
+<p>The line must have word &quot;Copyright&quot;, a space, three characters &#39;(C)&#39; (or a U+00A9 UTF copyright sign), a space, and the range of years. Varying amount of spaces and tabs are permitted, but there must be no spaces around the dash-character in YEAR-YEAR. Examples:</p>
+
+<pre><code>            A whitespace, or multiple, required
             |   |           No space between years
             |   |           |
    Copyright (C)        YYYY-YYYY
    Copyright: (C)       YYYY-YYYY
             |
-            A colon is optional</pre>
-<p>By default certain files and paths are always ignored; like version
-control directories, backups files, object files and binary files
-according to Perl's <code>-T</code> file test. Run program with option
-<strong>--help-exclude</strong> to see exclude path list.</p>
-<p>
-</p>
-<hr />
-<h1><a name="options">OPTIONS</a></h1>
-<p>
-</p>
-<h2><a name="run_options">Run options</a></h2>
+            A colon is optional</code></pre>
+
+<p>By default certain files and paths are always ignored; like version control directories, backups files, object files and binary files according to Perl&#39;s <code>-T</code> file test. Run program with option <b>--help-exclude</b> to see exclude path list.</p>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<h2 id="Run-options">Run options</h2>
+
 <dl>
-<dt><strong><a name="a_auto" class="item"><strong>-a, --auto</strong></a></strong></dt>
 
+<dt id="a---auto"><b>-a, --auto</b></dt>
 <dd>
-<p>In automatic mode, the author's name is read from environment variable
-NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
-is not set, read information from EMAIL.</p>
-<p>If neither NAME nor EMAIL exists in evenvironemt, or if their values
-are not in a recognizable formats (see section ENVIRONMENT), this
-options does nothing.</p>
-<p>This option effectively tries to preset value for the <strong>--line</strong> option.</p>
+
+<p>In automatic mode, the author&#39;s name is read from environment variable NAME and only lines matching &#39;Copyright.*$NAME&#39; are affected. If NAME is not set, read information from EMAIL.</p>
+
+<p>If neither NAME nor EMAIL exists in evenvironemt, or if their values are not in a recognizable formats (see section ENVIRONMENT), this options does nothing.</p>
+
+<p>This option effectively tries to preset value for the <b>--line</b> option.</p>
+
 </dd>
-<dt><strong><a name="c_code" class="item"><strong>-c, --code</strong></a></strong></dt>
-
+<dt id="c---code"><b>-c, --code</b></dt>
 <dd>
-<p>Preset <strong>--include</strong> to match common code files: .c, .h, .cc, .hh, .cpp,
-.c++, .hpp, .C, .pl, .py, .sh and .rb</p>
+
+<p>Preset <b>--include</b> to match common code files: .c, .h, .cc, .hh, .cpp, .c++, .hpp, .C, .pl, .py, .sh and .rb</p>
+
 </dd>
-<dt><strong><a name="d_debug_level" class="item"><strong>-d, --debug LEVEL</strong></a></strong></dt>
-
+<dt id="d---debug-LEVEL"><b>-d, --debug LEVEL</b></dt>
 <dd>
+
 <p>Turn on debug. Level can be in range 0-10.</p>
-</dd>
-<dt><strong><a name="f_fsf_address" class="item"><strong>-f, --fsf-address</strong></a></strong></dt>
 
+</dd>
+<dt id="f---fsf-address"><b>-f, --fsf-address</b></dt>
 <dd>
-<p>Change License paragraphs that refer to FSF address. The FSF's current
-recommendation is to redirect inquiries about licences to their URL.</p>
+
+<p>Change License paragraphs that refer to FSF address. The FSF&#39;s current recommendation is to redirect inquiries about licences to their URL.</p>
+
 <p>Effectively replace paragraphs:</p>
-<pre>
-  You should have received a copy of the GNU General Public License
+
+<pre><code>  You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA</pre>
-<pre>
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
   You should have received a copy of the GNU General Public License
   along with this package; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA</pre>
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA</code></pre>
+
 <p>With this:</p>
-<pre>
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see &lt;<a href="http://www.gnu.org/licenses/&gt">http://www.gnu.org/licenses/&gt</a>;.</pre>
-</dd>
-<dt><strong><a name="i_include_regexp" class="item"><strong>-i, --include REGEXP</strong></a></strong></dt>
 
+<pre><code>  You should have received a copy of the GNU General Public License
+  along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</code></pre>
+
+</dd>
+<dt id="i---include-REGEXP"><b>-i, --include REGEXP</b></dt>
 <dd>
+
 <p>Include files matching regexp. The match is done against whole path.</p>
-<p>If this option is not supplied, every file is automatically included.
-The matches can be further filtered by using option <strong>--exclude</strong>.</p>
-<p>This option can be used multiple times. See also option <strong>--code</strong>.</p>
-</dd>
-<dt><strong><a name="l_line_regexp" class="item"><strong>-l, --line REGEXP</strong></a></strong></dt>
 
+<p>If this option is not supplied, every file is automatically included. The matches can be further filtered by using option <b>--exclude</b>.</p>
+
+<p>This option can be used multiple times. See also option <b>--code</b>.</p>
+
+</dd>
+<dt id="l---line-REGEXP"><b>-l, --line REGEXP</b></dt>
 <dd>
+
 <p>Change only lines which match REGEXP. The match is case-insensitive.</p>
-</dd>
-<dt><strong><a name="r_recursive" class="item"><strong>-r, --recursive</strong></a></strong></dt>
 
+</dd>
+<dt id="r---recursive"><b>-r, --recursive</b></dt>
 <dd>
+
 <p>Recursively search all directories given in command line.</p>
-</dd>
-<dt><strong><a name="r_regexp_regexp" class="item"><strong>-R, --regexp REGEXP</strong></a></strong></dt>
 
-<dd>
-<p>Change only files whose content matches REGEXP. The file is read in as
-a one big string so that it's possible to match using Perl regular
-expressions across the whole file. An example:
-'(?smi)This.*multi.*line.*match'. See <code>perlre(1)</code> for more information
-about 'smi' and other modifiers.</p>
-<p>This option can be used as a preliminary <em>Content criteria</em>, to
-select files before <strong>--line</strong> option finds the correct Copyright
-lines.</p>
 </dd>
-<dt><strong><a name="t_test_dry_run" class="item"><strong>-t, --test, --dry-run</strong></a></strong></dt>
-
+<dt id="R---regexp-REGEXP"><b>-R, --regexp REGEXP</b></dt>
 <dd>
+
+<p>Change only files whose content matches REGEXP. The file is read in as a one big string so that it&#39;s possible to match using Perl regular expressions across the whole file. An example: &#39;(?smi)This.*multi.*line.*match&#39;. See perlre(1) for more information about &#39;smi&#39; and other modifiers.</p>
+
+<p>This option can be used as a preliminary <i>Content criteria</i>, to select files before <b>--line</b> option finds the correct Copyright lines.</p>
+
+</dd>
+<dt id="t---test---dry-run"><b>-t, --test, --dry-run</b></dt>
+<dd>
+
 <p>Run in test mode. Show what would happen. No files are changed.</p>
-</dd>
-<dt><strong><a name="v_verbose_level" class="item"><strong>-v, --verbose LEVEL</strong></a></strong></dt>
 
-<dd>
-<p>Print informational messages. Increase numeric LEVEL for more
-verbosity.</p>
 </dd>
-<dt><strong><a name="x_exclude_regexp" class="item"><strong>-x, --exclude REGEXP</strong></a></strong></dt>
-
+<dt id="v---verbose-LEVEL"><b>-v, --verbose LEVEL</b></dt>
 <dd>
-<p>Ignore files matching regexp. The match is done against whole path.
-The option can be used multiple times.</p>
-<p>This option is applied after possible <strong>--include</strong> matches.</p>
+
+<p>Print informational messages. Increase numeric LEVEL for more verbosity.</p>
+
 </dd>
-<dt><strong><a name="y_year_year" class="item"><strong>-y, --year YEAR</strong></a></strong></dt>
-
+<dt id="x---exclude-REGEXP"><b>-x, --exclude REGEXP</b></dt>
 <dd>
+
+<p>Ignore files matching regexp. The match is done against whole path. The option can be used multiple times.</p>
+
+<p>This option is applied after possible <b>--include</b> matches.</p>
+
+</dd>
+<dt id="y---year-YEAR"><b>-y, --year YEAR</b></dt>
+<dd>
+
 <p>Update files using YEAR. Value must be four digits.</p>
-<p>The default operation is to use currect year, so this option is not
-necessary in normal use. Use case: you plan to take a long holiday
-before year's end and want to update the next year's value beforehand.</p>
-</dd>
-<dt><strong><a name="y_no_year" class="item"><strong>-Y, --no-year</strong></a></strong></dt>
 
+<p>The default operation is to use currect year, so this option is not necessary in normal use. Use case: you plan to take a long holiday before year&#39;s end and want to update the next year&#39;s value beforehand.</p>
+
+</dd>
+<dt id="Y---no-year"><b>-Y, --no-year</b></dt>
 <dd>
+
 <p>Disable updating year.</p>
+
 </dd>
 </dl>
-<p>
-</p>
-<h2><a name="miscellaneus_options">Miscellaneus options</a></h2>
+
+<h2 id="Miscellaneus-options">Miscellaneus options</h2>
+
 <dl>
-<dt><strong><a name="h_help" class="item"><strong>-h, --help</strong></a></strong></dt>
 
+<dt id="h---help"><b>-h, --help</b></dt>
 <dd>
+
 <p>Display help.</p>
-</dd>
-<dt><strong><a name="help_exclude" class="item"><strong>--help-exclude</strong></a></strong></dt>
 
+</dd>
+<dt id="help-exclude"><b>--help-exclude</b></dt>
 <dd>
+
 <p>Display default values used to exclude paths and files.</p>
-</dd>
-<dt><strong><a name="help_html" class="item"><strong>--help-html</strong></a></strong></dt>
 
+</dd>
+<dt id="help-html"><b>--help-html</b></dt>
 <dd>
+
 <p>Display help in HTML format.</p>
-</dd>
-<dt><strong><a name="help_man" class="item"><strong>--help-man</strong></a></strong></dt>
 
+</dd>
+<dt id="help-man"><b>--help-man</b></dt>
 <dd>
+
 <p>Display help in manual page <code>man(1)</code> format.</p>
-</dd>
-<dt><strong><a name="v_version" class="item"><strong>-V, --version</strong></a></strong></dt>
 
+</dd>
+<dt id="V---version"><b>-V, --version</b></dt>
 <dd>
+
 <p>Display contact and version information.</p>
+
 </dd>
 </dl>
-<p>
-</p>
-<hr />
-<h1><a name="examples">EXAMPLES</a></h1>
-<p>The primary use is to update files to reflect current year; option
-<strong>--year</strong> is implicit:</p>
-<pre>
-   copyright-update *</pre>
+
+<h1 id="EXAMPLES">EXAMPLES</h1>
+
+<p>The primary use is to update files to reflect current year; option <b>--year</b> is implicit:</p>
+
+<pre><code>   copyright-update *</code></pre>
+
 <p>To test what would happen:</p>
-<pre>
-   copyright-update --verbose 1 --test *</pre>
+
+<pre><code>   copyright-update --verbose 1 --test *</code></pre>
+
 <p>Update only C-code file:</p>
-<pre>
-   copyright-update --verbose 1 --include '\.[ch]$' --recursive .</pre>
-<p>It is possible to restrict updating files recursively to only those
-files whose content match regexp. Here, the lines affected are those
-that match <strong>--line</strong> regular expression.</p>
-<pre>
-   copyright-update \
-        --regexp  '(?i)Author:.*John.*Doe' \
-        --line    '\bFoo\b' \
-        --ignore  '\.(bak|bup|[~#]])$' \
+
+<pre><code>   copyright-update --verbose 1 --include &#39;\.[ch]$&#39; --recursive .</code></pre>
+
+<p>It is possible to restrict updating files recursively to only those files whose content match regexp. Here, the lines affected are those that match <b>--line</b> regular expression.</p>
+
+<pre><code>   copyright-update \
+        --regexp  &#39;(?i)Author:.*John.*Doe&#39; \
+        --line    &#39;\bFoo\b&#39; \
+        --ignore  &#39;\.(bak|bup|[~#]])$&#39; \
         --verbose 1 \
         --year    2013 \
         --test \
         --recursive \
-        .</pre>
-<p>
-</p>
-<hr />
-<h1><a name="troubleshooting">TROUBLESHOOTING</a></h1>
-<p>See option <strong>--debug</strong>.</p>
-<p>
-</p>
-<hr />
-<h1><a name="environment">ENVIRONMENT</a></h1>
-<dl>
-<dt><strong><a name="email" class="item">EMAIL</a></strong></dt>
+        .</code></pre>
 
+<h1 id="TROUBLESHOOTING">TROUBLESHOOTING</h1>
+
+<p>See option <b>--debug</b>.</p>
+
+<h1 id="ENVIRONMENT">ENVIRONMENT</h1>
+
+<dl>
+
+<dt id="EMAIL">EMAIL</dt>
 <dd>
-<p>In the form <a href="mailto:"firstname.lastname@example.com";">"firstname.lastname@example.com";</a> that is, without the
-angles &lt;&gt;. If set, the value is used in option <strong>--auto</strong> only if
-environment variable NAME is not set.</p>
-<p>In order to find first and lastname, the localpart in email address
-must match case insensitive regexp <code>'^[a-z-]+\.[a-z-]+@'</code>:</p>
-<pre>
-    address@example.com            Not used, not in form First.Last
-    +------ +----------</pre>
-<pre>
+
+<p>In the form &quot;firstname.lastname@example.com&quot;; that is, without the angles &lt;&gt;. If set, the value is used in option <b>--auto</b> only if environment variable NAME is not set.</p>
+
+<p>In order to find first and lastname, the localpart in email address must match case insensitive regexp <code>&#39;^[a-z-]+\.[a-z-]+@&#39;</code>:</p>
+
+<pre><code>    address@example.com            Not used, not in form First.Last
+    +------ +----------
+
     mr.first.lastname@example.com  Not used, likewise
     +---------------- +----------
     |                 |
-    Localpart         Domain part</pre>
-</dd>
-<dt><strong><a name="name" class="item">NAME</a></strong></dt>
+    Localpart         Domain part</code></pre>
 
+</dd>
+<dt id="NAME1">NAME</dt>
 <dd>
-<p>In the form &quot;Firstname Lastname&quot;. If set, the value is used in option
-<strong>--auto</strong>.</p>
+
+<p>In the form &quot;Firstname Lastname&quot;. If set, the value is used in option <b>--auto</b>.</p>
+
 </dd>
 </dl>
-<p>
-</p>
-<hr />
-<h1><a name="files">FILES</a></h1>
+
+<h1 id="FILES">FILES</h1>
+
 <p>None.</p>
-<p>
-</p>
-<hr />
-<h1><a name="exit_status">EXIT STATUS</a></h1>
+
+<h1 id="EXIT-STATUS">EXIT STATUS</h1>
+
 <p>Not defined.</p>
-<p>
-</p>
-<hr />
-<h1><a name="see_also">SEE ALSO</a></h1>
-<p><code>licensecheck(1)</code></p>
-<p>
-</p>
-<hr />
-<h1><a name="dependencies">DEPENDENCIES</a></h1>
+
+<h1 id="SEE-ALSO">SEE ALSO</h1>
+
+<p>licensecheck(1)</p>
+
+<h1 id="DEPENDENCIES">DEPENDENCIES</h1>
+
 <p>Uses only standard Perl modules.</p>
-<p>
-</p>
-<hr />
-<h1><a name="bugs_and_limitations">BUGS AND LIMITATIONS</a></h1>
-<p>The Copyright stanzas searched with option <strong>--fsf-address</strong> must be
-exactly like in the FSF recommendation in order for them to be
-noticed. See STANDARDS.</p>
-<p>
-</p>
-<hr />
-<h1><a name="standards">STANDARDS</a></h1>
-<p><code>How to use GNU licenses for your own software</code>
-<a href="http://www.gnu.org/copyleft/gpl-howto.html">http://www.gnu.org/copyleft/gpl-howto.html</a></p>
-<p><code>Information for maintainers of GNU software (6.5 Copyright Notices)</code>
-<a href="http://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html">http://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html</a></p>
-<p><code>Information for maintainers of GNU software (6.6 License Notices)</code>
-<a href="http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-Notices">http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-Notices</a></p>
-<p>
-</p>
-<hr />
-<h1><a name="availability">AVAILABILITY</a></h1>
-<p>Homepage is at <a href="http://freecode.com/projects/copyright-update">http://freecode.com/projects/copyright-update</a></p>
-<p>
-</p>
-<hr />
-<h1><a name="author">AUTHOR</a></h1>
+
+<h1 id="BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</h1>
+
+<p>The Copyright stanzas searched with option <b>--fsf-address</b> must be exactly like in the FSF recommendation in order for them to be noticed. See STANDARDS.</p>
+
+<h1 id="STANDARDS">STANDARDS</h1>
+
+<p><code>How to use GNU licenses for your own software</code> http://www.gnu.org/copyleft/gpl-howto.html</p>
+
+<p><code>Information for maintainers of GNU software (6.5 Copyright Notices)</code> http://www.gnu.org/prep/maintain/html_node/Copyright-Notices.html</p>
+
+<p><code>Information for maintainers of GNU software (6.6 License Notices)</code> http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-Notices</p>
+
+<h1 id="AVAILABILITY">AVAILABILITY</h1>
+
+<p>Homepage is at http://freecode.com/projects/copyright-update</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
 <p>Jari Aalto</p>
-<p>
-</p>
-<hr />
-<h1><a name="license_and_copyright">LICENSE AND COPYRIGHT</a></h1>
+
+<h1 id="LICENSE-AND-COPYRIGHT">LICENSE AND COPYRIGHT</h1>
+
 <p>Copyright (C) 2000-2013 Jari Aalto</p>
-<p>This program is free software; you can redistribute and/or modify
-program under the terms of GNU General Public license either version 2
-of the License, or (at your option) any later version.
-For more information, see see &lt;http://www.gnu.org/licenses/&gt;.</p>
+
+<p>This program is free software; you can redistribute and/or modify program under the terms of GNU General Public license either version 2 of the License, or (at your option) any later version. For more information, see see &lt;http://www.gnu.org/licenses/&gt;.</p>
+
 
 </body>
 
 </html>
+
+
