@@ -67,7 +67,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2015.0928.0638';
+my $VERSION = '2019.0505.1613';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -112,7 +112,7 @@ sub Initialize ()
 
     $LICENSE    = "GPL-2+";
     $CONTACT    = "Jari Aalto";
-    $URL        = "http://freecode.com/projects/copyright-update";
+    $URL        = "https://github.com/jaalto/project--copyright-update";
 
     $LIB        = basename $PROGRAM_NAME;
     $PROGNAME   = $LIB;
@@ -399,7 +399,7 @@ http://www.gnu.org/prep/maintain/html_node/License-Notices.html#License-Notices
 
 =head1 AVAILABILITY
 
-Homepage is at http://freecode.com/projects/copyright-update
+Homepage is at https://github.com/jaalto/project--copyright-update
 
 =head1 AUTHOR
 

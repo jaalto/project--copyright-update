@@ -1,3 +1,7 @@
+2019-05-05 Sun  Jari Aalto  <jari.aalto@cante.net>
+
+	* ALL: update copyright years. Point URLs to Github.
+
 2013-06-02 Sun  Jari Aalto  <jari.aalto@cante.net>
 
 	* bin/copyright-update.pl (POD::OPTIONS::--auto): Fix typo.
@@ -141,7 +145,7 @@
 	* INSTALL: Update requirements and manual install.
 
 	Make a standalone project. This program has been part of the Emacs Tiny
-	Tools project. See http://freecode.com/projects/emacs-tiny-tools
+	Tools project.
 
 	* copyright-update.pl: (top level): update Copyright template.
 	(Help): reorder manual page into sections.
