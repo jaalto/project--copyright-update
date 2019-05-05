@@ -42,6 +42,9 @@ use File::Basename;
 use File::Find;
 use charnames q(:full);
 
+use Encode;
+use Encode::Guess;
+
 IMPORT: # This is just a syntactic sugar: actually no-op
 {
     #   Import following environment variables
@@ -67,7 +70,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2019.0505.1613';
+my $VERSION = '2019.0505.1615';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -779,7 +782,7 @@ sub HandleFile ( % )
 	# Perl Unicode also would accpt x{a9}/, but \N{} is more readable
 	# http://en.wikipedia.org/wiki/Copyright_symbol
 
-	my $ch   = "\N{COPYRIGHT SIGN}";
+	my $ch   = encode("UTF-8", "\N{COPYRIGHT SIGN}");
 	my $sign = '(?:' . $ch . '|\([Cc]\))';
 	my $yyyy = '\d{4}';
 	my $copy = '(?:(?i)Copyright):?[ \t]+' . $sign . '[ \t]+' . $yyyy;
