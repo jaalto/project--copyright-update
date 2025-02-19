@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title></title>
+<title>copyright-update - Update Copyright information in files</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:ASSI@cygwin.nonet" />
+<link rev="made" href="mailto:ASSI@walter.nonet" />
 </head>
 
 <body>
@@ -41,24 +41,24 @@
 
 <h1 id="SYNOPSIS">SYNOPSIS</h1>
 
-<pre><code>  copyright-update [options] FILE [FILE ...]
-  copyright-update [options] --recursive PATH [PATH ...]</code></pre>
+<pre><code>copyright-update [options] FILE [FILE ...]
+copyright-update [options] --recursive PATH [PATH ...]</code></pre>
 
 <h1 id="DESCRIPTION">DESCRIPTION</h1>
 
-<p>Update the copyright information in set of files, possibly recursively, matching content criteria. The updating affects copyright year, GPL address information etc.</p>
+<p>Update the copyright information in a set of files, possibly recursively, matching content criteria. The update affects the copyright year, GPL address information, etc.</p>
 
-<p>The line must have word &quot;Copyright&quot;, a space, three characters &#39;(C)&#39; (or a U+00A9 UTF copyright sign), a space, and the range of years. Varying amount of spaces and tabs are permitted, but there must be no spaces around the dash-character in YEAR-YEAR. Examples:</p>
+<p>The line must contain the word &quot;Copyright,&quot; a space, three characters &#39;(C)&#39; (or a U+00A9 UTF copyright sign), a space, and the range of years. A varying amount of spaces and tabs are permitted, but there must be no spaces around the dash character in YEAR-YEAR. Examples:</p>
 
-<pre><code>            A whitespace, or multiple, required
-            |   |           No space between years
-            |   |           |
-   Copyright (C)        YYYY-YYYY
-   Copyright: (C)       YYYY-YYYY
-            |
-            A colon is optional</code></pre>
+<pre><code>         A whitespace, or multiple, required
+         |   |           No space between years
+         |   |           |
+Copyright (C)        YYYY-YYYY
+Copyright: (C)       YYYY-YYYY
+         |
+         A colon is optional</code></pre>
 
-<p>By default certain files and paths are always ignored; like version control directories, backups files, object files and binary files according to Perl&#39;s <code>-T</code> file test. Run program with option <b>--help-exclude</b> to see exclude path list.</p>
+<p>By default, certain files and paths are always ignored, such as version control directories, backup files, object files, and binary files according to Perl&#39;s <code>-T</code> file test. Run the program with the option <b>--help-exclude</b> to see the excluded path list.</p>
 
 <h1 id="OPTIONS">OPTIONS</h1>
 
@@ -69,44 +69,44 @@
 <dt id="a---auto"><b>-a, --auto</b></dt>
 <dd>
 
-<p>In automatic mode, the author&#39;s name is read from environment variable NAME and only lines matching &#39;Copyright.*$NAME&#39; are affected. If NAME is not set, read information from EMAIL.</p>
+<p>In automatic mode, the author&#39;s name is read from the environment variable NAME, and only lines matching &#39;Copyright.*$NAME&#39; are affected. If NAME is not set, the information is read from EMAIL.</p>
 
-<p>If neither NAME nor EMAIL exists in evenvironemt, or if their values are not in a recognizable formats (see section ENVIRONMENT), this options does nothing.</p>
+<p>If neither NAME nor EMAIL exists in the environment, or if their values are not in a recognizable format (see section ENVIRONMENT), this option does nothing.</p>
 
-<p>This option effectively tries to preset value for the <b>--line</b> option.</p>
+<p>This option effectively tries to preset a value for the <b>--line</b> option.</p>
 
 </dd>
 <dt id="c---code"><b>-c, --code</b></dt>
 <dd>
 
-<p>Preset <b>--include</b> to match common code files: .c, .h, .cc, .hh, .cpp, .c++, .hpp, .C, .pl, .py, .sh and .rb</p>
+<p>Preset <b>--include</b> to match common code files: .c, .h, .cc, .hh, .cpp, .c++, .hpp, .C, .pl, .py, .sh, and .rb.</p>
 
 </dd>
 <dt id="d---debug-LEVEL"><b>-d, --debug LEVEL</b></dt>
 <dd>
 
-<p>Turn on debug. Level can be in range 0-10.</p>
+<p>Turn on debugging. LEVEL can be in the range of 0-10.</p>
 
 </dd>
 <dt id="f---fsf-address"><b>-f, --fsf-address</b></dt>
 <dd>
 
-<p>Change License paragraphs that refer to FSF address. The FSF&#39;s current recommendation is to redirect inquiries about licences to their URL.</p>
+<p>Change license paragraphs that refer to the FSF address. The FSF&#39;s current recommendation is to redirect inquiries about licenses to their URL.</p>
 
-<p>Effectively replace paragraphs:</p>
+<p>Effectively replace the paragraphs:</p>
 
-<pre><code>  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+<pre><code>You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-  You should have received a copy of the GNU General Public License
-  along with this package; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA</code></pre>
+You should have received a copy of the GNU General Public License
+along with this package; if not, write to the Free Software
+Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</code></pre>
 
 <p>With this:</p>
 
-<pre><code>  You should have received a copy of the GNU General Public License
-  along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</code></pre>
+<pre><code>You should have received a copy of the GNU General Public License
+along with this program. If not, see &lt;http://www.gnu.org/licenses/&gt;.</code></pre>
 
 </dd>
 <dt id="i---include-REGEXP"><b>-i, --include REGEXP</b></dt>
@@ -134,7 +134,7 @@
 <dt id="R---regexp-REGEXP"><b>-R, --regexp REGEXP</b></dt>
 <dd>
 
-<p>Change only files whose content matches REGEXP. The file is read in as a one big string so that it&#39;s possible to match using Perl regular expressions across the whole file. An example: &#39;(?smi)This.*multi.*line.*match&#39;. See perlre(1) for more information about &#39;smi&#39; and other modifiers.</p>
+<p>Change only files whose content matches REGEXP. The file is read in as a one big string so that it&#39;s possible to match using Perl regular expressions across the whole file. An example: <code>&#39;(?smi)This.*multi.*line.*match&#39;</code>. See <code>perlre(1)</code> for more information about <code>&#39;smi&#39;</code> and other modifiers.</p>
 
 <p>This option can be used as a preliminary <i>Content criteria</i>, to select files before <b>--line</b> option finds the correct Copyright lines.</p>
 
@@ -215,27 +215,27 @@
 
 <p>The primary use is to update files to reflect current year; option <b>--year</b> is implicit:</p>
 
-<pre><code>   copyright-update *</code></pre>
+<pre><code>copyright-update *</code></pre>
 
 <p>To test what would happen:</p>
 
-<pre><code>   copyright-update --verbose 1 --test *</code></pre>
+<pre><code>copyright-update --verbose 1 --test *</code></pre>
 
 <p>Update only C-code file:</p>
 
-<pre><code>   copyright-update --verbose 1 --include &#39;\.[ch]$&#39; --recursive .</code></pre>
+<pre><code>copyright-update --verbose 1 --include &#39;\.[ch]$&#39; --recursive .</code></pre>
 
 <p>It is possible to restrict updating files recursively to only those files whose content match regexp. Here, the lines affected are those that match <b>--line</b> regular expression.</p>
 
-<pre><code>   copyright-update \
-        --regexp  &#39;(?i)Author:.*John.*Doe&#39; \
-        --line    &#39;\bFoo\b&#39; \
-        --ignore  &#39;\.(bak|bup|[~#]])$&#39; \
-        --verbose 1 \
-        --year    2013 \
-        --test \
-        --recursive \
-        .</code></pre>
+<pre><code>copyright-update \
+     --regexp  &#39;(?i)Author:.*John.*Doe&#39; \
+     --line    &#39;\bFoo\b&#39; \
+     --ignore  &#39;\.(bak|bup|[~#]])$&#39; \
+     --verbose 1 \
+     --year    2013 \
+     --test \
+     --recursive \
+     .</code></pre>
 
 <h1 id="TROUBLESHOOTING">TROUBLESHOOTING</h1>
 
@@ -252,13 +252,13 @@
 
 <p>In order to find first and lastname, the localpart in email address must match case insensitive regexp <code>&#39;^[a-z-]+\.[a-z-]+@&#39;</code>:</p>
 
-<pre><code>    address@example.com            Not used, not in form First.Last
-    +------ +----------
+<pre><code>address@example.com            Not used, not in form First.Last
++------ +----------
 
-    mr.first.lastname@example.com  Not used, likewise
-    +---------------- +----------
-    |                 |
-    Localpart         Domain part</code></pre>
+mr.first.lastname@example.com  Not used, likewise
++---------------- +----------
+|                 |
+Localpart         Domain part</code></pre>
 
 </dd>
 <dt id="NAME1">NAME</dt>

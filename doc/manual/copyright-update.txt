@@ -6,14 +6,14 @@ SYNOPSIS
       copyright-update [options] --recursive PATH [PATH ...]
 
 DESCRIPTION
-    Update the copyright information in set of files, possibly recursively,
-    matching content criteria. The updating affects copyright year, GPL
-    address information etc.
+    Update the copyright information in a set of files, possibly
+    recursively, matching content criteria. The update affects the copyright
+    year, GPL address information, etc.
 
-    The line must have word "Copyright", a space, three characters '(C)' (or
-    a U+00A9 UTF copyright sign), a space, and the range of years. Varying
-    amount of spaces and tabs are permitted, but there must be no spaces
-    around the dash-character in YEAR-YEAR. Examples:
+    The line must contain the word "Copyright," a space, three characters
+    '(C)' (or a U+00A9 UTF copyright sign), a space, and the range of years.
+    A varying amount of spaces and tabs are permitted, but there must be no
+    spaces around the dash character in YEAR-YEAR. Examples:
 
                 A whitespace, or multiple, required
                 |   |           No space between years
@@ -23,37 +23,38 @@ DESCRIPTION
                 |
                 A colon is optional
 
-    By default certain files and paths are always ignored; like version
-    control directories, backups files, object files and binary files
-    according to Perl's "-T" file test. Run program with option
-    --help-exclude to see exclude path list.
+    By default, certain files and paths are always ignored, such as version
+    control directories, backup files, object files, and binary files
+    according to Perl's "-T" file test. Run the program with the option
+    --help-exclude to see the excluded path list.
 
 OPTIONS
   Run options
     -a, --auto
-        In automatic mode, the author's name is read from environment
-        variable NAME and only lines matching 'Copyright.*$NAME' are
-        affected. If NAME is not set, read information from EMAIL.
+        In automatic mode, the author's name is read from the environment
+        variable NAME, and only lines matching 'Copyright.*$NAME' are
+        affected. If NAME is not set, the information is read from EMAIL.
 
-        If neither NAME nor EMAIL exists in evenvironemt, or if their values
-        are not in a recognizable formats (see section ENVIRONMENT), this
-        options does nothing.
+        If neither NAME nor EMAIL exists in the environment, or if their
+        values are not in a recognizable format (see section ENVIRONMENT),
+        this option does nothing.
 
-        This option effectively tries to preset value for the --line option.
+        This option effectively tries to preset a value for the --line
+        option.
 
     -c, --code
         Preset --include to match common code files: .c, .h, .cc, .hh, .cpp,
-        .c++, .hpp, .C, .pl, .py, .sh and .rb
+        .c++, .hpp, .C, .pl, .py, .sh, and .rb.
 
     -d, --debug LEVEL
-        Turn on debug. Level can be in range 0-10.
+        Turn on debugging. LEVEL can be in the range of 0-10.
 
     -f, --fsf-address
-        Change License paragraphs that refer to FSF address. The FSF's
-        current recommendation is to redirect inquiries about licences to
+        Change license paragraphs that refer to the FSF address. The FSF's
+        current recommendation is to redirect inquiries about licenses to
         their URL.
 
-        Effectively replace paragraphs:
+        Effectively replace the paragraphs:
 
           You should have received a copy of the GNU General Public License
           along with this program; if not, write to the Free Software
@@ -61,7 +62,7 @@ OPTIONS
 
           You should have received a copy of the GNU General Public License
           along with this package; if not, write to the Free Software
-          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
+          Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
         With this:
 
