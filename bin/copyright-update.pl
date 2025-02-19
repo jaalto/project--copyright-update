@@ -70,7 +70,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2019.0505.1615';
+my $VERSION = '2025.0219.1439';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -152,14 +152,14 @@ copyright-update - Update Copyright information in files
 
 =head1 DESCRIPTION
 
-Update the copyright information in set of files, possibly
-recursively, matching content criteria. The updating affects copyright
-year, GPL address information etc.
+Update the copyright information in a set of files, possibly
+recursively, matching content criteria. The update affects the copyright
+year, GPL address information, etc.
 
-The line must have word "Copyright", a space, three characters '(C)'
+The line must contain the word "Copyright," a space, three characters '(C)'
 (or a U+00A9 UTF copyright sign), a space, and the range of
-years. Varying amount of spaces and tabs are permitted, but there must
-be no spaces around the dash-character in YEAR-YEAR. Examples:
+years. A varying amount of spaces and tabs are permitted, but there must
+be no spaces around the dash character in YEAR-YEAR. Examples:
 
 	    A whitespace, or multiple, required
 	    |   |           No space between years
@@ -169,10 +169,10 @@ be no spaces around the dash-character in YEAR-YEAR. Examples:
 	    |
 	    A colon is optional
 
-By default certain files and paths are always ignored; like version
-control directories, backups files, object files and binary files
-according to Perl's C<-T> file test. Run program with option
-B<--help-exclude> to see exclude path list.
+By default, certain files and paths are always ignored, such as version
+control directories, backup files, object files, and binary files
+according to Perl's C<-T> file test. Run the program with the option
+B<--help-exclude> to see the excluded path list.
 
 =head1 OPTIONS
 
@@ -182,31 +182,31 @@ B<--help-exclude> to see exclude path list.
 
 =item B<-a, --auto>
 
-In automatic mode, the author's name is read from environment variable
-NAME and only lines matching 'Copyright.*$NAME' are affected. If NAME
-is not set, read information from EMAIL.
+In automatic mode, the author's name is read from the environment variable
+NAME, and only lines matching 'Copyright.*$NAME' are affected. If NAME
+is not set, the information is read from EMAIL.
 
-If neither NAME nor EMAIL exists in evenvironemt, or if their values
-are not in a recognizable formats (see section ENVIRONMENT), this
-options does nothing.
+If neither NAME nor EMAIL exists in the environment, or if their values
+are not in a recognizable format (see section ENVIRONMENT), this
+option does nothing.
 
-This option effectively tries to preset value for the B<--line> option.
+This option effectively tries to preset a value for the B<--line> option.
 
 =item B<-c, --code>
 
 Preset B<--include> to match common code files: .c, .h, .cc, .hh, .cpp,
-.c++, .hpp, .C, .pl, .py, .sh and .rb
+.c++, .hpp, .C, .pl, .py, .sh, and .rb.
 
 =item B<-d, --debug LEVEL>
 
-Turn on debug. Level can be in range 0-10.
+Turn on debugging. LEVEL can be in the range of 0-10.
 
 =item B<-f, --fsf-address>
 
-Change License paragraphs that refer to FSF address. The FSF's current
-recommendation is to redirect inquiries about licences to their URL.
+Change license paragraphs that refer to the FSF address. The FSF's current
+recommendation is to redirect inquiries about licenses to their URL.
 
-Effectively replace paragraphs:
+Effectively replace the paragraphs:
 
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
@@ -214,7 +214,7 @@ Effectively replace paragraphs:
 
   You should have received a copy of the GNU General Public License
   along with this package; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301USA
+  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 With this:
 
@@ -240,11 +240,11 @@ Recursively search all directories given in command line.
 
 =item B<-R, --regexp REGEXP>
 
-Change only files whose content matches REGEXP. The file is read in as
-a one big string so that it's possible to match using Perl regular
-expressions across the whole file. An example:
-'(?smi)This.*multi.*line.*match'. See perlre(1) for more information
-about 'smi' and other modifiers.
+Change only files whose content matches REGEXP. The file is read
+in as a one big string so that it's possible to match using Perl
+regular expressions across the whole file. An example:
+C<'(?smi)This.*multi.*line.*match'>. See C<perlre(1)> for more
+information about C<'smi'> and other modifiers.
 
 This option can be used as a preliminary I<Content criteria>, to
 select files before B<--line> option finds the correct Copyright
