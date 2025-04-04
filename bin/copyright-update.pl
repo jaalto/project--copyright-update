@@ -74,7 +74,7 @@ my $LIB = basename $PROGRAM_NAME;
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2025.0404.0914';
+my $VERSION = '2025.0404.0917';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -455,6 +455,9 @@ sub HandleFile (%)
 		       ;
 
     my $ffile;
+
+    # "Creating Nested Functions"
+    # https://www.perlmonks.org/?node_id=696592
 
     my $Print;
     $Print = sub (@)
