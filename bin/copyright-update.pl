@@ -41,7 +41,7 @@ use Getopt::Long;
 use File::Basename;
 use File::Find;
 use charnames q(:full);
-use Fatal qw(open binmode system);
+use Fatal qw(open binmode);
 
 use Encode;
 use Encode::Guess;
@@ -74,7 +74,7 @@ my $LIB = basename $PROGRAM_NAME;
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2025.0404.0908';
+my $VERSION = '2025.0404.0914';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -169,7 +169,8 @@ sub Help
     }
     else
     {
-	system "perl -S pod2text $PROGRAM_NAME"
+	system "perl -S pod2text $PROGRAM_NAME" or
+	    do { 1; } # Ignore error. Do nothing.
     }
 
     defined $msg  and  print $msg;
