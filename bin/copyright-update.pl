@@ -74,7 +74,7 @@ my $LIB = basename $PROGRAM_NAME;
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2025.0404.0917';
+my $VERSION = '2025.0404.0924';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -114,7 +114,6 @@ sub Initialize ()
 	$URL
 
 	$PROGNAME
-	$OUTPUT_AUTOFLUSH
     );
 
     $LICENSE    = "GPL-2.0-or-later";
