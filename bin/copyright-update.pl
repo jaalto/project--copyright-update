@@ -41,6 +41,7 @@ use Getopt::Long;
 use File::Basename;
 use File::Find;
 use charnames q(:full);
+use Fatal qw(open binmode system);
 
 use Encode;
 use Encode::Guess;
@@ -63,14 +64,17 @@ IMPORT: # This is just a syntactic sugar: actually no-op
 #
 # ****************************************************************************
 
-use vars qw ( $VERSION );
+use vars qw($VERSION $URL);
+
+local $OUTPUT_AUTOFLUSH = 1;
+my $LIB = basename $PROGRAM_NAME;
 
 #   This is for use of Makefile.PL and ExtUtils::MakeMaker
 #
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2025.0404.0718';
+my $VERSION = '2025.0404.0908';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -103,24 +107,21 @@ my $DEFAULT_FILE_EXCLUDE =              # Matches *only* file component
 
 sub Initialize ()
 {
-    use vars qw
+    use vars qw  # Declare globals
     (
 	$LICENSE
 	$CONTACT
 	$URL
 
-	$LIB
 	$PROGNAME
+	$OUTPUT_AUTOFLUSH
     );
 
-    $LICENSE    = "GPL-2+";
+    $LICENSE    = "GPL-2.0-or-later";
     $CONTACT    = "Jari Aalto";
     $URL        = "https://github.com/jaalto/project--copyright-update";
 
-    $LIB        = basename $PROGRAM_NAME;
     $PROGNAME   = $LIB;
-
-    $OUTPUT_AUTOFLUSH = 1;
 }
 
 # ****************************************************************************
@@ -139,13 +140,700 @@ sub Initialize ()
 #
 # ****************************************************************************
 
+# Perlcritic flags this
+#   perldoc Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars
+# ... commented out
+
+# sub Help (;$$);
+
+sub Help
+{
+    my $id   = "$LIB.Help";
+    my $type = shift;  # optional arg, type
+    my $msg  = shift;  # optional arg, why are we here...
+
+    if ($type eq -html)
+    {
+	pod2html $PROGRAM_NAME;
+    }
+    elsif ($type eq -man)
+    {
+	eval {require Pod::Man; 1}
+	    or die "$id: Cannot generate Man: $EVAL_ERROR";
+
+	my %options;
+	$options{center} = "User commands";
+
+	my $parser = Pod::Man->new(%options);
+	$parser->parse_from_file ($PROGRAM_NAME);
+    }
+    else
+    {
+	system "perl -S pod2text $PROGRAM_NAME"
+    }
+
+    defined $msg  and  print $msg;
+    exit 0;
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Display default excludes.
+#
+#   INPUT PARAMETERS
+#
+#       None
+#
+#   RETURN VALUES
+#
+#       None
+#
+# ****************************************************************************
+
+sub HelpExclude ()
+{
+    my $id = "$LIB.HelpExclude";
+
+    print "Default path exclude regexp: '$DEFAULT_PATH_EXCLUDE'\n";
+    print "Default file exclude regexp: '$DEFAULT_FILE_EXCLUDE'\n";
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Return current year YYYY.
+#
+#   INPUT PARAMETERS
+#
+#       None
+#
+#   RETURN VALUES
+#
+#       number      YYYY
+#
+# ****************************************************************************
+
+sub Year ()
+{
+    my $id = "$LIB.Year";
+    1900 + (localtime time)[5];
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Read command line arguments and their parameters.
+#
+#   INPUT PARAMETERS
+#
+#       None
+#
+#   RETURN VALUES
+#
+#       Globally set options.
+#
+# ****************************************************************************
+
+sub HandleCommandLineArgs ()
+{
+    my $id = "$LIB.HandleCommandLineArgs";
+
+    # Declare globals
+    use vars qw
+    (
+	$TEST
+	$VERB
+	$DEBUG
+
+	$YEAR
+	$OPT_AUTOMATIC
+	@OPT_FILE_REGEXP_EXCLUDE
+	@OPT_FILE_REGEXP_INCLUDE
+	$OPT_FSF_ADDRESS
+	$OPT_LINE_REGEXP
+	$OPT_NO_YEAR
+	$OPT_RECURSIVE
+	$OPT_REGEXP
+    );
+
+    Getopt::Long::config(qw
+    (
+	no_ignore_case
+	no_ignore_case_always
+    ));
+
+    my ($help, $helpMan, $helpHtml, $version); # local variables to function
+    my ($helpExclude, $code);
+
+    $DEBUG = -1;
+
+    GetOptions      # Getopt::Long
+    (
+	  "a|auto"          => \$OPT_AUTOMATIC
+	, "fsf-address"     => \$OPT_FSF_ADDRESS
+	, "c|code"          => \$code
+	, "D|debug:i"       => \$DEBUG
+	, "dry-run"         => \$TEST
+	, "help-exclude"    => \$helpExclude
+	, "help-html"       => \$helpHtml
+	, "help-man"        => \$helpMan
+	, "h|help"          => \$help
+	, "include=s"       => \@OPT_FILE_REGEXP_INCLUDE
+	, "line=s"          => \$OPT_LINE_REGEXP
+	, "r|recursive"     => \$OPT_RECURSIVE
+	, "R|regexp=s"      => \$OPT_REGEXP
+	, "test"            => \$TEST
+	, "v|verbose:i"     => \$VERB
+	, "V|version"       => \$version
+	, "year=i"          => \$YEAR
+	, "Y|no-year"       => \$OPT_NO_YEAR
+	, "x|exclude=s"     => \@OPT_FILE_REGEXP_EXCLUDE
+    );
+
+    $version            and  die "$VERSION $CONTACT $LICENSE $URL\n";
+    $helpExclude        and  HelpExclude();
+    $help               and  Help();
+    $helpMan            and  Help(-man);
+    $helpHtml           and  Help(-html);
+
+    $DEBUG = 1          if $DEBUG == 0;
+    $DEBUG = 0          if $DEBUG < 0;
+
+    $YEAR = Year()  unless defined $YEAR;
+
+    unless ($YEAR =~ m,^\d{4}$,)
+    {
+	die "$id: Option --year must be given with four digits [$YEAR]";
+    }
+
+    if (defined $VERB  and  $VERB == 0)
+    {
+	$VERB = 1;
+    }
+
+    if ($code)
+    {
+	push @OPT_FILE_REGEXP_INCLUDE,
+	    '\.([Cch]|cc|hh|cpp|c\+\+|hpp|p[y]l|sh|rb)';
+    }
+
+    $VERB = 1  if  $TEST and $VERB == 0;
+    $VERB = 5  if  $DEBUG;
+
+    if ( $OPT_LINE_REGEXP  and  $OPT_AUTOMATIC )
+    {
+	die "$id: option --auto cannot be used togethet with --line";
+    }
+
+    if ($OPT_AUTOMATIC)
+    {
+	if ($NAME)
+	{
+	    local $ARG = $NAME;
+
+	    if (/^([[:lower:]-]+) +([[:lower:]-]+)/i)
+	    {
+		$VERB > 1 and  print "$id: Using NAME: $NAME\n";
+		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
+	    }
+	    else
+	    {
+		$VERB  and  print "$id: WARN: NAME not recognized: '$NAME'\n";
+	    }
+	}
+
+	if (not $OPT_LINE_REGEXP  and  $EMAIL)
+	{
+	    local $ARG = $EMAIL;
+
+	    if ( /^([[:lower:]-]+)[.]([[:lower:]-]+)@/i )
+	    {
+		$VERB > 1  and  print "$id: Using EMAIL: $EMAIL\n";
+		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
+	    }
+	    else
+	    {
+		$VERB  and  print "$id: WARN: EMAIL not recognized: '$EMAIL'\n";
+	    }
+
+	    unless ($OPT_LINE_REGEXP)
+	    {
+		die "$id: information for option --auto missing";
+	    }
+	}
+
+	$VERB > 1  and  print "$id: automatic preset of --line '$OPT_LINE_REGEXP'\n";
+    }
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Change FSF Address
+#
+#   INPUT PARAMETERS
+#
+#       $content        File content.
+#
+#   RETURN VALUES
+#
+#       $string         File content or empty if no chnages.
+#
+# ****************************************************************************
+
+sub FsfAddress ($ ; $)
+{
+    my $id     = "$LIB.FsfAddress";
+    local $ARG = shift;
+    my $file   = shift;
+
+    my $X = $DEBUG ? "$id: " : "";
+    my $done;
+
+    # Substitute operation in s{}{}
+
+    my $re = qr{
+        ^([^\r\n]*)You \s+ should \s+ have \s+ received
+	.*? (write \s+ to | contact .*? Foundation)
+	.*? USA[ \t.]*
+    }x;
+
+    s
+    {
+	$re
+    }
+    {$1You should have received a copy of the GNU General Public License\n$1along with this program. If not, see <http://www.gnu.org/licenses/>.}smix
+    and $done++;
+
+    $ARG if $done;
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Handle Single file
+#
+#   INPUT PARAMETERS
+#
+#       %hash       -file   => [filename list]
+#                   -regexp => Regexp to match file content.
+#                              If regexp is not found in file, file is not
+#                              handled.
+#
+#   RETURN VALUES
+#
+#       none
+#
+# ****************************************************************************
+
+sub HandleFile (%)
+{
+    my $id  = "$LIB.HandleFile";
+    my %arg = @ARG;
+
+    my $X       = $DEBUG ? "$id: " : "";
+    my @files   = @{ $arg{-file} };
+    my $regexp  = $arg{-regexp};
+    my $linere  = $arg{-line};
+
+    unless (@files)
+    {
+	warn "$id: -file argument is empty: ",  $arg{-file};
+	return;
+    }
+
+    $DEBUG  and  print "$id: -file [@files], ",
+		       "-regexp '$regexp' ",
+		       "-line '$linere'\n"
+		       ;
+
+    my $ffile;
+
+    my $Print;
+    $Print = sub (@)
+    {
+	print "${X}$ffile: ", @_, "\n";
+    };
+
+    local $ARG = "";
+
+    for my $file (@files)
+    {
+	$ffile = $file;                 # For Print()
+
+	$DEBUG  and  print "$id: $file: open\n";
+
+	# ..................................................... read ...
+
+	{
+	    my $FILE;
+
+	    unless (open my $FILE, "<", $file)
+	    {
+		$VERB  and  $Print->("ERROR: cannot open");
+		next;
+	    }
+	    else
+	    {
+		binmode $FILE;
+		local $INPUT_RECORD_SEPARATOR = undef;
+		$ARG = <$FILE>;
+		close $FILE  or  warn "Close $file error $ERRNO";
+
+		unless (/\w/)
+		{
+		    $VERB  and  $Print->("WARN: empty file");
+		    return;
+		}
+	    }
+	}
+
+	if ($regexp)
+	{
+	    unless (/$regexp/o)
+	    {
+		$VERB  and  $Print->("WARN: failed regexp check: $regexp");
+		next;
+	    }
+	}
+
+	my $done;
+	my $msg = $TEST ? "Would change" : "Changed";
+
+	if ($OPT_FSF_ADDRESS  and  (my $fsf = FsfAddress $ARG, $file))
+	{
+	    $Print->("$msg FSF address to URL");
+	    $ARG = $fsf;
+	    $done++;
+	}
+
+	# Perl Unicode also would accpt x{a9}/, but \N{} is more readable
+	# http://en.wikipedia.org/wiki/Copyright_symbol
+
+	my $ch   = encode("UTF-8", "\N{COPYRIGHT SIGN}");
+	my $sign = '(?:' . $ch . '|\([Cc]\))';
+	my $yyyy = qr/\d{4}/;
+	my $copy = qr/(?:(?i)Copyright):?[ \t]+/ . $sign . qr/[ \t]+/ . $yyyy;
+
+	# In manual pages the hyphen is quoted as:
+	# Copyright (C) YYYY\-YYYY
+
+	my $repeat  = qr/\\?-/;
+
+	#  If we find the regexp, then check if YEAR is different
+	#  and finally do substitution.
+	#
+	#  If everything went ok, replace file.
+
+	my $y;
+
+	if (/$copy$repeat($yyyy)/oi)
+	{
+	    $y = $1;
+	}
+	else
+	{
+	    $VERB  > 1  and  $Print->("No Copyright line");
+	    $DEBUG > 2  and  $Print->("$id: Match regexp: $copy$repeat($yyyy)\n");
+	}
+
+	$y = "" if $OPT_NO_YEAR;
+
+	if ($y  and  $y eq $YEAR)
+	{
+	    $VERB > 2  and  $Print->("Copyright is already $YEAR");
+	    $y = "";
+	}
+
+	unless ($OPT_NO_YEAR)
+	{
+	    my $i = 0;
+
+	    if ($linere)
+	    {
+		if ($DEBUG > 1)
+		{
+		    warn "s/(?:$linere).*\\K($copy$repeat)($yyyy)/\${1}$YEAR/gmi\n";
+		    warn "s/($copy$repeat)$yyyy(.*$linere)/\${1}$YEAR\${2}/gmi\n";
+		}
+
+		s/(?:$linere).*\K($copy$repeat)$yyyy/$1$YEAR/gmi and $i++;
+		s/($copy$repeat)$yyyy(.*$linere)/$1$YEAR$2/gmi and $i++;
+
+	    }
+	    else
+	    {
+		s/($copy$repeat)$yyyy/$1$YEAR/gmi and $i++;
+	    }
+
+	    $done += $i;
+	    $DEBUG and $i and print "$id: matches --line '$linere'\n";
+
+	    $y = ""  unless $i;
+	}
+
+	$VERB   and  $y  and  $Print->("$msg $y => $YEAR");
+
+	$TEST     and  next;
+	not $done and  next;
+
+	my $FILE;
+
+	unless (open $FILE, ">", $file)
+	{
+	    $Print->("ERROR: Cannot open for write");
+	}
+	else
+	{
+	    $VERB > 2  and  $Print->("wrote");
+
+	    binmode $FILE;
+	    print $FILE $ARG;
+	    close $FILE  or  warn "Close $file error $ERRNO";
+	}
+    }
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Check if FILE matches exclude regexps.
+#
+#   INPUT PARAMETERS
+#
+#       $       Filename
+#
+#   RETURN VALUES
+#
+#       true    File in exclude list
+#       false   File NOT in exclude list
+#
+# ****************************************************************************
+
+sub IsExclude ($)
+{
+    my $id   = "$LIB.IsExclude";
+    local $ARG = shift;
+
+    scalar @OPT_FILE_REGEXP_EXCLUDE  or  return 0;
+
+    for my $re (@OPT_FILE_REGEXP_EXCLUDE)
+    {
+
+	if (/$re/)
+	{
+	    $VERB > 2  and  print "$id: '$re' matches: $ARG\n";
+	    return 1
+	}
+    }
+
+    return 0;
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Check if FILE matches include regexps.
+#
+#   INPUT PARAMETERS
+#
+#       $       Filename
+#
+#   RETURN VALUES
+#
+#       true    File in include list
+#       false   File NOT in include list
+#
+# ****************************************************************************
+
+sub IsInclude ($)
+{
+    my $id   = "$LIB.IsInclude";
+    local $ARG = shift;
+
+    scalar @OPT_FILE_REGEXP_INCLUDE  or  return 1;
+
+    for my $re (@OPT_FILE_REGEXP_INCLUDE)
+    {
+
+	if (/$re/)
+	{
+	    $VERB > 2  and  print "$id: '$re' matches: $ARG\n";
+	    return 1
+	}
+    }
+
+    return 0;
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Recursively find out all files and change their content.
+#
+#   INPUT PARAMETERS
+#
+#       None. This function is called from File::FInd.pm library
+#
+#   RETURN VALUES
+#
+#       None.
+#
+# ****************************************************************************
+
+sub wanted ()
+{
+    my $id = "$LIB.wanted";
+
+    my $dir  = $File::Find::dir;
+    my $file = $File::Find::name;  # complete path
+
+    if ($dir =~ m,$DEFAULT_PATH_EXCLUDE,o)
+    {
+	$File::Find::prune = 1;
+	$DEBUG  and  print "$id: DEfault path exclude: $dir\n";
+	return;
+    }
+
+    if ($file =~ m,$DEFAULT_FILE_EXCLUDE,o)
+    {
+	$DEBUG  and  print "$id: Default file exclude: $file\n";
+	return;
+    }
+
+    if (-f)
+    {
+	if ($VERB > 3)
+	{
+	    print "$id: $file\n";
+	}
+
+	unless (-T)
+	{
+	    $DEBUG and
+		print "$id: Exclude binary file (internal test): $file\n";
+	}
+
+	IsInclude $file  or  return;
+	IsExclude $file  and return;
+
+	HandleFile -file   => [$file],
+	           -line   => $OPT_LINE_REGEXP,
+	           -regexp => $OPT_REGEXP;
+    }
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Expand files in list. Win32 support
+#
+#   INPUT PARAMETERS
+#
+#       @       list of file glob patterns.
+#
+#   RETURN VALUES
+#
+#       @       list of filenames
+#
+# ****************************************************************************
+
+sub FileGlobs (@)
+{
+    my $id   = "$LIB.FileGlobs";
+    my @list = @ARG;
+    not @list  and  die "$id: No files to expand. Argument list is empty.";
+
+    my @files;
+
+    for my $glob (@list)
+    {
+	#       Win32 can't expand "*". We must do it here.
+	#       Grep only FILES, not directories.
+
+	push @files, grep {-f} glob $glob;
+    }
+
+    $DEBUG  and  print "$id: RETURN [@files]\n";
+    @files;
+}
+
+# ****************************************************************************
+#
+#   DESCRIPTION
+#
+#       Main function
+#
+#   INPUT PARAMETERS
+#
+#       None
+#
+#   RETURN VALUES
+#
+#       None
+#
+# ****************************************************************************
+
+sub Main ()
+{
+    my $id = "$LIB.Main";
+
+    grep /-D|--debug/, @ARGV  and  print "$id: ARGV [@ARGV]\n";
+
+    Initialize();
+    HandleCommandLineArgs();
+
+    unless (scalar @ARGV)
+    {
+	die "What files to change? See --help.";
+    }
+
+    $DEBUG  and  print "$id: ARGV files or paths [@ARGV]\n";
+
+    # .......................................... expand command line ...
+
+
+    if ($OPT_RECURSIVE)
+    {
+	find({wanted => \&wanted, no_chdir => 1},  @ARGV);
+    }
+    else
+    {
+	my @files = FileGlobs @ARGV;
+
+	unless (@files)
+	{
+	    $VERB  and  warn "[WARN] No files matching glob(s): @ARGV\n";
+	    return;
+	}
+
+	HandleFile -file   => [@files],
+	           -line   => $OPT_LINE_REGEXP,
+	           -regexp => $OPT_REGEXP;
+    }
+}
+
+Main();
+
+__END__
+
 =pod
 
 =head1 NAME
 
 copyright-update - Update Copyright information in files
 
-=head1 SYNOPSIS
+=head1 USAGE
 
   copyright-update [options] FILE [FILE ...]
   copyright-update [options] --recursive PATH [PATH ...]
@@ -174,6 +862,10 @@ control directories, backup files, object files, and binary files
 according to Perl's C<-T> file test. Run the program with the option
 B<--help-exclude> to see the excluded path list.
 
+=head1 REQUIRED ARGUMENTS
+
+Either FILE or PATH with C<--recursive> option.
+
 =head1 OPTIONS
 
 =head2 Run options
@@ -197,7 +889,7 @@ This option effectively tries to preset a value for the B<--line> option.
 Preset B<--include> to match common code files: .c, .h, .cc, .hh, .cpp,
 .c++, .hpp, .C, .pl, .py, .sh, and .rb.
 
-=item B<-d, --debug LEVEL>
+=item B<-D, --debug LEVEL>
 
 Turn on debugging. LEVEL can be in the range of 0-10.
 
@@ -367,21 +1059,33 @@ B<--auto>.
 
 =back
 
+=head1 DIAGNOSTICS
+
+See option C<--debug LEVEL>
+
+=head1 EXIT STATUS
+
+Value 0 on normal exit and non-zero on error.
+
+=head1 CONFIGURATION
+
+None.
+
+=head1 DEPENDENCIES
+
+None. Uses only standard Perl modules.
+
+=head1 INCOMPATIBILITIES
+
+None.
+
 =head1 FILES
 
 None.
 
-=head1 EXIT STATUS
-
-Not defined.
-
 =head1 SEE ALSO
 
 licensecheck(1)
-
-=head1 DEPENDENCIES
-
-Uses only standard Perl modules.
 
 =head1 BUGS AND LIMITATIONS
 
@@ -418,673 +1122,3 @@ of the License, or (at your option) any later version.
 For more information, see see <http://www.gnu.org/licenses/>.
 
 =cut
-
-sub Help (;$$)
-{
-    my $id   = "$LIB.Help";
-    my $type = shift;  # optional arg, type
-    my $msg  = shift;  # optional arg, why are we here...
-
-    if ($type eq -html)
-    {
-	pod2html $PROGRAM_NAME;
-    }
-    elsif ($type eq -man)
-    {
-	eval {require Pod::Man; 1}
-	    or die "$id: Cannot generate Man: $EVAL_ERROR";
-
-	my %options;
-	$options{center} = "User commands";
-
-	my $parser = Pod::Man->new(%options);
-	$parser->parse_from_file ($PROGRAM_NAME);
-    }
-    else
-    {
-	system "perl -S pod2text $PROGRAM_NAME"
-    }
-
-    defined $msg  and  print $msg;
-    exit 0;
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Display default excludes.
-#
-#   INPUT PARAMETERS
-#
-#       None
-#
-#   RETURN VALUES
-#
-#       None
-#
-# ****************************************************************************
-
-sub HelpExclude ()
-{
-    my $id = "$LIB.HelpExclude";
-
-    print "Default path exclude regexp: '$DEFAULT_PATH_EXCLUDE'\n";
-    print "Default file exclude regexp: '$DEFAULT_FILE_EXCLUDE'\n";
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Return current year YYYY.
-#
-#   INPUT PARAMETERS
-#
-#       None
-#
-#   RETURN VALUES
-#
-#       number      YYYY
-#
-# ****************************************************************************
-
-sub Year ()
-{
-    my $id = "$LIB.Year";
-    1900 + (localtime time() )[5];
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Read command line arguments and their parameters.
-#
-#   INPUT PARAMETERS
-#
-#       None
-#
-#   RETURN VALUES
-#
-#       Globally set options.
-#
-# ****************************************************************************
-
-sub HandleCommandLineArgs ()
-{
-    my $id = "$LIB.HandleCommandLineArgs";
-
-    use vars qw
-    (
-	$test
-	$verb
-	$debug
-
-	$YEAR
-	$OPT_AUTOMATIC
-	@OPT_FILE_REGEXP_EXCLUDE
-	@OPT_FILE_REGEXP_INCLUDE
-	$OPT_FSF_ADDRESS
-	$OPT_LINE_REGEXP
-	$OPT_NO_YEAR
-	$OPT_RECURSIVE
-	$OPT_REGEXP
-    );
-
-    Getopt::Long::config(qw
-    (
-	no_ignore_case
-	no_ignore_case_always
-    ));
-
-    my ($help, $helpMan, $helpHtml, $version); # local variables to function
-    my ($helpExclude, $code);
-
-    $debug = -1;
-
-    GetOptions      # Getopt::Long
-    (
-	  "a|auto"          => \$OPT_AUTOMATIC
-	, "fsf-address"     => \$OPT_FSF_ADDRESS
-	, "c|code"          => \$code
-	, "d|debug:i"       => \$debug
-	, "dry-run"         => \$test
-	, "help-exclude"    => \$helpExclude
-	, "help-html"       => \$helpHtml
-	, "help-man"        => \$helpMan
-	, "h|help"          => \$help
-	, "include=s"       => \@OPT_FILE_REGEXP_INCLUDE
-	, "line=s"          => \$OPT_LINE_REGEXP
-	, "r|recursive"     => \$OPT_RECURSIVE
-	, "R|regexp=s"      => \$OPT_REGEXP
-	, "test"            => \$test
-	, "v|verbose:i"     => \$verb
-	, "V|version"       => \$version
-	, "year=i"          => \$YEAR
-	, "Y|no-year"       => \$OPT_NO_YEAR
-	, "x|exclude=s"     => \@OPT_FILE_REGEXP_EXCLUDE
-    );
-
-    $version            and  die "$VERSION $CONTACT $LICENSE $URL\n";
-    $helpExclude        and  HelpExclude();
-    $help               and  Help();
-    $helpMan            and  Help(-man);
-    $helpHtml           and  Help(-html);
-    $version            and  Version();
-
-    $debug = 1          if $debug == 0;
-    $debug = 0          if $debug < 0;
-
-    $YEAR = Year()  unless defined $YEAR;
-
-    unless ($YEAR =~ m,^\d{4}$,)
-    {
-	die "$id: Option --year must be given with four digits [$YEAR]";
-    }
-
-    if (defined $verb  and  $verb == 0)
-    {
-	$verb = 1;
-    }
-
-    if ($code)
-    {
-	push @OPT_FILE_REGEXP_INCLUDE,
-	    '\.([Cch]|cc|hh|cpp|c\+\+|hpp|p[y]l|sh|rb)';
-    }
-
-    $verb = 1  if  $test and $verb == 0;
-    $verb = 5  if  $debug;
-
-    if ( $OPT_LINE_REGEXP  and  $OPT_AUTOMATIC )
-    {
-	die "$id: option --auto cannot be used togethet with --line";
-    }
-
-    if ($OPT_AUTOMATIC)
-    {
-	if ($NAME)
-	{
-	    local $ARG = $NAME;
-
-	    if (/^([a-z-]+) +([a-z-]+)/i)
-	    {
-		$verb > 1 and  print "$id: Using NAME: $NAME\n";
-		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
-	    }
-	    else
-	    {
-		$verb  and  print "$id: WARN: NAME not recognized: '$NAME'\n";
-	    }
-	}
-
-	if (not $OPT_LINE_REGEXP  and  $EMAIL)
-	{
-	    local $ARG = $EMAIL;
-
-	    if ( /^([a-z-]+)\.([a-z-]+)@/i )
-	    {
-		$verb > 1  and  print "$id: Using EMAIL: $EMAIL\n";
-		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
-	    }
-	    else
-	    {
-		$verb  and  print "$id: WARN: EMAIL not recognized: '$EMAIL'\n";
-	    }
-
-	    unless ($OPT_LINE_REGEXP)
-	    {
-		die "$id: information for option --auto missing";
-	    }
-	}
-
-	$verb > 1  and  print "$id: automatic preset of --line '$OPT_LINE_REGEXP'\n";
-    }
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Change FSF Address
-#
-#   INPUT PARAMETERS
-#
-#       $content        File content.
-#
-#   RETURN VALUES
-#
-#       $string         File content or empty if no chnages.
-#
-# ****************************************************************************
-
-sub FsfAddress ($ ; $)
-{
-    my $id     = "$LIB.FsfAddress";
-    local $ARG = shift;
-    my $file   = shift;
-
-    my $X = $debug ? "$id: " : "";
-    my $done;
-
-    # Substitute operation in s{}{}
-
-    s
-    {^([^\r\n]*)You \s+ should \s+ have \s+ received
-	 .*? (write \s+ to | contact .*? Foundation)
-	 .*? USA[ \t.]*
-    }
-    {$1You should have received a copy of the GNU General Public License\n$1along with this program. If not, see <http://www.gnu.org/licenses/>.}smix
-    and $done++;
-
-    $ARG if $done;
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Handle Single file
-#
-#   INPUT PARAMETERS
-#
-#       %hash       -file   => [filename list]
-#                   -regexp => Regexp to match file content.
-#                              If regexp is not found in file, file is not
-#                              handled.
-#
-#   RETURN VALUES
-#
-#       none
-#
-# ****************************************************************************
-
-sub HandleFile (%)
-{
-    my $id  = "$LIB.HandleFile";
-    my %arg = @ARG;
-
-    my $X       = $debug ? "$id: " : "";
-    my @files   = @{ $arg{-file} };
-    my $regexp  = $arg{-regexp};
-    my $linere  = $arg{-line};
-
-    unless (@files)
-    {
-	warn "$id: -file argument is empty: ",  $arg{-file};
-	return;
-    }
-
-    $debug  and  print "$id: -file [@files], ",
-		       "-regexp '$regexp' ",
-		       "-line '$linere'\n"
-		       ;
-
-    my $ffile;
-
-    sub Print(@);
-    local *Print = sub (@)
-    {
-	print "${X}$ffile: ", @_, "\n";
-    };
-
-    local $ARG;
-
-    for my $file (@files)
-    {
-	$ffile = $file;                 # For Print()
-
-	$debug  and  print "$id: $file: open\n";
-
-	# ..................................................... read ...
-
-	{
-	    my $FILE;
-
-	    unless (open my $FILE, "<", $file)
-	    {
-		$verb  and  Print "ERROR: cannot open";
-		next;
-	    }
-	    else
-	    {
-		binmode $FILE;
-		local $INPUT_RECORD_SEPARATOR = undef;
-		$ARG = <$FILE>;
-		close $FILE  or  warn "Close $file error $ERRNO";
-
-		unless (/\w/)
-		{
-		    $verb  and  Print "WARN: empty file";
-		    return;
-		}
-	    }
-	}
-
-	if ($regexp)
-	{
-	    unless (/$regexp/o)
-	    {
-		$verb  and  Print "WARN: failed regexp check: $regexp";
-		next;
-	    }
-	}
-
-	my $done;
-	my $msg = $test ? "Would change" : "Changed";
-
-	if ($OPT_FSF_ADDRESS  and  (my $fsf = FsfAddress $ARG, $file))
-	{
-	    Print "$msg FSF address to URL";
-	    $ARG = $fsf;
-	    $done++;
-	}
-
-	# Perl Unicode also would accpt x{a9}/, but \N{} is more readable
-	# http://en.wikipedia.org/wiki/Copyright_symbol
-
-	my $ch   = encode("UTF-8", "\N{COPYRIGHT SIGN}");
-	my $sign = '(?:' . $ch . '|\([Cc]\))';
-	my $yyyy = '\d{4}';
-	my $copy = '(?:(?i)Copyright):?[ \t]+' . $sign . '[ \t]+' . $yyyy;
-
-	# In manual pages the hyphen is quoted as:
-	# Copyright (C) YYYY\-YYYY
-
-	my $repeat  = '\x5C?-';         # HEX 5C = backslash (\)
-
-	#  If we find the regexp, then check if YEAR is different
-	#  and finally do substitution.
-	#
-	#  If everything went ok, replace file.
-
-	unless (/$copy$repeat($yyyy)/oi)
-	{
-	    $verb  > 1  and  Print "No Copyright line" ;
-	    $debug > 2  and  print "$id: Match regexp: $copy$repeat($yyyy)\n";
-	}
-
-	my $y = $1;
-	$y = "" if $OPT_NO_YEAR;
-
-	if ($y  and  $y eq $YEAR)
-	{
-	    $verb > 2  and  Print "Copyright is already $YEAR";
-	    $y = "";
-	}
-
-	unless ($OPT_NO_YEAR)
-	{
-	    my $i = 0;
-
-	    if ($linere)
-	    {
-		if ($debug > 1)
-		{
-		    warn "s/(?:$linere).*\\K($copy$repeat)($yyyy)/\${1}$YEAR/gmi\n";
-		    warn "s/($copy$repeat)$yyyy(.*$linere)/\${1}$YEAR\${2}/gmi\n";
-		}
-
-		s/(?:$linere).*\K($copy$repeat)$yyyy/$1$YEAR/gmi and $i++;
-		s/($copy$repeat)$yyyy(.*$linere)/$1$YEAR$2/gmi and $i++;
-
-	    }
-	    else
-	    {
-		s/($copy$repeat)$yyyy/$1$YEAR/gmi and $i++;
-	    }
-
-	    $done += $i;
-	    $debug and $i and print "$id: matches --line '$linere'\n";
-
-	    $y = ""  unless $i;
-	}
-
-	$verb   and  $y  and  Print "$msg $y => $YEAR";
-
-	$test     and  next;
-	not $done and  next;
-
-	my $FILE;
-
-	unless (open $FILE, ">", $file)
-	{
-	    Print "ERROR: Cannot open for write";
-	}
-	else
-	{
-	    $verb > 2  and  Print "wrote";
-
-	    binmode $FILE;
-	    print $FILE $ARG;
-	    close $FILE  or  warn "Close $file error $ERRNO";
-	}
-    }
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Check if FILE matches exclude regexps.
-#
-#   INPUT PARAMETERS
-#
-#       $       Filename
-#
-#   RETURN VALUES
-#
-#       true    File in exclude list
-#       false   File NOT in exclude list
-#
-# ****************************************************************************
-
-sub IsExclude ($)
-{
-    my $id   = "$LIB.IsExclude";
-    local $ARG = shift;
-
-    @OPT_FILE_REGEXP_EXCLUDE  or  return 0;
-
-    for my $re (@OPT_FILE_REGEXP_EXCLUDE)
-    {
-
-	if (/$re/)
-	{
-	    $verb > 2  and  print "$id: '$re' matches: $ARG\n";
-	    return 1
-	}
-    }
-
-    return 0;
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Check if FILE matches include regexps.
-#
-#   INPUT PARAMETERS
-#
-#       $       Filename
-#
-#   RETURN VALUES
-#
-#       true    File in include list
-#       false   File NOT in include list
-#
-# ****************************************************************************
-
-sub IsInclude ($)
-{
-    my $id   = "$LIB.IsInclude";
-    local $ARG = shift;
-
-    @OPT_FILE_REGEXP_INCLUDE  or  return 1;
-
-    for my $re (@OPT_FILE_REGEXP_INCLUDE)
-    {
-
-	if (/$re/)
-	{
-	    $verb > 2  and  print "$id: '$re' matches: $ARG\n";
-	    return 1
-	}
-    }
-
-    return 0;
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Recursively find out all files and change their content.
-#
-#   INPUT PARAMETERS
-#
-#       None. This function is called from File::FInd.pm library
-#
-#   RETURN VALUES
-#
-#       None.
-#
-# ****************************************************************************
-
-sub wanted ()
-{
-    my $id = "$LIB.wanted";
-
-    my $dir  = $File::Find::dir;
-    my $file = $File::Find::name;  # complete path
-
-    if ($dir =~ m,$DEFAULT_PATH_EXCLUDE,o)
-    {
-	$File::Find::prune = 1;
-	$debug  and  print "$id: DEfault path exclude: $dir\n";
-	return;
-    }
-
-    if ($file =~ m,$DEFAULT_FILE_EXCLUDE,o)
-    {
-	$debug  and  print "$id: Default file exclude: $file\n";
-	return;
-    }
-
-    if (-f)
-    {
-	if ($verb > 3)
-	{
-	    print "$id: $file\n";
-	}
-
-	unless (-T)
-	{
-	    $debug and
-		print "$id: Exclude binary file (internal test): $file\n";
-	}
-
-	IsInclude $file  or  return;
-	IsExclude $file  and return;
-
-	HandleFile -file   => [$file],
-	           -line   => $OPT_LINE_REGEXP,
-	           -regexp => $OPT_REGEXP;
-    }
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Expand files in list. Win32 support
-#
-#   INPUT PARAMETERS
-#
-#       @       list of file glob patterns.
-#
-#   RETURN VALUES
-#
-#       @       list of filenames
-#
-# ****************************************************************************
-
-sub FileGlobs (@)
-{
-    my $id   = "$LIB.FileGlobs";
-    my @list = @ARG;
-    not @list  and  die "$id: No files to expand. Argument list is empty.";
-
-    my @files;
-
-    for my $glob (@list)
-    {
-	#       Win32 can't expand "*". We must do it here.
-	#       Grep only FILES, not directories.
-
-	push @files, grep {-f} glob $glob;
-    }
-
-    $debug  and  print "$id: RETURN [@files]\n";
-    @files;
-}
-
-# ****************************************************************************
-#
-#   DESCRIPTION
-#
-#       Main function
-#
-#   INPUT PARAMETERS
-#
-#       None
-#
-#   RETURN VALUES
-#
-#       None
-#
-# ****************************************************************************
-
-sub Main ()
-{
-    my $id = "$LIB.Main";
-
-    Initialize();
-    HandleCommandLineArgs();
-
-    unless (@ARGV)
-    {
-	die "What files to change? See --help.";
-    }
-
-    $debug  and  print "$id: ARGV [@ARGV]\n";
-
-    # .......................................... expand command line ...
-
-
-    if ($OPT_RECURSIVE)
-    {
-	find({wanted => \&wanted, no_chdir => 1},  @ARGV);
-    }
-    else
-    {
-	my @files = FileGlobs @ARGV;
-
-	unless (@files)
-	{
-	    $verb  and  warn "[WARN] No files matching glob(s): @ARGV\n";
-	    return;
-	}
-
-	HandleFile -file   => [@files],
-	           -line   => $OPT_LINE_REGEXP,
-	           -regexp => $OPT_REGEXP;
-    }
-}
-
-Main();
-
-# End of file
-
