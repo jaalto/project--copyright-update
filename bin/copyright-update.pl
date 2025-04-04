@@ -33,10 +33,10 @@
 
 use strict;
 
-use autouse 'Pod::Text'     => qw( pod2text );
-use autouse 'Pod::Html'     => qw( pod2html );
+use autouse 'Pod::Text'     => qw(pod2text);
+use autouse 'Pod::Html'     => qw(pod2html);
 
-use English qw( -no_match_vars );
+use English qw(-no_match_vars);
 use Getopt::Long;
 use File::Basename;
 use File::Find;
@@ -70,7 +70,7 @@ use vars qw ( $VERSION );
 #   The following variable is updated by custom Emacs setup whenever
 #   this file is saved.
 
-my $VERSION = '2025.0219.1439';
+my $VERSION = '2025.0404.0718';
 
 my $DEFAULT_PATH_EXCLUDE =              # Matches *only path component
     '(CVS|RCS|\.(bzr|svn|git|darcs|arch|mtn|hg))$'
@@ -425,13 +425,13 @@ sub Help (;$$)
     my $type = shift;  # optional arg, type
     my $msg  = shift;  # optional arg, why are we here...
 
-    if ( $type eq -html )
+    if ($type eq -html)
     {
 	pod2html $PROGRAM_NAME;
     }
-    elsif ( $type eq -man )
+    elsif ($type eq -man)
     {
-	eval { require Pod::Man; 1 }
+	eval {require Pod::Man; 1}
 	    or die "$id: Cannot generate Man: $EVAL_ERROR";
 
 	my %options;
@@ -532,14 +532,14 @@ sub HandleCommandLineArgs ()
 	$OPT_REGEXP
     );
 
-    Getopt::Long::config( qw
+    Getopt::Long::config(qw
     (
 	no_ignore_case
 	no_ignore_case_always
     ));
 
-    my ( $help, $helpMan, $helpHtml, $version ); # local variables to function
-    my ( $helpExclude, $code );
+    my ($help, $helpMan, $helpHtml, $version); # local variables to function
+    my ($helpExclude, $code);
 
     $debug = -1;
 
@@ -578,17 +578,17 @@ sub HandleCommandLineArgs ()
 
     $YEAR = Year()  unless defined $YEAR;
 
-    unless ( $YEAR =~ m,^\d{4}$, )
+    unless ($YEAR =~ m,^\d{4}$,)
     {
 	die "$id: Option --year must be given with four digits [$YEAR]";
     }
 
-    if ( defined $verb  and  $verb == 0 )
+    if (defined $verb  and  $verb == 0)
     {
 	$verb = 1;
     }
 
-    if ( $code )
+    if ($code)
     {
 	push @OPT_FILE_REGEXP_INCLUDE,
 	    '\.([Cch]|cc|hh|cpp|c\+\+|hpp|p[y]l|sh|rb)';
@@ -602,13 +602,13 @@ sub HandleCommandLineArgs ()
 	die "$id: option --auto cannot be used togethet with --line";
     }
 
-    if ( $OPT_AUTOMATIC )
+    if ($OPT_AUTOMATIC)
     {
-	if ( $NAME )
+	if ($NAME)
 	{
 	    local $ARG = $NAME;
 
-	    if ( /^([a-z-]+) +([a-z-]+)/i )
+	    if (/^([a-z-]+) +([a-z-]+)/i)
 	    {
 		$verb > 1 and  print "$id: Using NAME: $NAME\n";
 		$OPT_LINE_REGEXP = "${1}[ \\t]+$2";
@@ -619,7 +619,7 @@ sub HandleCommandLineArgs ()
 	    }
 	}
 
-	if ( not $OPT_LINE_REGEXP  and  $EMAIL )
+	if (not $OPT_LINE_REGEXP  and  $EMAIL)
 	{
 	    local $ARG = $EMAIL;
 
@@ -633,7 +633,7 @@ sub HandleCommandLineArgs ()
 		$verb  and  print "$id: WARN: EMAIL not recognized: '$EMAIL'\n";
 	    }
 
-	    unless ( $OPT_LINE_REGEXP )
+	    unless ($OPT_LINE_REGEXP)
 	    {
 		die "$id: information for option --auto missing";
 	    }
@@ -659,7 +659,7 @@ sub HandleCommandLineArgs ()
 #
 # ****************************************************************************
 
-sub FsfAddress ( $ ; $ )
+sub FsfAddress ($ ; $)
 {
     my $id     = "$LIB.FsfAddress";
     local $ARG = shift;
@@ -667,6 +667,8 @@ sub FsfAddress ( $ ; $ )
 
     my $X = $debug ? "$id: " : "";
     my $done;
+
+    # Substitute operation in s{}{}
 
     s
     {^([^\r\n]*)You \s+ should \s+ have \s+ received
@@ -698,7 +700,7 @@ sub FsfAddress ( $ ; $ )
 #
 # ****************************************************************************
 
-sub HandleFile ( % )
+sub HandleFile (%)
 {
     my $id  = "$LIB.HandleFile";
     my %arg = @ARG;
@@ -708,7 +710,7 @@ sub HandleFile ( % )
     my $regexp  = $arg{-regexp};
     my $linere  = $arg{-line};
 
-    unless ( @files )
+    unless (@files)
     {
 	warn "$id: -file argument is empty: ",  $arg{-file};
 	return;
@@ -729,7 +731,7 @@ sub HandleFile ( % )
 
     local $ARG;
 
-    for my $file ( @files )
+    for my $file (@files)
     {
 	$ffile = $file;                 # For Print()
 
@@ -740,7 +742,7 @@ sub HandleFile ( % )
 	{
 	    my $FILE;
 
-	    unless ( open my $FILE, "<", $file )
+	    unless (open my $FILE, "<", $file)
 	    {
 		$verb  and  Print "ERROR: cannot open";
 		next;
@@ -752,7 +754,7 @@ sub HandleFile ( % )
 		$ARG = <$FILE>;
 		close $FILE  or  warn "Close $file error $ERRNO";
 
-		unless ( /\w/ )
+		unless (/\w/)
 		{
 		    $verb  and  Print "WARN: empty file";
 		    return;
@@ -760,9 +762,9 @@ sub HandleFile ( % )
 	    }
 	}
 
-	if ( $regexp )
+	if ($regexp)
 	{
-	    unless ( /$regexp/o )
+	    unless (/$regexp/o)
 	    {
 		$verb  and  Print "WARN: failed regexp check: $regexp";
 		next;
@@ -772,7 +774,7 @@ sub HandleFile ( % )
 	my $done;
 	my $msg = $test ? "Would change" : "Changed";
 
-	if ( $OPT_FSF_ADDRESS  and  (my $fsf = FsfAddress $ARG, $file) )
+	if ($OPT_FSF_ADDRESS  and  (my $fsf = FsfAddress $ARG, $file))
 	{
 	    Print "$msg FSF address to URL";
 	    $ARG = $fsf;
@@ -797,7 +799,7 @@ sub HandleFile ( % )
 	#
 	#  If everything went ok, replace file.
 
-	unless ( /$copy$repeat($yyyy)/oi )
+	unless (/$copy$repeat($yyyy)/oi)
 	{
 	    $verb  > 1  and  Print "No Copyright line" ;
 	    $debug > 2  and  print "$id: Match regexp: $copy$repeat($yyyy)\n";
@@ -806,19 +808,19 @@ sub HandleFile ( % )
 	my $y = $1;
 	$y = "" if $OPT_NO_YEAR;
 
-	if ( $y  and  $y eq $YEAR )
+	if ($y  and  $y eq $YEAR)
 	{
 	    $verb > 2  and  Print "Copyright is already $YEAR";
 	    $y = "";
 	}
 
-	unless ( $OPT_NO_YEAR )
+	unless ($OPT_NO_YEAR)
 	{
 	    my $i = 0;
 
-	    if ( $linere )
+	    if ($linere)
 	    {
-		if ( $debug > 1 )
+		if ($debug > 1)
 		{
 		    warn "s/(?:$linere).*\\K($copy$repeat)($yyyy)/\${1}$YEAR/gmi\n";
 		    warn "s/($copy$repeat)$yyyy(.*$linere)/\${1}$YEAR\${2}/gmi\n";
@@ -846,7 +848,7 @@ sub HandleFile ( % )
 
 	my $FILE;
 
-	unless ( open $FILE, ">", $file )
+	unless (open $FILE, ">", $file)
 	{
 	    Print "ERROR: Cannot open for write";
 	}
@@ -885,10 +887,10 @@ sub IsExclude ($)
 
     @OPT_FILE_REGEXP_EXCLUDE  or  return 0;
 
-    for my $re ( @OPT_FILE_REGEXP_EXCLUDE )
+    for my $re (@OPT_FILE_REGEXP_EXCLUDE)
     {
 
-	if ( /$re/ )
+	if (/$re/)
 	{
 	    $verb > 2  and  print "$id: '$re' matches: $ARG\n";
 	    return 1
@@ -922,10 +924,10 @@ sub IsInclude ($)
 
     @OPT_FILE_REGEXP_INCLUDE  or  return 1;
 
-    for my $re ( @OPT_FILE_REGEXP_INCLUDE )
+    for my $re (@OPT_FILE_REGEXP_INCLUDE)
     {
 
-	if ( /$re/ )
+	if (/$re/)
 	{
 	    $verb > 2  and  print "$id: '$re' matches: $ARG\n";
 	    return 1
@@ -958,29 +960,29 @@ sub wanted ()
     my $dir  = $File::Find::dir;
     my $file = $File::Find::name;  # complete path
 
-    if ( $dir =~ m,$DEFAULT_PATH_EXCLUDE,o )
+    if ($dir =~ m,$DEFAULT_PATH_EXCLUDE,o)
     {
 	$File::Find::prune = 1;
 	$debug  and  print "$id: DEfault path exclude: $dir\n";
 	return;
     }
 
-    if ( $file =~ m,$DEFAULT_FILE_EXCLUDE,o )
+    if ($file =~ m,$DEFAULT_FILE_EXCLUDE,o)
     {
 	$debug  and  print "$id: Default file exclude: $file\n";
 	return;
     }
 
-    if ( -f )
+    if (-f)
     {
-	if ( $verb > 3 )
+	if ($verb > 3)
 	{
 	    print "$id: $file\n";
 	}
 
-	unless ( -T )
+	unless (-T)
 	{
-	    $debug  and
+	    $debug and
 		print "$id: Exclude binary file (internal test): $file\n";
 	}
 
@@ -1009,7 +1011,7 @@ sub wanted ()
 #
 # ****************************************************************************
 
-sub FileGlobs ( @ )
+sub FileGlobs (@)
 {
     my $id   = "$LIB.FileGlobs";
     my @list = @ARG;
@@ -1017,12 +1019,12 @@ sub FileGlobs ( @ )
 
     my @files;
 
-    for my $glob ( @list )
+    for my $glob (@list)
     {
 	#       Win32 can't expand "*". We must do it here.
 	#       Grep only FILES, not directories.
 
-	push @files, grep { -f } glob $glob;
+	push @files, grep {-f} glob $glob;
     }
 
     $debug  and  print "$id: RETURN [@files]\n";
@@ -1052,7 +1054,7 @@ sub Main ()
     Initialize();
     HandleCommandLineArgs();
 
-    unless ( @ARGV )
+    unless (@ARGV)
     {
 	die "What files to change? See --help.";
     }
@@ -1062,9 +1064,9 @@ sub Main ()
     # .......................................... expand command line ...
 
 
-    if ( $OPT_RECURSIVE )
+    if ($OPT_RECURSIVE)
     {
-	find( {wanted => \&wanted, no_chdir => 1},  @ARGV );
+	find({wanted => \&wanted, no_chdir => 1},  @ARGV);
     }
     else
     {
