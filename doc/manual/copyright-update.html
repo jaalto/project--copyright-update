@@ -4,7 +4,7 @@
 <head>
 <title>copyright-update - Update Copyright information in files</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<link rev="made" href="mailto:ASSI@walter.nonet" />
+<link rev="made" href="mailto:root@localhost" />
 </head>
 
 <body>
@@ -13,8 +13,9 @@
 
 <ul id="index">
   <li><a href="#NAME">NAME</a></li>
-  <li><a href="#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="#USAGE">USAGE</a></li>
   <li><a href="#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="#REQUIRED-ARGUMENTS">REQUIRED ARGUMENTS</a></li>
   <li><a href="#OPTIONS">OPTIONS</a>
     <ul>
       <li><a href="#Run-options">Run options</a></li>
@@ -24,10 +25,13 @@
   <li><a href="#EXAMPLES">EXAMPLES</a></li>
   <li><a href="#TROUBLESHOOTING">TROUBLESHOOTING</a></li>
   <li><a href="#ENVIRONMENT">ENVIRONMENT</a></li>
-  <li><a href="#FILES">FILES</a></li>
+  <li><a href="#DIAGNOSTICS">DIAGNOSTICS</a></li>
   <li><a href="#EXIT-STATUS">EXIT STATUS</a></li>
-  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="#CONFIGURATION">CONFIGURATION</a></li>
   <li><a href="#DEPENDENCIES">DEPENDENCIES</a></li>
+  <li><a href="#INCOMPATIBILITIES">INCOMPATIBILITIES</a></li>
+  <li><a href="#FILES">FILES</a></li>
+  <li><a href="#SEE-ALSO">SEE ALSO</a></li>
   <li><a href="#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</a></li>
   <li><a href="#STANDARDS">STANDARDS</a></li>
   <li><a href="#AVAILABILITY">AVAILABILITY</a></li>
@@ -39,7 +43,7 @@
 
 <p>copyright-update - Update Copyright information in files</p>
 
-<h1 id="SYNOPSIS">SYNOPSIS</h1>
+<h1 id="USAGE">USAGE</h1>
 
 <pre><code>copyright-update [options] FILE [FILE ...]
 copyright-update [options] --recursive PATH [PATH ...]</code></pre>
@@ -59,6 +63,10 @@ Copyright: (C)       YYYY-YYYY
          A colon is optional</code></pre>
 
 <p>By default, certain files and paths are always ignored, such as version control directories, backup files, object files, and binary files according to Perl&#39;s <code>-T</code> file test. Run the program with the option <b>--help-exclude</b> to see the excluded path list.</p>
+
+<h1 id="REQUIRED-ARGUMENTS">REQUIRED ARGUMENTS</h1>
+
+<p>Either FILE or PATH with <code>--recursive</code> option.</p>
 
 <h1 id="OPTIONS">OPTIONS</h1>
 
@@ -82,7 +90,7 @@ Copyright: (C)       YYYY-YYYY
 <p>Preset <b>--include</b> to match common code files: .c, .h, .cc, .hh, .cpp, .c++, .hpp, .C, .pl, .py, .sh, and .rb.</p>
 
 </dd>
-<dt id="d---debug-LEVEL"><b>-d, --debug LEVEL</b></dt>
+<dt id="D---debug-LEVEL"><b>-D, --debug LEVEL</b></dt>
 <dd>
 
 <p>Turn on debugging. LEVEL can be in the range of 0-10.</p>
@@ -269,21 +277,33 @@ Localpart         Domain part</code></pre>
 </dd>
 </dl>
 
+<h1 id="DIAGNOSTICS">DIAGNOSTICS</h1>
+
+<p>See option <code>--debug LEVEL</code></p>
+
+<h1 id="EXIT-STATUS">EXIT STATUS</h1>
+
+<p>Value 0 on normal exit and non-zero on error.</p>
+
+<h1 id="CONFIGURATION">CONFIGURATION</h1>
+
+<p>None.</p>
+
+<h1 id="DEPENDENCIES">DEPENDENCIES</h1>
+
+<p>None. Uses only standard Perl modules.</p>
+
+<h1 id="INCOMPATIBILITIES">INCOMPATIBILITIES</h1>
+
+<p>None.</p>
+
 <h1 id="FILES">FILES</h1>
 
 <p>None.</p>
 
-<h1 id="EXIT-STATUS">EXIT STATUS</h1>
-
-<p>Not defined.</p>
-
 <h1 id="SEE-ALSO">SEE ALSO</h1>
 
 <p>licensecheck(1)</p>
-
-<h1 id="DEPENDENCIES">DEPENDENCIES</h1>
-
-<p>Uses only standard Perl modules.</p>
 
 <h1 id="BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</h1>
 

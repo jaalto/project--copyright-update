@@ -1,7 +1,7 @@
 NAME
     copyright-update - Update Copyright information in files
 
-SYNOPSIS
+USAGE
       copyright-update [options] FILE [FILE ...]
       copyright-update [options] --recursive PATH [PATH ...]
 
@@ -28,6 +28,9 @@ DESCRIPTION
     according to Perl's "-T" file test. Run the program with the option
     --help-exclude to see the excluded path list.
 
+REQUIRED ARGUMENTS
+    Either FILE or PATH with "--recursive" option.
+
 OPTIONS
   Run options
     -a, --auto
@@ -46,7 +49,7 @@ OPTIONS
         Preset --include to match common code files: .c, .h, .cc, .hh, .cpp,
         .c++, .hpp, .C, .pl, .py, .sh, and .rb.
 
-    -d, --debug LEVEL
+    -D, --debug LEVEL
         Turn on debugging. LEVEL can be in the range of 0-10.
 
     -f, --fsf-address
@@ -186,17 +189,26 @@ ENVIRONMENT
         In the form "Firstname Lastname". If set, the value is used in
         option --auto.
 
+DIAGNOSTICS
+    See option "--debug LEVEL"
+
+EXIT STATUS
+    Value 0 on normal exit and non-zero on error.
+
+CONFIGURATION
+    None.
+
+DEPENDENCIES
+    None. Uses only standard Perl modules.
+
+INCOMPATIBILITIES
+    None.
+
 FILES
     None.
 
-EXIT STATUS
-    Not defined.
-
 SEE ALSO
     licensecheck(1)
-
-DEPENDENCIES
-    Uses only standard Perl modules.
 
 BUGS AND LIMITATIONS
     The Copyright stanzas searched with option --fsf-address must be exactly

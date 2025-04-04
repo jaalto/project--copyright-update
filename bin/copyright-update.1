@@ -55,15 +55,15 @@
 .\" ========================================================================
 .\"
 .IX Title "COPYRIGHT-UPDATE 1"
-.TH COPYRIGHT-UPDATE 1 2025-02-19 "perl v5.40.1" "User commands"
+.TH COPYRIGHT-UPDATE 1 2025-04-04 "perl v5.40.1" "User commands"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
 .nh
 .SH NAME
 copyright\-update \- Update Copyright information in files
-.SH SYNOPSIS
-.IX Header "SYNOPSIS"
+.SH USAGE
+.IX Header "USAGE"
 .Vb 2
 \&  copyright\-update [options] FILE [FILE ...]
 \&  copyright\-update [options] \-\-recursive PATH [PATH ...]
@@ -93,6 +93,9 @@ By default, certain files and paths are always ignored, such as version
 control directories, backup files, object files, and binary files
 according to Perl's \f(CW\*(C`\-T\*(C'\fR file test. Run the program with the option
 \&\fB\-\-help\-exclude\fR to see the excluded path list.
+.SH "REQUIRED ARGUMENTS"
+.IX Header "REQUIRED ARGUMENTS"
+Either FILE or PATH with \f(CW\*(C`\-\-recursive\*(C'\fR option.
 .SH OPTIONS
 .IX Header "OPTIONS"
 .SS "Run options"
@@ -112,8 +115,8 @@ This option effectively tries to preset a value for the \fB\-\-line\fR option.
 .IX Item "-c, --code"
 Preset \fB\-\-include\fR to match common code files: .c, .h, .cc, .hh, .cpp,
 \&.c++, .hpp, .C, .pl, .py, .sh, and .rb.
-.IP "\fB\-d, \-\-debug LEVEL\fR" 4
-.IX Item "-d, --debug LEVEL"
+.IP "\fB\-D, \-\-debug LEVEL\fR" 4
+.IX Item "-D, --debug LEVEL"
 Turn on debugging. LEVEL can be in the range of 0\-10.
 .IP "\fB\-f, \-\-fsf\-address\fR" 4
 .IX Item "-f, --fsf-address"
@@ -266,18 +269,27 @@ must match case insensitive regexp \f(CW\*(Aq^[a\-z\-]+\e.[a\-z\-]+@\*(Aq\fR:
 .IX Item "NAME"
 In the form "Firstname Lastname". If set, the value is used in option
 \&\fB\-\-auto\fR.
+.SH DIAGNOSTICS
+.IX Header "DIAGNOSTICS"
+See option \f(CW\*(C`\-\-debug LEVEL\*(C'\fR
+.SH "EXIT STATUS"
+.IX Header "EXIT STATUS"
+Value 0 on normal exit and non-zero on error.
+.SH CONFIGURATION
+.IX Header "CONFIGURATION"
+None.
+.SH DEPENDENCIES
+.IX Header "DEPENDENCIES"
+None. Uses only standard Perl modules.
+.SH INCOMPATIBILITIES
+.IX Header "INCOMPATIBILITIES"
+None.
 .SH FILES
 .IX Header "FILES"
 None.
-.SH "EXIT STATUS"
-.IX Header "EXIT STATUS"
-Not defined.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
 \&\fBlicensecheck\fR\|(1)
-.SH DEPENDENCIES
-.IX Header "DEPENDENCIES"
-Uses only standard Perl modules.
 .SH "BUGS AND LIMITATIONS"
 .IX Header "BUGS AND LIMITATIONS"
 The Copyright stanzas searched with option \fB\-\-fsf\-address\fR must be
